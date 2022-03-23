@@ -112,10 +112,11 @@ class _MyAppState extends State<MyApp> {
                         // locale: locale,
                         debugShowCheckedModeBanner: false,
                         theme: Styles.themeData(themeChangeProvider.darkTheme, context),
-                        initialRoute: '/card',
+                        initialRoute: '/splash',
                         routes: <String, WidgetBuilder>{
                             //'/ggg': (BuildContext context) => Auth(),
-                            '/splash' :(BuildContext context) => Display(initIndex: null,),
+                            '/card' :(BuildContext context) => Display(initIndex: null,),
+                           // '/splash' :(BuildContext context) => Display(initIndex: null,),
                             '/profile' :(BuildContext context) => SettingsPage(null),
                             '/splash':(BuildContext context) => SplashScreen(),
                             '/':(BuildContext context) => LoginScreen(), //OTP this is

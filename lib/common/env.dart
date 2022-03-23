@@ -51,7 +51,7 @@ getCHFID(){
 
 
 
-String FirebaseToken;
+String FirebaseToken; //
 
 setFirebaseToken(token){
 	FirebaseToken = token;
