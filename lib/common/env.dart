@@ -65,7 +65,7 @@ String OFFICE_LIST_URL = "";
 String FAQ_LIST_URL = "";
 String API_HIB_URL = 'http://imistest.hib.gov.np/api/graphql';
 
-String LOGO_URL = 'https://hib.gov.np/site/img/shs.png';
+String LOGO_URL = 'assets/images/shs.png';
 String SPLASH_SCREEN = 'assets/images/HIB.jpg';
 String ONBOARDING_SCREEN_1 = 'assets/images/smcard/splash1.jpg';
 String ONBOARDING_SCREEN_2 = 'assets/images/smcard/splash2.jpg';

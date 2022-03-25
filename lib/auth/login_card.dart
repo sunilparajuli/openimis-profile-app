@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
 																			shape: CircleBorder(),
 																			image: DecorationImage(
 																					fit: BoxFit.cover,
-																					image: AssetImage('assets/images/openimis-logo.png'),
+																					image: AssetImage('assets/images/shs.png'),
 																			)
 																	),
 																),

@@ -228,15 +228,15 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget _InsureeCardWidget(snapshot){
 		return Container(
-			height: 100,
+			height: MediaQuery.of(context).size.height*0.14, //100
 			padding: EdgeInsets.all(8.0),
-			margin: EdgeInsets.only(top: 165),
+			margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.22), //165
 			child: Card(
 				shape: RoundedRectangleBorder(
 					borderRadius: BorderRadius.circular(20)
 				),
 				child: Padding(
-					padding: EdgeInsets.only(left: 8, top: 2, bottom: 2, right: 8),
+					padding: EdgeInsets.all(4.0),
 					child: Row(
 						mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 						mainAxisSize: MainAxisSize.max,
@@ -250,6 +250,7 @@ class _HomepageState extends State<Homepage> {
 									child: Column(
 										children: [
 											Container(
+												width: MediaQuery.of(context).size.width*0.4, //150,
 												decoration: BoxDecoration(
 													borderRadius: BorderRadius.only(
 														topRight: Radius.circular(8),
@@ -261,13 +262,22 @@ class _HomepageState extends State<Homepage> {
 												child: Text(
 													AppTranslations.of(context).text('remaining'),
 													style: TextStyle(
+														fontSize: 16,
+														fontWeight: FontWeight.bold,
 														color: Colors.white
 													),
 												),
 											),
 											SizedBox(height: 8.0),
-											Text('${int.parse(snapshot.data.data.profile.remainingDays) > 0 ? snapshot.data.data.profile.remainingDays : "0" } days')
-											//Text('${insureeCardDetail.policy.expiryDate}')
+											Text(
+												'${int.parse(snapshot.data.data.profile.remainingDays) > 0 ?
+												snapshot.data.data.profile.remainingDays : "Expired" }',
+												style: TextStyle(
+													fontSize: 16,
+													fontWeight: FontWeight.bold
+												),
+												// textAlign: TextAlign.center,
+											)
 										],
 									),
 								),
@@ -279,8 +289,10 @@ class _HomepageState extends State<Homepage> {
 										side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
 									),
 									child: Column(
+										// crossAxisAlignment: CrossAxisAlignment.center,
 										children: [
 											Container(
+												width: MediaQuery.of(context).size.width*0.4, // 150,
 												decoration: BoxDecoration(
 													borderRadius: BorderRadius.only(
 														topRight: Radius.circular(8),
@@ -292,15 +304,23 @@ class _HomepageState extends State<Homepage> {
 												child: Text(
 													AppTranslations.of(context).text('expire_on'),
 													style: TextStyle(
+														fontSize: 16,
+														fontWeight: FontWeight.bold,
 														color: Colors.white,
-														letterSpacing: 2.0,
-														wordSpacing: 0.5
 													),
+													// textAlign: TextAlign.center,
 												),
 											),
 											SizedBox(height: 8.0),
+											
 											//Text('  ${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.year}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.month}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.day}  ')
-											Text( _InsureeCardWidgetExpiresOn({'insureePolicies': snapshot.data.data.profile.insuree.insureePolicies}) )
+											Text(
+												_InsureeCardWidgetExpiresOn({'insureePolicies': snapshot.data.data.profile.insuree.insureePolicies}),
+												style: TextStyle(
+													fontSize: 16,
+													fontWeight: FontWeight.bold
+												),
+											)
 											//Text('${remainingDays.lastName}')
 										],
 									),

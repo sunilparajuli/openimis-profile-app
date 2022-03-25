@@ -121,7 +121,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                                                                     shape: CircleBorder(),
                                                                     image: DecorationImage(
                                                                         fit: BoxFit.cover,
-                                                                        image: AssetImage('assets/images/openimis-logo.png'),
+                                                                        image: AssetImage('assets/images/shs.png'),
                                                                     ),
                                                                 ),
                                                             ),
