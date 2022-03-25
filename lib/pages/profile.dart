@@ -265,7 +265,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
 													// SUBMIT BUTTON
 													SizedBox(height: 16.0),
-													_buildSubmitButton()
+													// _buildSubmitButton()
 												],
 											);
 										}
@@ -465,6 +465,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 					),
 					SizedBox(height: 8.0),
 					TextFormField(
+						readOnly: true,
 						controller: phoneController,
 						keyboardType: TextInputType.number,
 						validator: (value) {
@@ -521,6 +522,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 					),
 					SizedBox(height: 8.0),
 					TextFormField(
+						readOnly: true,
 						controller: emailController,
 						keyboardType: TextInputType.emailAddress,
 						validator: (value) {

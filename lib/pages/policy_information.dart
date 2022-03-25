@@ -127,8 +127,24 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                             ),
                         ),
 						SizedBox(height: 16.0),
+						_data.policy.status.toString() == '2' ? Text(
+							'Active',
+							style: TextStyle(
+								fontSize: 16,
+								fontWeight: FontWeight.bold,
+								color: Colors.green
+							),
+						):
+						_data.policy.status.toString() == '8' ? Text(
+							'Expire',
+							style: TextStyle(
+								fontSize: 16,
+								fontWeight: FontWeight.bold,
+								color: Colors.red
+							),
+						) :
 						Text(
-							_data.policy.status.toString(),
+							'Idle',
 							style: TextStyle(
 								fontSize: 16.0,
 								fontWeight: FontWeight.bold,

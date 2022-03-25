@@ -174,13 +174,13 @@ class _SettingsPageState extends State<SettingsPage> {
 						_buildUpdateLanguageWidget(context),
 
 						// DARK/LIGHT THEME
-						_buildThemeWidget(context),
+						// _buildThemeWidget(context),
 
 						// CONTACT US
 						_buildContactWidget(context),
 
 						// LOGOUT
-						_buildLogoutWidget(context),
+						// _buildLogoutWidget(context),
 					],
 				),
 			),
@@ -291,8 +291,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                         
                             // FEEDBACK
-                            Container(
-                                //padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                            /*Container(
+                                // padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                                 child: GestureDetector(
                                     onTap: (){
                                         print("Feedback page clicked...");
@@ -305,7 +305,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         trailing: Icon(Icons.arrow_forward_ios),
                                     )
                                 )
-                            ),
+                            ),*/
                         ],
                     ),
                 )

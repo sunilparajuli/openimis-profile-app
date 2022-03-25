@@ -1,6 +1,6 @@
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-
+import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,13 +15,13 @@ class OpenimisOnboardingPage extends StatelessWidget {
 			body: Column(
 				children: <Widget>[
 					Text(
-						'Welcome to openIMIS',
+						'Welcome to HIB',
 						style: TextStyle(
 							color: Colors.grey,
 						),
 					),
 					Text(
-						'A Moments of Caring Future. Enjoy the Life at Every stage.',
+						'Your Health is Our Concern',
 						style: TextStyle(
 							color: Colors.black54,
 							fontSize: 16.0
@@ -30,7 +30,7 @@ class OpenimisOnboardingPage extends StatelessWidget {
 				],
 			),
 			mainImage: Image.asset(
-				'assets/images/smcard/splash1.jpg',
+				env.ONBOARDING_SCREEN_1,
 				width: 285.0,
 				alignment: Alignment.center,
 			),
@@ -44,13 +44,13 @@ class OpenimisOnboardingPage extends StatelessWidget {
 			body: Column(
 				children: <Widget>[
 					Text(
-						'Your Insurance is in your hand',
+						'Your Information is in your hand',
 						style: TextStyle(
 							color: Colors.grey,
 						),
 					),
 					Text(
-						'In pursuit of Your Heath Vision & Mission, we will help you',
+						'Digitizing health Information',
 						style: TextStyle(
 							color: Colors.black54,
 							fontSize: 16.0
@@ -59,7 +59,7 @@ class OpenimisOnboardingPage extends StatelessWidget {
 				],
 			),
 			mainImage: Image.asset(
-				'assets/images/smcard/splash2.jpg',
+				env.ONBOARDING_SCREEN_2,
 				width: 285.0,
 				alignment: Alignment.center,
 			),
@@ -73,22 +73,22 @@ class OpenimisOnboardingPage extends StatelessWidget {
 			body: Column(
 				children: <Widget>[
 					Text(
-						'Automatically Organize Your Information',
+						'Health Insurance For Universal Health Coverage',
 						style: TextStyle(
 							color: Colors.grey,
 						),
 					),
-					Text(
-						'Organize your Insurance records.',
-						style: TextStyle(
-							color: Colors.black54,
-							fontSize: 16.0
-						),
-					),
+//					Text(
+//						'Organize your Insurance records.',
+//						style: TextStyle(
+//							color: Colors.black54,
+//							fontSize: 16.0
+//						),
+//					),
 				],
 			),
 			mainImage: Image.asset(
-				'assets/images/smcard/splash3.jpg',
+				env.ONBOARDING_SCREEN_3,
 				width: 285.0,
 				alignment: Alignment.center,
 			),
@@ -121,7 +121,7 @@ class OpenimisOnboardingPage extends StatelessWidget {
 						Positioned(
 							top: 20.0,
 							left: MediaQuery.of(context).size.width/2 - 50,
-							child: Image.asset('assets/images/logo.png', width: 100,)
+							child: Image.asset(env.LOGO_URL, width: 100,)
 						)
 					],
 				),

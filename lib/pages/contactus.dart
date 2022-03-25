@@ -35,7 +35,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 								)
 							),
 							child: DefaultTabController(
-								length: 3,
+								length: 2,
 								child: Container(
 									padding: EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
 									child: Column(
@@ -54,16 +54,16 @@ class _ContactUsPageState extends State<ContactUsPage> {
 															),
 														),
 													),
-													Tab(
-														child: Text(
-															'EO Contact',
-															style: TextStyle(
-																fontSize: 14,
-																fontWeight: FontWeight.w400,
-																color: Colors.black
-															),
-														),
-													),
+//													Tab(
+//														child: Text(
+//															'EO Contact',
+//															style: TextStyle(
+//																fontSize: 14,
+//																fontWeight: FontWeight.w400,
+//																color: Colors.black
+//															),
+//														),
+//													),
 													Tab(
 														child: Text(
 															'PO Contact',
@@ -141,7 +141,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 															),
 														),
 														
-														Container(
+														/*Container(
 															child: ListView.builder(
 																itemBuilder: (BuildContext context, int index){
 																	return Container(
@@ -149,7 +149,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 																		child: Card(
 																			shape: RoundedRectangleBorder(
 																				borderRadius: BorderRadius.circular(0.0),
-																				// side: BorderSide(color: CustomTheme.lightTheme.primaryColor),
+																				side: BorderSide(color: CustomTheme.lightTheme.primaryColor),
 																			),
 																			elevation: 5,
 																			shadowColor: CustomTheme.lightTheme.primaryColor,
@@ -198,7 +198,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 																	);
 																}
 															),
-														),
+														),*/
 														
 														Container(
 															child: ListView.builder(
@@ -270,34 +270,5 @@ class _ContactUsPageState extends State<ContactUsPage> {
 				],
 			),
 		);
-		
-		/*return DefaultTabController(
-			length: 3,
-			child: Scaffold(
-				body: NestedScrollView(
-					headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-						return <Widget>[
-							new SliverAppBar(
-								title: Text('Contact us'),
-								bottom: TabBar(
-									tabs: [
-										Tab(child: Text('EA Contact')),
-										Tab(child: Text('EO Contact')),
-										Tab(child: Text('PC Contact')),
-									],
-								),
-							),
-						];
-					},
-					body: TabBarView(
-						children: <Widget>[
-							Icon(Icons.flight, size: 350),
-							Icon(Icons.directions_transit, size: 350),
-							Icon(Icons.directions_walk, size: 350),
-						]
-					)
-				),
-			)
-		);*/
 	}
 }

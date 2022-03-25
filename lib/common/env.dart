@@ -104,12 +104,18 @@ bool hasAuthUserObject(){
 }
 
 
-String API_BASE_LOCAL_URL =  "http://imistest.hib.gov.np/api/graphql"; //"http://10.0.2.2/api/graphql";//"http://imistest.hib.gov.np/api/graphql";//"https://oi.tinker.com.np/api/graphql";
+String API_BASE_LOCAL_URL = "https://oi.tinker.com.np/api/graphql"; //"http://imistest.hib.gov.np/api/graphql"; //"http://10.0.2.2/api/graphql";//"http://imistest.hib.gov.np/api/graphql";//"https://oi.tinker.com.np/api/graphql";
 String API_IOS_BASE_LOCAL_URL = "http://localhost:8000/api/graphql";
 String API_BASE_LOCAL_MOBILE_URL = "http://192.168.31.221:8000/api/graphql";
 String OFFICE_LIST_URL = "https://ag.gov.np/dag1/offices.json";
 String FAQ_LIST_URL = "https://ag.gov.np/dag1/faqs.json";
-String API_HIB_URL = 'https://imistest.hib.gov.np/api/graphql';
+String API_HIB_URL = 'http://imistest.hib.gov.np/api/graphql';
+
+String LOGO_URL = 'https://hib.gov.np/site/img/shs.png';
+String SPLASH_SCREEN = 'assets/images/HIB.jpg';
+String ONBOARDING_SCREEN_1 = 'assets/images/smcard/splash1.jpg';
+String ONBOARDING_SCREEN_2 = 'assets/images/smcard/splash2.jpg';
+String ONBOARDING_SCREEN_3 = 'assets/images/smcard/splash3.jpg';
 
 String getBaseUrl(){
 	if (kReleaseMode) {
@@ -118,9 +124,9 @@ String getBaseUrl(){
 	}
 
 	if (Platform.isAndroid) {
-		return API_BASE_LOCAL_URL;
+		return API_HIB_URL;
 	} else if (Platform.isIOS) {
-		return API_IOS_BASE_LOCAL_URL;
+		return API_HIB_URL;
 	}
 }
 

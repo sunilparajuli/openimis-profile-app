@@ -1,5 +1,5 @@
 {
-  "page_title_openimis" : "Openimis",
+  "page_title_openimis" : "Health Insurance Board",
   "page_title_history": "History",
   "page_title_policy_information" : "Policy Information",
   "page_title_settings" : "Settings",
@@ -45,7 +45,8 @@
   "go_back" : "Back",
 
   "current_balance" : "Current Balance",
-  "remaining" : "Remaininig",
+  "first_service_point" : "First Service Point",
+  "remaining" : "Remaining Days",
   "expire_on" : "Expire On",
 
   "service_provider_list" : "Service Providers Near You"

@@ -136,14 +136,14 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                                                                 fontSize: 24, fontWeight: FontWeight.w400),
                                                             textAlign: TextAlign.center,
                                                         ),
-                                                        subtitle: Text(
-                                                            "Welcome back, you've been missed!",
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w300,
-                                                                color: Colors.grey),
-                                                            textAlign: TextAlign.center,
-                                                        ),
+//                                                        subtitle: Text(
+//                                                            "Welcome back, you've been missed!",
+//                                                            style: TextStyle(
+//                                                                fontSize: 16,
+//                                                                fontWeight: FontWeight.w300,
+//                                                                color: Colors.grey),
+//                                                            textAlign: TextAlign.center,
+//                                                        ),
                                                     ),
                                                     
                                                     // PHONE NUMBER CONTAINER

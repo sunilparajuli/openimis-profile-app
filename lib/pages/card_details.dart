@@ -89,23 +89,23 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                                     _virtualCardWidget(policyprofile, insureeProfile),
                                                 
                                                     // FULL NAME
-                                                    SizedBox(height: 20.0),
-                                                    _buildNameTF(policyprofile),
+                                                    // SizedBox(height: 20.0),
+                                                    // _buildNameTF(policyprofile),
                                                 
                                                     // CARD NUMBER
-                                                    SizedBox(height: 20.0),
-                                                    _buildCardNumberTF(policyprofile),
+                                                    // SizedBox(height: 20.0),
+                                                    // _buildCardNumberTF(policyprofile),
                                                 
                                                     // EXPIRY DATE
-                                                    SizedBox(height: 20.0),
-                                                    _buildExpiryDateTF(insureeProfile),
+                                                    // SizedBox(height: 20.0),
+                                                    // _buildExpiryDateTF(insureeProfile),
                                                 
                                                     // RENEW SUBMISSION BUTTON
-                                                    SizedBox(height: 20.0),
+                                                    /*SizedBox(height: 20.0),
                                                     differenceInDays > 30 ?
                                                      _buildRenewButtonWidget() : Text(""),
                                                     widget.message!=null?
-                                                    _buildBackButtonWidget() : Text(""),
+                                                    _buildBackButtonWidget() : Text(""),*/
                                                 ],
                                             );
                                         }
@@ -298,6 +298,32 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                     Text(
                                         insureeProfile.insuree.healthFacility!=null ?
                                         '${insureeProfile.insuree.healthFacility.name}' : Text(""),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            decoration: TextDecoration.underline,
+                                            decorationStyle: TextDecorationStyle.dotted,
+                                        ),
+                                    ),
+                                ],
+                            ),
+    
+                            SizedBox(height: 8.0),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                    Text(
+                                        'Expiry Date:',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                        ),
+                                    ),
+                                    SizedBox(width: 8.0),
+                                    Text(
+                                        insureeProfile.policy.expiryDate!=null ?
+                                        '${insureeProfile.policy.expiryDate.year}-${insureeProfile.policy.expiryDate.month}-${insureeProfile.policy.expiryDate.day}' : Text(""),
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,

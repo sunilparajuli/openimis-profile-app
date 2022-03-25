@@ -90,7 +90,7 @@ class _HomepageState extends State<Homepage> {
 						),
 					),
 					
-					bottom_nav.currentIndex== 0 ? ExploreServicesPage() : Text(""),
+					// bottom_nav.currentIndex== 0 ? ExploreServicesPage() : Text(""),
 				],
 			),
 		);
@@ -98,7 +98,7 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget _InsureeInfoWidget(snapshot){
 		return Container(
-			height: screenHeight(context, dividedBy: 4), //220,
+			height: screenHeight(context, dividedBy: 3.5), //220,
 			padding: EdgeInsets.all(20),
 			width: double.infinity,
 			decoration: BoxDecoration(
@@ -125,16 +125,15 @@ class _HomepageState extends State<Homepage> {
 								.start,
 							children: <Widget>[
 								CircleAvatar(
-									radius: 30,
+									radius: 50,
 									backgroundColor: Colors.white,
 									child: ClipOval(
-										
 										child: FadeInImage.assetNetwork(
 											image: snapshot.hasData ? snapshot.data.data.profile.photo:
 											"assets/images/openimis-logo.png",
 											placeholder: "assets/images/openimis-logo.png",
-											
-											fit: BoxFit.contain,),
+											fit: BoxFit.contain,
+                                        ),
 									),
 								),
 								
@@ -170,14 +169,14 @@ class _HomepageState extends State<Homepage> {
 								Text(
 									AppTranslations.of(context).text('current_balance'),
 									style: TextStyle(
-										fontSize: 14,
-										fontWeight: FontWeight.normal,
+										fontSize: 18,
+										fontWeight: FontWeight.bold,
 										color: Colors.white
 									),
 								),
 								SizedBox(height: 8.0),
 								Text(
-									'${snapshot.data.data.profile.insuree.insureePolicies[0].policy.value}',
+									'NRs.' + '${snapshot.data.data.profile.insuree.insureePolicies[0].policy.value}',
 									style: TextStyle(
 										fontSize: 16,
 										fontWeight: FontWeight.bold,
@@ -191,10 +190,19 @@ class _HomepageState extends State<Homepage> {
 									color: Colors.white,
 								),
 								SizedBox(height: 8.0),
+                                Text(
+                                    AppTranslations.of(context).text('first_service_point'),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white
+                                    ),
+                                ),
+                                SizedBox(height: 8.0),
 								Text(
 									'${snapshot.data.data.profile.insuree.healthFacility.name ?? "N/A"}',
 									style: TextStyle(
-										fontSize: 14,
+										fontSize: 16,
 										fontWeight: FontWeight.normal,
 										color: Colors.white
 									),
@@ -219,90 +227,110 @@ class _HomepageState extends State<Homepage> {
 	}
 	
 	Widget _InsureeCardWidget(snapshot){
-		return Container(
-			height: 100,
-			padding: EdgeInsets.all(8.0),
-			margin: EdgeInsets.only(top: 165),
-			child: Card(
-				shape: RoundedRectangleBorder(
-					borderRadius: BorderRadius.circular(20)
-				),
-				child: Padding(
-					padding: EdgeInsets.only(left: 8, top: 2, bottom: 2, right: 8),
-					child: Row(
-						mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-						mainAxisSize: MainAxisSize.max,
-						children: [
-							Container(
-								child: Card(
-									shape: RoundedRectangleBorder(
-										borderRadius: BorderRadius.circular(8),
-										side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
-									),
-									child: Column(
-										children: [
-											Container(
-												decoration: BoxDecoration(
-													borderRadius: BorderRadius.only(
-														topRight: Radius.circular(8),
-														topLeft: Radius.circular(8),
-													),
-													color: CustomTheme.lightTheme.primaryColor
-												),
-												padding: EdgeInsets.all(4),
-												child: Text(
-													AppTranslations.of(context).text('remaining'),
-													style: TextStyle(
-														color: Colors.white
-													),
-												),
-											),
-											SizedBox(height: 8.0),
-											Text('${int.parse(snapshot.data.data.profile.remainingDays) > 0 ? snapshot.data.data.profile.remainingDays : "Expired" } days')
-											//Text('${insureeCardDetail.policy.expiryDate}')
-										],
-									),
-								),
-							),
-							Container(
-								child: Card(
-									shape: RoundedRectangleBorder(
-										borderRadius: BorderRadius.circular(8),
-										side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
-									),
-									child: Column(
-										children: [
-											Container(
-												decoration: BoxDecoration(
-													borderRadius: BorderRadius.only(
-														topRight: Radius.circular(8),
-														topLeft: Radius.circular(8),
-													),
-													color: CustomTheme.lightTheme.primaryColor
-												),
-												padding: EdgeInsets.all(4),
-												child: Text(
-													AppTranslations.of(context).text('expire_on'),
-													style: TextStyle(
-														color: Colors.white,
-														letterSpacing: 2.0,
-														wordSpacing: 0.5
-													),
-												),
-											),
-											SizedBox(height: 8.0),
-											//Text('  ${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.year}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.month}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.day}  ')
-											Text( _InsureeCardWidgetExpiresOn({'insureePolicies': snapshot.data.data.profile.insuree.insureePolicies}) )
-											//Text('${remainingDays.lastName}')
-										],
-									),
-								),
-							),
-						],
-					)
-				)
-			),
-		);
+        return Container(
+            height: MediaQuery.of(context).size.height*0.14, //100
+            padding: EdgeInsets.all(8.0),
+            margin: EdgeInsets.only(top: 165),
+            child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                ),
+                child: Padding(
+                    padding: EdgeInsets.only(left: 8, top: 2, bottom: 2, right: 8),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                            Container(
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
+                                    ),
+                                    child: Column(
+                                        children: [
+                                            Container(
+                                                width: 150,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                        topRight: Radius.circular(8),
+                                                        topLeft: Radius.circular(8),
+                                                    ),
+                                                    color: CustomTheme.lightTheme.primaryColor
+                                                ),
+                                                padding: EdgeInsets.all(4),
+                                                child: Text(
+                                                    AppTranslations.of(context).text('remaining'),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white
+                                                    ),
+                                                ),
+                                            ),
+                                            SizedBox(height: 8.0),
+                                            Text(
+                                                '${int.parse(snapshot.data.data.profile.remainingDays) > 0 ?
+                                                snapshot.data.data.profile.remainingDays : "Expired" }',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                                // textAlign: TextAlign.center,
+                                            )
+                                        ],
+                                    ),
+                                ),
+                            ),
+                            Container(
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
+                                    ),
+                                    child: Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                            Container(
+                                                width: 150,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                        topRight: Radius.circular(8),
+                                                        topLeft: Radius.circular(8),
+                                                    ),
+                                                    color: CustomTheme.lightTheme.primaryColor
+                                                ),
+                                                padding: EdgeInsets.all(4),
+                                                child: Text(
+                                                    AppTranslations.of(context).text('expire_on'),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                    ),
+                                                    // textAlign: TextAlign.center,
+                                                ),
+                                            ),
+                                            SizedBox(height: 8.0),
+                                            
+                                            //Text('  ${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.year}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.month}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.day}  ')
+                                            Text(
+                                                _InsureeCardWidgetExpiresOn({'insureePolicies': snapshot.data.data.profile.insuree.insureePolicies}),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                            )
+                                            //Text('${remainingDays.lastName}')
+                                        ],
+                                    ),
+                                ),
+                            ),
+                        ],
+                    )
+                )
+            ),
+        );
 	}
 	
 	Widget _ClaimHistoryWidget(){

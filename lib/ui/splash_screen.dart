@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
         [
           Positioned.fill(  //
             child: Image(
-              image: AssetImage('assets/images/100-welcome.png'),
+              image: AssetImage(env.SPLASH_SCREEN),
               fit : BoxFit.fill,
            ),
           ), 
