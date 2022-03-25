@@ -208,8 +208,17 @@ class _ProfileInfoState extends State<ProfileInfo> {
 																					color: Colors.transparent,
 																				),
 																				child: CachedNetworkImage(
-                                            
-																						imageUrl:	snapshot.data.data.profile.photo, //"https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e",
+
+																						imageUrl:	_image==null ? snapshot.data.data.profile.photo.replaceAll('192.168.15.22', 'imistest.hib.gov.np') : 'https://toppng.com/uploads/preview/no-transparent-png-11553948956p3qwmcbeyt.png', //"https://cdn.sstatic.net/Img/teams/teams-illo-free-sidebar-promo.svg?v=47faa659a05e",
+																						imageBuilder: (context, imageProvider) => Container(
+																							width: 80.0,
+																							height: 80.0,
+																							decoration: BoxDecoration(
+																								shape: BoxShape.circle,
+																								image: DecorationImage(
+																										image: imageProvider, fit: BoxFit.fill),
+																							),
+																						),
 																						placeholder: (context, url) => new CircularProgressIndicator(),
 																						errorWidget: (context, url, error) =>  _image==null ? new Image.asset('assets/images/openimis-logo.png') : _addImageCardWidget(),
 																						fit: BoxFit.fill
