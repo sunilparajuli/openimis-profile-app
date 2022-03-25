@@ -176,7 +176,7 @@ class _HomepageState extends State<Homepage> {
 								),
 								SizedBox(height: 8.0),
 								Text(
-									'NRs.' + '${snapshot.data.data.profile.insuree.insureePolicies[0].policy.value}',
+									env.Currency + '${snapshot.data.data.profile.insuree.insureePolicies[0].policy.value}',
 									style: TextStyle(
 										fontSize: 16,
 										fontWeight: FontWeight.bold,

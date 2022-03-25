@@ -44,7 +44,15 @@ class _CardDetailPageState extends State<CardDetailPage> {
     void showInSnackBar(String value) {
         ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text(value), duration: Duration(milliseconds: 3000), ), );
     }
-    
+
+    _replaceCHFID(chfId) {
+        // print(chfId);
+        final regexp = RegExp(r'(\d{3})(\d{3})(\d{3})');
+        final result = chfId.replaceAllMapped(regexp, (match) => '${match[1]}-${match[2]}-${match[3]}');
+        print(result);
+        return result;
+    }
+
     @override
     Widget build(BuildContext context) {
         auth = Provider.of<AuthBlock>(context);
@@ -155,6 +163,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
     
     // ignore: non_constant_identifier_names
     Widget _virtualCardWidget(policyprofile, insureeProfile){
+        var chfId = '${policyprofile.chfId}';
         return Container(
             child: Card(
                 shape: RoundedRectangleBorder(
@@ -226,7 +235,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                     Text(
-                                        AppTranslations.of(context).text('member_id') + ':${policyprofile.chfId}',
+                                        AppTranslations.of(context).text('member_id') + ': '+ _replaceCHFID(chfId),
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,

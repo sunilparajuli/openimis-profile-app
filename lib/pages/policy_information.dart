@@ -97,6 +97,8 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 						Text(
 							_data.insuree.healthFacility!=null ?
 							'${_data.insuree.healthFacility.name}' : Text(""),
+//							_data.policy.product !=null ?
+//							'${_data.policy.product.name}' : Text(""),
                             style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -104,14 +106,14 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                         )
 					],
 				),
-				leading: Text(
-					_data.insuree.healthFacility.code !=null ?
-					'${_data.insuree.healthFacility.code}': Text(""),
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400,
-                    ),
-                ),
+//				leading: Text(
+//					_data.insuree.healthFacility.code !=null ?
+//					'${_data.insuree.healthFacility.code}': Text(""),
+//                    style: TextStyle(
+//                        fontSize: 14.0,
+//                        fontWeight: FontWeight.w400,
+//                    ),
+//                ),
 				subtitle: Text(
                     'Expiry date: ${_data.policy.expiryDate.year}-${_data.policy.expiryDate.month}-${_data.policy.expiryDate.day}',
                 ),
