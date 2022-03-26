@@ -1,11 +1,11 @@
 {
   "page_title_openimis" : "Health Insurance Board",
-  "page_title_history": "ईतिहाँस",
+  "page_title_history": "ईतिहास",
   "page_title_policy_information" : "नीति जानकारी",
   "page_title_settings" : "सेटिङ्स्",
   "page_title_profile" : "प्रोफाईल",
   "page_card_details" : "कार्ड विवरण",
-  "page_payment_submission" : "भौचर को फोटो अपलोड गर्नुहोस",
+  "page_payment_submission" : "भौचरको फोटो अपलोड गर्नुहोस",
 
   "history": "ईतिहास",
   "see_all" : "सवै",
@@ -20,9 +20,9 @@
   "logout" : "बाईरिनुहोस",
 
   "full_name": "पुरा नाम",
-  "card_number" : "कार्ड नंबर",
-  "expiry_date" : "सक्कीने मिति",
-  "renew_submission" : "सेवा रीन्यू गर्नुहोस",
+  "card_number" : "कार्ड नम्बर",
+  "expiry_date" : "सकिने मिति",
+  "renew_submission" : "सेवा नवीकरण गर्नुहोस",
   "submit" : "चयन गर्नुहोस",
   "no_internet_connection" : "ईन्टरनेट कनेक्सनमा समस्या छ ",
 
@@ -30,7 +30,7 @@
   "change_language_text" : "आफ्मो भाषा छान्नुहोस",
   "change_theme_color" : "थेम कलर परिवर्तन गर्नुहोस",
 
-  "mobile_number" : "मोबाईल नंबर",
+  "mobile_number" : "मोबाईल नम्बर",
   "email_address" : "ईमेल ठौगाना",
   "date_of_birth": "जन्म मिति",
   "address" : "ठेगाना",
@@ -47,12 +47,12 @@
   "remaining" : "बाँकी दिन",
   "expire_on" : "समाप्त हुने",
 
-  "service_provider_list" : "नजिक रहेका सेवा प्रदाई कार्यालयहरु",
+  "service_provider_list" : "नजिक रहेका सेवा प्रदायक कार्यालयहरु",
 
-  "name_surname" : "नामथर",
+  "name_surname" : "नाम थर",
   "dob_date" : "जन्ममिति",
   "first_hf" : "प्रथम स्वास्थ्य संस्था",
-  "gender" : "मिङ्ग",
+  "gender" : "लिङ्ग",
   "org" : "नेपाल सरकार, स्वास्थय वीमा बोर्ड",
   "member_id" : "सदस्यता नं"
 

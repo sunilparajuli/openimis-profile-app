@@ -323,7 +323,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                     Text(
-                                        'Expiry Date:',
+                                        AppTranslations.of(context).text('expiry_date')+ ':',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,

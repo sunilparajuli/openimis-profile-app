@@ -143,10 +143,11 @@ class _SettingsPageState extends State<SettingsPage> {
 					                                    clipBehavior: Clip.antiAliasWithSaveLayer,
 					                                    child: (_image != null) ? Image.file(
 					                                      _image, fit: BoxFit.fill,) :
-					                                    Image.asset(
-					                                       'assets/images/openimis-logo.png',
-					                                      fit: BoxFit.fill,
-					                                    ),
+                                                            Icon(Icons.supervised_user_circle),
+//                                                          Image.asset(
+//                                                              'assets/images/shs.png',
+//                                                              fit: BoxFit.fill,
+//                                                          )
 					                                    shape: RoundedRectangleBorder(
 					                                      borderRadius: BorderRadius.circular(10.0),
 					                                    ),
