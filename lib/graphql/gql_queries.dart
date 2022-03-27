@@ -75,7 +75,7 @@ class openimisGqlQueries {
     
     openimis_insuree_policy_information_lists(chfid){ //for policyinformationpage
         var query = """
-    query {insureeProfile(insureeCHFID: "047775276"){
+    query {insureeProfile(insureeCHFID: "${chfid}"){
      chfId
      lastName
      otherNames
