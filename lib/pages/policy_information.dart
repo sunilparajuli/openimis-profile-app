@@ -55,14 +55,15 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 													return ListView.builder(
 															itemCount: snapshot.data.data.insureeProfile.insureePolicies.length,
 															itemBuilder: (BuildContext context, int index) {
-																var _data = snapshot.data.data.insureeProfile.insureePolicies[index];
+//																var _data = snapshot.data.data.insureeProfile.insureePolicies[index];
+                                                                var _data = snapshot.data.data.insureeProfile.insureePoliciesSorted()[index];
 																return _policyInformationListWidget(_data);
 															}
 													);
 												}
 
 									    else {
-													return Center(child:Text("NO POLICY AVAIALBE WITH ASSOCIATED HEALTH FACILITY"));
+													return Center(child:Text("NO POLICY AVAILABLE WITH ASSOCIATED HEALTH FACILITY"));
 										}
 									    }
 								  	else {
@@ -95,10 +96,10 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: [
 						Text(
-							_data.insuree.healthFacility!=null ?
-							'${_data.insuree.healthFacility.name}' : Text(""),
-//							_data.policy.product !=null ?
-//							'${_data.policy.product.name}' : Text(""),
+//							_data.insuree.healthFacility!=null ?
+//							'${_data.insuree.healthFacility.name}' : Text(""),
+							_data.policy.product !=null ?
+							'${_data.policy.product.name}' : Text(""),
                             style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,

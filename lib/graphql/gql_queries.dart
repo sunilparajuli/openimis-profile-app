@@ -75,27 +75,45 @@ class openimisGqlQueries {
     
     openimis_insuree_policy_information_lists(chfid){ //for policyinformationpage
         var query = """
-    query {
-        insureeProfile(insureeCHFID:\"${chfid}\"){
-          insureePolicies{
-            policy{
-              legacyId
-              effectiveDate
-              expiryDate
-              validityFrom
-              validityTo
-              status
-              value
-            }
-          }
+    query {insureeProfile(insureeCHFID: "047775276"){
+     chfId
+     lastName
+     otherNames
+     insureePolicies{
+       policy{
+        id
+         value
+         expiryDate
+         status
+        product{
+          name
         }
-      }
+       }
+       insuree{
+         gender{
+           code
+           gender
+         }
+         dob
+         healthFacility{
+           code
+           name
+         }
+       }
+     }
+   }
+ }
    """;
+        var _ret= {
+            "query": query, //jsonEncode(query),
+            "variables": null
+        };
+        return _ret;
 //        return {
 //            "query":"query {\n  insureeProfile(insureeCHFID:\"${chfid}\"){\n    insureePolicies{\n      policy{\n        legacyId\n        effectiveDate\n        expiryDate\n        validityFrom\n        validityTo\n        status\n        value\n      }\n    }\n  }\n}","variables":null
 //        };
-    
-    return {"query":"query {insureeProfile(insureeCHFID: \"${chfid}\"){\n    chfId\n    insureePolicies{\n      policy{\n        value\n        expiryDate\n        status\n      }\n      insuree{\n        healthFacility{\n          code\n          name\n        }\n      }\n    }\n  }\n}","variables":null};
+    var x =  {"query":"query {insureeProfile(insureeCHFID: \"${chfid}\"){\n    chfId\n    insureePolicies{\n      policy{\n        value\n        expiryDate\n        status\n      }\n      insuree{\n        healthFacility{\n          code\n          name\n        }\n      }\n    }\n  }\n}","variables":null};
+    return x;
     }
     
     openimis_gql_notices(){

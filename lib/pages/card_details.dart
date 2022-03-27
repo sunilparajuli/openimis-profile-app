@@ -250,7 +250,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                     Text(
-                                AppTranslations.of(context).text('name_surname'),
+                                        AppTranslations.of(context).text('name_surname'),
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
@@ -258,7 +258,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                     ),
                                     SizedBox(width: 8.0),
                                     Text(
-                                        ':${policyprofile.otherNames} ${policyprofile.lastName}',
+                                        ': ${policyprofile.otherNames} ${policyprofile.lastName}',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
@@ -275,14 +275,14 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                     Text(
-                                        AppTranslations.of(context).text('dob_date') + ':${insureeProfile.insuree.dob.year}-${insureeProfile.insuree.dob.month}-${insureeProfile.insuree.dob.day}',
+                                        AppTranslations.of(context).text('dob_date') + ': ${insureeProfile.insuree.dob.year}-${insureeProfile.insuree.dob.month}-${insureeProfile.insuree.dob.day}',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
                                         ),
                                     ),
                                     Text(
-                                        AppTranslations.of(context).text('gender') + ':${insureeProfile.insuree.gender.gender}',
+                                        AppTranslations.of(context).text('gender') + ': ${insureeProfile.insuree.gender.gender}',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,

@@ -40,6 +40,10 @@ class Data {
     };
 }
 
+jpt(json) {
+    return json;
+}
+
 class InsureeProfile {
     InsureeProfile({
         this.chfId,
@@ -57,7 +61,10 @@ class InsureeProfile {
         chfId: json["chfId"],
         lastName: json["lastName"],
         otherNames: json["otherNames"],
-        insureePolicies: List<InsureePolicy>.from(json["insureePolicies"].map((x) => InsureePolicy.fromJson(x))),
+       insureePolicies: List<InsureePolicy>.from(json["insureePolicies"].map((x) => InsureePolicy.fromJson(x))),
+        // a.value['name'].toString().toLowerCase().compareTo(b.value['name'].toString().toLowerCase());
+        // insureePolicies: List<InsureePolicy>.from(json["insureePolicies"].sort((a,b)=> a.value['id'].toString().toLowerCase().compareTo(b.value['id'].toString().toLowerCase())).map((x) => InsureePolicy.fromJson(x))),
+        // insureePolicies: List<InsureePolicy>.from(jpt(json["insureePolicies"]).sort((a,b)=> int.parse(a["policy"]["id"]).compareTo(int.parse(b["policy"]["id"]))).map((x) => InsureePolicy.fromJson(x))),
     );
     
     Map<String, dynamic> toJson() => {
@@ -66,6 +73,11 @@ class InsureeProfile {
         "otherNames": otherNames,
         "insureePolicies": List<dynamic>.from(insureePolicies.map((x) => x.toJson())),
     };
+    
+    List<InsureePolicy> insureePoliciesSorted() {
+        this.insureePolicies.sort((a, b) => b.policy.expiryDate.compareTo(a.policy.expiryDate));
+        return this.insureePolicies;
+    }
 }
 
 class InsureePolicy {
@@ -160,7 +172,7 @@ class Policy {
         this.product,
     });
     
-    int value;
+    double value;
     DateTime expiryDate;
     int status;
     Product product;
