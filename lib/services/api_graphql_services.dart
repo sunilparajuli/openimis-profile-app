@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:openimis_web_app/models/faq.dart';
 import 'package:openimis_web_app/models/feedback.dart';
 import 'package:openimis_web_app/models/health_facility_coordinates.dart';
@@ -289,13 +290,8 @@ class ApiGraphQlServices {
  Future<Offices>  getOfficesList() async {
    var jsonmap;
    try {
-     final response = await http.get(Uri.parse(env.OFFICE_LIST_URL),
-         headers: {
-           "Content-Type": "application/json",
-         },
-         
-     );
-     jsonmap = response.body;
+     final response = await  rootBundle.loadString("assets/json/offices.json"); //http.get(Uri.parse(env.OFFICE_LIST_URL),
+     jsonmap = response;
      offices =  Offices.fromJson(jsonDecode(jsonmap));
    } catch (Exception)
 
@@ -311,13 +307,15 @@ class ApiGraphQlServices {
   Future<Faq>  getFaqs() async {
     var jsonmap;
     try {
-      final response = await http.get(Uri.parse(env.FAQ_LIST_URL),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      //final response = await http.get(Uri.parse(env.FAQ_LIST_URL),
+      final response = await  rootBundle.loadString("assets/json/faqs.json");
 
-      );
-      jsonmap = response.body;
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+
+      // );
+      jsonmap = response;
       faq =  Faq.fromJson(jsonDecode(jsonmap));
     } catch (Exception)
 

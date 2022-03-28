@@ -16,21 +16,28 @@ class VerifyInsuree extends StatefulWidget {
 
 class _VerifyInsureeState extends State<VerifyInsuree> {
     final _formKey = GlobalKey<FormState>();
+    final focus = FocusNode();
+    TextEditingController _yearController = TextEditingController();
+    TextEditingController _monthController = TextEditingController();
+    TextEditingController _dayController = TextEditingController();
+
 
     @override
     void initState() {
     // TODO: implement initState
     super.initState();
     print("auth/verify_insuree.dart");
+
+
   }
     final Insuree _insuree = Insuree();
     
     final double circleRadius = 100.0;
     final double circleBorderWidth = 8.0;
     
-    TextEditingController _yearController = TextEditingController();
-    TextEditingController _monthController = TextEditingController();
-    TextEditingController _dayController = TextEditingController();
+
+
+
     dynamic verify;
 
      validateYear(val){
@@ -342,6 +349,9 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                                             obscureText: false,
                                             controller: _yearController,
                                             maxLength: 4,
+                                            onChanged: (_) => _yearController.text.length==4 ? FocusScope.of(context).nextFocus(): null,
+
+
                                         )
                                     ],
                                 )),
@@ -364,6 +374,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                                             obscureText: false,
                                             controller: _monthController,
                                             maxLength: 2,
+                                            onChanged: (_) => _monthController.text.length==2 ? FocusScope.of(context).nextFocus(): null,
                                         )
                                     ],
                                 )),
