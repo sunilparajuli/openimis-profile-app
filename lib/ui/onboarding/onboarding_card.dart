@@ -79,7 +79,7 @@ class OpenimisOnboardingPage extends StatelessWidget {
 						),
 					),
 //					Text(
-//						'Organize your Insurance records.',
+//						'Health Insurance For Universal Health Coverage',
 //						style: TextStyle(
 //							color: Colors.black54,
 //							fontSize: 16.0
@@ -118,11 +118,11 @@ class OpenimisOnboardingPage extends StatelessWidget {
 								fontFamily: "Regular",
 							),
 						),
-						Positioned(
-							top: 20.0,
-							left: MediaQuery.of(context).size.width/2 - 50,
-							child: Image.asset(env.LOGO_URL, width: 100,)
-						)
+//						Positioned(
+//							top: 20.0,
+//							left: MediaQuery.of(context).size.width/2 - 50,
+//							child: Image.asset(env.LOGO_URL, width: 100, height: 100,)
+//						)
 					],
 				),
 			),
