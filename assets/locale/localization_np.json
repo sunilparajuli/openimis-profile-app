@@ -1,5 +1,5 @@
 {
-  "page_title_openimis" : "Health Insurance Board",
+  "page_title_openimis" : "राष्ट्रिय बीमा बोर्ड",
   "page_title_history": "ईतिहास",
   "page_title_policy_information" : "नीति जानकारी",
   "page_title_settings" : "सेटिङ्स्",
@@ -54,6 +54,6 @@
   "first_hf" : "प्रथम स्वास्थ्य संस्था",
   "gender" : "लिङ्ग",
   "org" : "नेपाल सरकार, स्वास्थय वीमा बोर्ड",
-  "member_id" : "सदस्यता नं"
+  "member_id" : "बीमा नं."
 
 }

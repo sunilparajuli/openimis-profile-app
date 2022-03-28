@@ -46,7 +46,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 												tabs: [
 													Tab(
 														child: Text(
-															'EA Contact',
+															'EO Contact',
 															style: TextStyle(
 																fontSize: 14,
 																fontWeight: FontWeight.w400,

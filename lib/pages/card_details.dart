@@ -256,7 +256,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                             fontWeight: FontWeight.normal,
                                         ),
                                     ),
-                                    SizedBox(width: 8.0),
+                                    // SizedBox(width: 8.0),
                                     Text(
                                         ': ${policyprofile.otherNames} ${policyprofile.lastName}',
                                         style: TextStyle(
