@@ -378,7 +378,14 @@ class _HomepageState extends State<Homepage> {
 										return ListTile(
 											title: Text('${claims.healthFacility.name}'),
 											subtitle: Text('${claims.dateClaimed.year}-${claims.dateClaimed.month}-${claims.dateClaimed.day}'),
-											trailing: Text('${env.Currency} ${claims.claimed}'),
+											trailing:
+											Column(
+												children: [
+													Text('${env.Currency} ${claims.claimed}'),
+													claims.status==2 ? Text('Unverified', style: TextStyle(color: Colors.red),) : Text("")
+												],
+											),
+
 											onTap: () {
 												Navigator.push(
 													context,
