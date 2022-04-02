@@ -228,7 +228,7 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget _InsureeCardWidget(snapshot){
 		return Container(
-			height: MediaQuery.of(context).size.height*0.14, //100
+			height: MediaQuery.of(context).size.height*0.16, //100
 			padding: EdgeInsets.all(8.0),
 			margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.22), //165
 			child: Card(
@@ -248,6 +248,8 @@ class _HomepageState extends State<Homepage> {
 										side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
 									),
 									child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+										mainAxisSize: MainAxisSize.min,
 										children: [
 											Container(
 												width: MediaQuery.of(context).size.width*0.4, //150,
@@ -268,7 +270,7 @@ class _HomepageState extends State<Homepage> {
 													),
 												),
 											),
-											SizedBox(height: 8.0),
+											SizedBox(height: 4.0),
 											Text(
 												'${int.parse(snapshot.data.data.profile.remainingDays) > 0 ?
 												snapshot.data.data.profile.remainingDays : "Expired" }',
@@ -277,7 +279,8 @@ class _HomepageState extends State<Homepage> {
 													fontWeight: FontWeight.bold
 												),
 												// textAlign: TextAlign.center,
-											)
+											),
+                                            SizedBox(height: 4.0),
 										],
 									),
 								),
@@ -311,7 +314,7 @@ class _HomepageState extends State<Homepage> {
 													// textAlign: TextAlign.center,
 												),
 											),
-											SizedBox(height: 8.0),
+											SizedBox(height: 4.0),
 											
 											//Text('  ${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.year}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.month}-${snapshot.data.data.profile.insuree.insureePolicies[0].policy.expiryDate.day}  ')
 											Text(

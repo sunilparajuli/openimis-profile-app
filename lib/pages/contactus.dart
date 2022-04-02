@@ -78,7 +78,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 											),
 											
 											Container(
-												height: screenHeight(context, dividedBy: 1.26),
+												height: MediaQuery.of(context).size.height*0.75, //screenHeight(context, dividedBy: 1.26),
 												padding: EdgeInsets.only(top: 8.0),
 												child: TabBarView(
 													children: [
