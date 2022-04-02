@@ -79,7 +79,17 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 			),
 		);
 	}
-	
+
+	bool dateCheckActiveInactive(date){
+		var now = new DateTime.now();
+		var isPolicyExpire = DateTime.parse(date);
+		if(now.difference(isPolicyExpire).inDays >0)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	Widget _policyInformationListWidget(_data){
 		return Container(
 			margin: EdgeInsets.only(left: 8.0, right: 8.0),
@@ -130,30 +140,50 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                             ),
                         ),
 						SizedBox(height: 16.0),
-						_data.policy.status.toString() == '2' ? Text(
+
+						dateCheckActiveInactive("${_data.policy.expiryDate.year}-${_data.policy.expiryDate.month.toString().length!=2 ? '0${_data.policy.expiryDate.month}' :_data.policy.expiryDate.month}-${_data.policy.expiryDate.day}") != false ?
+						Text(
 							'Active',
 							style: TextStyle(
-								fontSize: 16,
-								fontWeight: FontWeight.bold,
-								color: Colors.green
-							),
-						):
-						_data.policy.status.toString() == '8' ? Text(
-							'Expire',
-							style: TextStyle(
-								fontSize: 16,
-								fontWeight: FontWeight.bold,
-								color: Colors.red
+									fontSize: 16,
+									fontWeight: FontWeight.bold,
+									color: Colors.green
 							),
 						) :
 						Text(
-							'Idle',
+							'Expire',
 							style: TextStyle(
-								fontSize: 16.0,
-								fontWeight: FontWeight.bold,
-								color: CustomTheme.lightTheme.primaryColor
+									fontSize: 16,
+									fontWeight: FontWeight.bold,
+									color: Colors.red
 							),
 						),
+
+
+						// _data.policy.status.toString() == '2' ? Text(
+						// 	'Active',
+						// 	style: TextStyle(
+						// 		fontSize: 16,
+						// 		fontWeight: FontWeight.bold,
+						// 		color: Colors.green
+						// 	),
+						// ):
+						// _data.policy.status.toString() == '8' ? Text(
+						// 	'Expire',
+						// 	style: TextStyle(
+						// 		fontSize: 16,
+						// 		fontWeight: FontWeight.bold,
+						// 		color: Colors.red
+						// 	),
+						// ) :
+						// Text(
+						// 	'Idle',
+						// 	style: TextStyle(
+						// 		fontSize: 16.0,
+						// 		fontWeight: FontWeight.bold,
+						// 		color: CustomTheme.lightTheme.primaryColor
+						// 	),
+						// ),
 					],
 				),
 			),

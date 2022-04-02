@@ -54,6 +54,8 @@ flutter:
     - assets/ca/
     - assets/locale/localization_en.json
     - assets/locale/localization_np.json
+    - assets/json/offices.json
+    - assets/json/faqs.json
 
 
   fonts:

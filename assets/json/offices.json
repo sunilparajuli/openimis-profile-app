@@ -1,0 +1,66 @@
+{
+  "BranchOfficeDetails": [
+    {
+      "Name": "Province 1, Office",
+      "Address": "Biratnagar, Morand",
+      "Email": "province1@hib.gov.np",
+      "Phone": [
+        "9851235377"
+      ]
+    },
+    {
+      "Name": "Madesh Pradesh, Office",
+      "Address": "Janakpur, Dhanusa",
+      "Email": "province2@hib.gov.np",
+      "Phone": [
+        "9855048301",
+        "9823073731"
+      ]
+    },
+    {
+      "Name": "Bagmati Province, Office",
+      "Address": "Radhe Radhe, Bhaktapur",
+      "Email": "province3@hib.gov.np",
+      "Phone": [
+        "01-6620431",
+        "9851134431"
+      ]
+    },
+    {
+      "Name": "Gandaki Province, Office",
+      "Address": "Pokhara, Kaski",
+      "Email": "gandaki@hib.gov.np",
+      "Phone": [
+        "061-524952",
+        "9856082148"
+      ]
+    },
+    {
+      "Name": "Lumbini Province, Office",
+      "Address": "Butwal, Rupendehi",
+      "Email": "province5@hib.gov.np",
+      "Phone": [
+        "071-419269",
+        "9857065136"
+      ]
+    },
+    {
+      "Name": "Karnali Province, Office",
+      "Address": "Birendranagar, Surkhet",
+      "Email": "karnali@hib.gov.np",
+      "Phone": [
+        "083-522521",
+        "9858062744"
+      ]
+    },
+    {
+      "Name":"Sudurpaschim Province, Office",
+      "Address":"Dhangadi, Kailali",
+      "Email":"sudurpaschim@hib.gov.np",
+      "Phone":[
+        "091-522143",
+        "9858785546"
+      ]
+    }
+  ]
+}

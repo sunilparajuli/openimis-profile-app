@@ -14,13 +14,26 @@ class openimisGqlQueries {
     }
     
     openimis_gql_insuree_claims(insuree_chfid) {
-        //pass insureeCHFID
-        return
-            {
-                "query": "query{\n  insureeProfile(insureeCHFID: \"${insuree_chfid}\"){\n    insureeClaim{\n"
-                    "      id\n      dateClaimed\n      claimed\n      healthFacility{\n        name\n      }\n    }\n  }\n}",
-                "variables": null
-            };
+        var query = """ 
+          {
+              insureeProfile(insureeCHFID: "${insuree_chfid}") {
+                insureeClaim {
+                  id
+                  dateClaimed
+                  claimed
+                  status
+                  healthFacility {
+                    name
+                  }
+                }
+              }
+            }
+         """;
+        var _ret= {
+          "query": query, //jsonEncode(query),
+          "variables": null
+        };
+        return _ret;
     }
     
     
@@ -35,7 +48,8 @@ class openimisGqlQueries {
     }
     
     openimis_gql_insuree_claimed_items(claimed_id) {
-        return
+
+      return
             
             {
                 "query": "query{\n  insureeClaim(claimId: ${claimed_id}){\n   \n    items{\n      id\n      item{\n        id\n        name\n        price\n      }\n    }\n  }\n}",
