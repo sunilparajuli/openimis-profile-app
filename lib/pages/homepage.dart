@@ -253,7 +253,7 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget _InsureeCardWidget(snapshot){
 		return Container(
-			height: MediaQuery.of(context).size.height*0.16, //100
+			height: 100, //MediaQuery.of(context).size.height*0.14, //100
 			padding: EdgeInsets.all(8.0),
 			margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.22), //165
 			child: Card(
@@ -273,8 +273,8 @@ class _HomepageState extends State<Homepage> {
 										side: BorderSide(color: CustomTheme.lightTheme.primaryColor)
 									),
 									child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-										mainAxisSize: MainAxisSize.min,
+                                        // crossAxisAlignment: CrossAxisAlignment.center,
+										// mainAxisSize: MainAxisSize.min,
 										children: [
 											Container(
 												width: MediaQuery.of(context).size.width*0.4, //150,
