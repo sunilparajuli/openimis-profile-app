@@ -64,6 +64,7 @@ String API_BASE_LOCAL_URL =  "http://imistest.hib.gov.np/api/graphql"; //"http:/
 String OFFICE_LIST_URL = "";
 String FAQ_LIST_URL = "";
 String API_HIB_URL = 'http://imistest.hib.gov.np/api/graphql';
+String API_HIB_REST_URL = 'http://imistest.hib.gov.np/api/';
 
 String LOGO_URL = 'assets/images/shs.png';
 String SPLASH_SCREEN = 'assets/images/HIB.jpg';

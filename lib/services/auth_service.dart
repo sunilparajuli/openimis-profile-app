@@ -75,10 +75,7 @@ class AuthService {
 
     if (response.statusCode == 200) {
       env.setRegisterSuccessTrue();
-      // userRegister.isRegisterSuccess=true;
-      
 
-      print(response.body);
       // If the call to the server was successful, parse the JSON.
       Fluttertoast.showToast(
           msg: 'Account Created',

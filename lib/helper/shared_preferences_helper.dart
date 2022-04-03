@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:openimis_web_app/models/insuree_policy_information.dart';
+import 'package:openimis_web_app/models/policy_information.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -24,6 +28,8 @@ class SessionManager {
   final String fullname = "";
   final String image_url = null;
 
+
+  InsureePolicyInformation _informationpolicy;
 //set data into shared preferences like this
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,6 +60,27 @@ class SessionManager {
   Future<void> setUserInfo(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(this.fullname, fullname);
+  }
+
+  Future<String> setPolicyInformation(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("policyinformation", args);
+  }
+
+  Future<bool> getInfoStatus() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("policyinformation") ??null;
+    if(jpt==null){
+      return false;
+    }
+    return true;
+  }
+  Future<InsureePolicyInformation> getPolicyInformation() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("policyinformation") ??null;
+    _informationpolicy = InsureePolicyInformation.fromJson(json.decode(jpt));
+    return _informationpolicy;
+
   }
 }
 

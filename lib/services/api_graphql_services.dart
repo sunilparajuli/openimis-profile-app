@@ -20,6 +20,7 @@ import 'package:openimis_web_app/graphql/gql_queries.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import "package:openimis_web_app/graphql/gql_mutations.dart";
 import 'package:openimis_web_app/common/global.dart' as globals;
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
 class ApiGraphQlServices {
     bool isLoading = false;
     MedicalServices medicalServices = MedicalServices();
@@ -189,9 +190,12 @@ class ApiGraphQlServices {
         return policyinformation;
     }
     
-    
-    Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid) async { //todo pass claim id from widget // this is for the list of policies of insuree
-        try {
+
+    Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid, bool canRefresh) async { //todo pass claim id from widget // this is for the list of policies of insuree
+      var jsonMap;
+      var resbody;
+      if(canRefresh || helper.SessionManager().getInfoStatus()==false){
+      try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
                 headers: {
                     "Content-Type": "application/json",
@@ -199,14 +203,19 @@ class ApiGraphQlServices {
                 },
                 body: jsonEncode(openimisGqlQueries().openimis_insuree_policy_information_lists(chfid)) //todo map qs filtering
             );
-            var jsonMap = json.decode(response.body);
+            resbody = response.body;
+             jsonMap = json.decode(response.body);
             insureepolicyinformation = InsureePolicyInformation.fromJson(jsonMap);
-            print(insureepolicyinformation);
             
         } catch (Exception) {
             return  insureepolicyinformation;//claimeditems;
         }
+        helper.SessionManager().setPolicyInformation(resbody);
         return insureepolicyinformation;
+    }
+      else {
+        return helper.SessionManager().getPolicyInformation();
+      }
     }
     
     Future<Notice> NoticesServicesGQL(String token) async {

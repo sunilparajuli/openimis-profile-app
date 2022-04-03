@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
+import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
 import 'package:openimis_web_app/pages/exploreServices.dart';
+import 'package:openimis_web_app/services/api_rest_services.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/pages/claimed_item_services.dart';
@@ -16,7 +20,7 @@ import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 import 'package:openimis_web_app/langlang/application.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Homepage extends StatefulWidget {
 	@override
@@ -25,20 +29,40 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
 	Future<MedicalServices> _medicalservices;
+	Future<UspPolicyInsureeHib> _usppolicybalance;
 	Future<Claims> _insureeclaims;
 	Future<Claimed> _claimed;
 	Future<ClaimedServicesItems> _claimedservicesitems;
 	AuthBlock auth;
 	dynamic insureeCardDetail;
 	SessionManager prefs =  SessionManager();
+	double balance;
+	var jpt;
+	final storage = FlutterSecureStorage();
 	// dynamic remainingDays;
 	
 	@override
-	void initState(){
+	 void initState() {
 		super.initState();
 		application.onLocaleChanged = onLocaleChange;
+			get_balance();
+
 		_medicalservices = ApiGraphQlServices().MedicalServicesGQL('medicalservice');
+
+
+
+
+
 		
+	}
+
+	get_balance() async {
+		var user = await storage.read(key: 'user');
+		var j =  json.decode(user);
+		ApiRestServices().UspPolicyHIB(j['data']['insureeAuthOtp']['insuree']['chfId']).then((value){
+			balance = value.balance;
+		});
+		return balance;
 	}
 	void onLocaleChange(Locale locale) async {
 		setState(() {
@@ -48,6 +72,7 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
+		jpt = auth;
 		final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
     
 		return Scaffold(
@@ -176,7 +201,7 @@ class _HomepageState extends State<Homepage> {
 								),
 								SizedBox(height: 8.0),
 								Text(
-									env.Currency + '${snapshot.data.data.profile.insuree.insureePolicies[0].policy.value}',
+									env.Currency + '${balance.toString()}',
 									style: TextStyle(
 										fontSize: 16,
 										fontWeight: FontWeight.bold,
