@@ -360,7 +360,37 @@ class _HomepageState extends State<Homepage> {
 			),
 		);
 	}
-	
+
+	claimStatusColor(status){
+		if(status==2){
+			return Colors.red;
+		}
+		if(status==4){
+			return Colors.orange;
+		}
+		if(status==8){
+			return Colors.blue;
+		}
+		if(status==16){
+			return Colors.green;
+		}
+	}
+	 String claimstatusString(status){
+		if(status==2){
+			return "Unverifed";
+		}
+		if(status==4){
+			return "Checked";
+		}
+		if(status==8){
+			return "Reviewed";
+		}
+		if(status==16){
+			return "Valuated";
+		}
+		return "-";
+	 }
+
 	Widget _ClaimHistoryWidget(){
 		return Container(
 			padding: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -410,7 +440,7 @@ class _HomepageState extends State<Homepage> {
 											Column(
 												children: [
 													Text('${env.Currency} ${claims.claimed}'),
-													claims.status==2 ? Text('Unverified', style: TextStyle(color: Colors.red),) : Text("")
+													Text(claimstatusString(claims.status), style: TextStyle(color: claimStatusColor(claims.status)),)
 												],
 											),
 

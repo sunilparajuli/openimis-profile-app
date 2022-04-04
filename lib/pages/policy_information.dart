@@ -28,11 +28,14 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 
   bool canRefresh = false;
   get_info() async {
-    var jpt = helper.SessionManager().getPolicyInformation().then((value) {
-      var abc = value;
-      print('hwa');
+    helper.SessionManager().getInfoStatus().then((value){
+      if(value==false){
+        setState(() {
+          canRefresh = true;
+        });
+
+      }
     });
-    print(jpt);
   }
 
   @override

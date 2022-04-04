@@ -194,7 +194,9 @@ class ApiGraphQlServices {
     Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid, bool canRefresh) async { //todo pass claim id from widget // this is for the list of policies of insuree
       var jsonMap;
       var resbody;
-      if(canRefresh || helper.SessionManager().getInfoStatus()==false){
+
+      if(canRefresh==true){
+
       try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
                 headers: {
@@ -210,10 +212,12 @@ class ApiGraphQlServices {
         } catch (Exception) {
             return  insureepolicyinformation;//claimeditems;
         }
+       // helper.SessionManager().deletePoicyInfrmatin();
         helper.SessionManager().setPolicyInformation(resbody);
         return insureepolicyinformation;
     }
       else {
+       // helper.SessionManager().deletePoicyInfrmatin();
         return helper.SessionManager().getPolicyInformation();
       }
     }

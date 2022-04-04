@@ -67,6 +67,12 @@ class SessionManager {
     prefs.setString("policyinformation", args);
   }
 
+
+  Future<String> deletePoicyInfrmatin() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   Future<bool> getInfoStatus() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var jpt = pref.getString("policyinformation") ??null;

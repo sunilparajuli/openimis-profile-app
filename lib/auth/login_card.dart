@@ -206,15 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
 																					var login = await auth.login(_user);
 																					Timer.periodic(Duration(milliseconds: 500), (timer) {
 																						print(DateTime.now());
-																						print('sign in');
 																						if(auth.isLoggedIn){
 																							timer.cancel();
 																							// Navigator.pushNamed(context, '/card');
-																							Navigator.push(
-																									context,
-																									MaterialPageRoute(
-																										builder: (context) => Display(initIndex: 0,),
-																									));
+																							Navigator.of(context)
+																									.pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
 																						}
 																						timer.cancel();
 																					});
