@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/langlang/application.dart';
-import 'package:openimis_web_app/mock_api/profile.dart';
+import 'package:openimis_web_app/mock_api/mock_api_data_services.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -188,7 +188,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 								  future: ApiGraphQlServices().InsureeInfoServicesGQL(
 										auth.user['data']['insureeAuthOtp']['token'],
 										auth.user['data']['insureeAuthOtp']['insuree']['chfId'].toString(),
-									),
+									true),
 								  builder: (context, snapshot) {
 										if (snapshot.hasData && snapshot.data.data!=null) {
 											return ListView(

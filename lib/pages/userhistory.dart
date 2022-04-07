@@ -53,7 +53,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 									future: ApiGraphQlServices()
 										.ClaimsServicesGQL(
 										auth.user['data']['insureeAuthOtp']['token'],
-										auth.user['data']['insureeAuthOtp']['insuree']['chfId']
+										auth.user['data']['insureeAuthOtp']['insuree']['chfId'], true
 									),
 									builder: (context, snapshot){
 										if(snapshot.hasData && snapshot.data.data!=null) {

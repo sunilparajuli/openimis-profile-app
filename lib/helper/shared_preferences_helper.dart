@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:openimis_web_app/models/insuree_claims.dart';
+import 'package:openimis_web_app/models/insuree_info.dart';
 import 'package:openimis_web_app/models/insuree_policy_information.dart';
 import 'package:openimis_web_app/models/policy_information.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +32,8 @@ class SessionManager {
 
 
   InsureePolicyInformation _informationpolicy;
+  Claims _claims;
+  InsureeData _insureedata;
 //set data into shared preferences like this
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -88,5 +92,56 @@ class SessionManager {
     return _informationpolicy;
 
   }
+
+
+
+  Future<bool> getClaimsServicesStatus() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("ClaimsServicesGQL") ??null;
+    if(jpt==null){
+      return false;
+    }
+    return true;
+  }
+
+  Future<String> setClaimsServicesGQL(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
+    prefs.setString("ClaimsServicesGQL", args);
+  }
+
+  Future<Claims> getClaimsServicesGQL() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("ClaimsServicesGQL") ??null;
+    print(jpt);
+    _claims = Claims.fromJson(json.decode(jpt));
+    return _claims;
+
+  }
+
+  Future<bool> getInsureeInfoServicesStatus() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("InsureeInfoServicesGQL") ??null;
+    if(jpt==null){
+      return false;
+    }
+    return true;
+  }
+
+  Future<String> setInsureeInfoServicesGQL(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("InsureeInfoServicesGQL", args);
+  }
+
+  Future<InsureeData> getInsureeInfoServicesGQL() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("InsureeInfoServicesGQL") ??null;
+    _insureedata = InsureeData.fromJson(json.decode(jpt));
+    return _insureedata;
+
+  }
+
+
+
 }
 

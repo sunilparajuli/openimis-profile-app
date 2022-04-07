@@ -21,6 +21,9 @@ import 'package:openimis_web_app/common/env.dart' as env;
 import "package:openimis_web_app/graphql/gql_mutations.dart";
 import 'package:openimis_web_app/common/global.dart' as globals;
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
+
+import "package:openimis_web_app/mock_api/mock_api_data_services.dart" as mock_data_services;
+
 class ApiGraphQlServices {
     bool isLoading = false;
     MedicalServices medicalServices = MedicalServices();
@@ -38,8 +41,7 @@ class ApiGraphQlServices {
     Offices offices = Offices();
     Faq faq = Faq();
 
-    
-    
+
     Future<MedicalServices> MedicalServicesGQL(String args) async {
         try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
@@ -60,61 +62,38 @@ class ApiGraphQlServices {
         return medicalServices;
     }
     
-    Future<Claims> ClaimsServicesGQL(String token, String chfID) async {
-        try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token" : "${token}"
-                },
-                body: jsonEncode(openimisGqlQueries().openimis_gql_insuree_claims(chfID))
-            
-            );
-            var jsonMap = response.body;
-            insuree_claims = Claims.fromJson(jsonDecode(jsonMap));
-        } catch (Exception) {
+    Future<Claims> ClaimsServicesGQL(String token, String chfID, canRefresh) async {
+          if(env.production==false){
+            insuree_claims = Claims.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_claims()));
             return insuree_claims;
-        }
-        return insuree_claims;
-    }
+          }
+          if(canRefresh) {
+            try {
+              final response = await http.post(Uri.parse(env.API_BASE_URL),
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Insuree-Token": "${token}"
+                  },
+                  body: jsonEncode(
+                      openimisGqlQueries().openimis_gql_insuree_claims(chfID))
+
+              );
+              var jsonMap = response.body;
+              helper.SessionManager().setClaimsServicesGQL(response.body);
+              insuree_claims = Claims.fromJson(jsonDecode(jsonMap));
+            } catch (Exception) {
+              return insuree_claims;
+            }
+            return insuree_claims;
+          }
+          else {
+            return helper.SessionManager().getClaimsServicesGQL();
+          }
+
+      }
 
 
-//  Future<Claimed> ClaimedServicesGQL() async {
-//    try {
-//      final response = await http.post(Uri.parse(env.API_BASE_URL),
-//          headers: {
-//            "Content-Type": "application/json",
-////                "Accept" : "application/json"
-//          },
-//          body: jsonEncode(openimisGqlQueries()
-//              .openimis_gql_individual_claimed_item_services(1)) //todo map qs filtering
-//      );
-//      var jsonMap = json.decode(response.body);
-//      claimed = Claimed.fromJson(jsonMap);
-//    } catch (Exception) {
-//      return claimed;
-//    }
-//    return claimed;
-//  }
-//
 
-//  Future<ClaimedServicesItems> ClaimedServicesItemsServicesGQL(int claimid) async { //todo pass claim id from widget
-//    try {
-//      final response = await http.post(Uri.parse(env.API_BASE_URL),
-//          headers: {
-//            "Content-Type": "application/json",
-////                "Accept" : "application/json"
-//          },
-//          body: jsonEncode(openimisGqlQueries()
-//              .openimis_gql_individual_claimed_item_services(claimid)) //todo map qs filtering
-//      );
-//      var jsonMap = json.decode(response.body);
-//      claimedServicesItems = ClaimedServicesItems.fromJson(jsonMap);
-//    } catch (Exception) {
-//      return claimedServicesItems;
-//    }
-//    return claimedServicesItems;
-//  }
     // Services api
     Future<ClaimedServices> ClaimedServicesServicesGQL(int claimid) async { //todo pass claim id from widget
         try {
@@ -239,21 +218,34 @@ class ApiGraphQlServices {
         return notices;
     }
 
-    Future<InsureeData> InsureeInfoServicesGQL(String token, String chfid) async {
+    Future<InsureeData> InsureeInfoServicesGQL(String token, String chfid, canRefresh) async {
+      if(env.production==false){
+        insureedata = InsureeData.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info())); //(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info()));
+        return insureedata;
+      }
+
+      if(canRefresh) {
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token": '${token}'
-                },
-                body: jsonEncode(openimisGqlQueries().openimis_gql_insuree_info(chfid))
-            );
-            var jsonMap = json.decode(response.body);
-            insureedata = InsureeData.fromJson(jsonMap);
+          final response = await http.post(Uri.parse(env.API_BASE_URL),
+              headers: {
+                "Content-Type": "application/json",
+                "Insuree-Token": '${token}'
+              },
+              body: jsonEncode(
+                  openimisGqlQueries().openimis_gql_insuree_info(chfid))
+          );
+          var jsonMap = json.decode(response.body);
+          insureedata = InsureeData.fromJson(jsonMap);
+          helper.SessionManager().deletePoicyInfrmatin();
+          helper.SessionManager().setInsureeInfoServicesGQL(response.body);
         } catch (Exception) {
-            return  insureedata;
+          return insureedata;
         }
         return insureedata;
+      }
+      else {
+        return helper.SessionManager().getInsureeInfoServicesGQL();
+      }
     }
 
 

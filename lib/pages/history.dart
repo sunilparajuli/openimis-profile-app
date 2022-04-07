@@ -68,7 +68,7 @@ class _HistoryPageState extends State<HistoryPage> {
 													future: ApiGraphQlServices().InsureeInfoServicesGQL(
 															auth.user['data']['insureeAuthOtp']['token'],
 															auth.user['data']['insureeAuthOtp']['insuree']['chfId']
-													),
+													,false),
 													builder: (context, snapshot) {
 														if(snapshot.hasData) {
 															return Row(
@@ -296,7 +296,7 @@ class _HistoryPageState extends State<HistoryPage> {
 												future: ApiGraphQlServices()
 													.ClaimsServicesGQL(
 													auth.user['data']['insureeAuthOtp']['token'],
-													auth.user['data']['insureeAuthOtp']['insuree']['chfId']
+													auth.user['data']['insureeAuthOtp']['insuree']['chfId'], true
 												),
 												builder: (context, snapshot) {
 													if(snapshot.hasData && snapshot.data.data!=null) {

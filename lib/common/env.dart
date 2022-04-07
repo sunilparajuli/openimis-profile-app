@@ -72,6 +72,8 @@ String ONBOARDING_SCREEN_1 = 'assets/images/smcard/splash1.jpg';
 String ONBOARDING_SCREEN_2 = 'assets/images/smcard/splash2.jpg';
 String ONBOARDING_SCREEN_3 = 'assets/images/smcard/splash3.jpg';
 
+bool production = true;
+
 String getBaseUrl(){
 	if (kReleaseMode) {
 		return API_HIB_URL;

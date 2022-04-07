@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 import 'package:openimis_web_app/langlang/application.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
 
 class Homepage extends StatefulWidget {
 	@override
@@ -37,24 +38,50 @@ class _HomepageState extends State<Homepage> {
 	dynamic insureeCardDetail;
 	SessionManager prefs =  SessionManager();
 	double balance;
-	var jpt;
 	final storage = FlutterSecureStorage();
 	// dynamic remainingDays;
-	
+	bool canRefresh = false;
+	bool canRefreshInsureeData = false;
 	@override
 	 void initState() {
 		super.initState();
 		application.onLocaleChanged = onLocaleChange;
-			get_balance();
+			env.production ? get_balance() : balance = 123456.00;
 
 		_medicalservices = ApiGraphQlServices().MedicalServicesGQL('medicalservice');
-
-
-
-
-
-		
+		get_canRefresh();
+		get_canRefreshInsureeData();
 	}
+
+	get_canRefresh() async{
+		helper.SessionManager().getClaimsServicesStatus().then((value) {
+			setState(() {
+				if(value==true) {
+					canRefresh = false;
+				}
+				else {
+					canRefresh = true;
+				}
+			});
+		} );
+
+
+	}
+
+	get_canRefreshInsureeData() async {
+		helper.SessionManager().getInsureeInfoServicesStatus().then((value) {
+			setState(() {
+				if(value==true) {
+					canRefreshInsureeData = false;
+				}
+				else {
+					canRefreshInsureeData = true;
+				}
+			});
+		} );
+	}
+
+
 
 	get_balance() async {
 		var user = await storage.read(key: 'user');
@@ -72,7 +99,6 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
-		jpt = auth;
 		final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
     
 		return Scaffold(
@@ -84,8 +110,8 @@ class _HomepageState extends State<Homepage> {
 							children: [
 								FutureBuilder<InsureeData>(
 									future: ApiGraphQlServices().InsureeInfoServicesGQL(
-										auth.user['data']['insureeAuthOtp']['token'],
-										auth.user['data']['insureeAuthOtp']['insuree']['chfId']
+									env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123",
+									env.production ? auth.user['data']['insureeAuthOtp']['insuree']['chfId'] : "123", canRefreshInsureeData
 									),
 									builder: (context, snapshot) {
 										
@@ -396,6 +422,7 @@ class _HomepageState extends State<Homepage> {
 			padding: EdgeInsets.only(left: 16.0, right: 16.0),
 			child: Column(
 				children: [
+
 					ListTile(
 						title: Text(
 							AppTranslations.of(context).text("history"),
@@ -404,7 +431,13 @@ class _HomepageState extends State<Homepage> {
 								fontWeight: FontWeight.normal
 							),
 						),
-						leading: Icon(Icons.history, color: Colors.green, size: 30,),
+						leading:  GestureDetector(
+									onTap: (){
+											print("123");
+									},
+							child: Icon(Icons.history, color: Colors.green, size: 30,),
+
+						),//Icon(Icons.history, color: Colors.green, size: 30,),
 						trailing: GestureDetector(
 							onTap: (){
 								Navigator.pushNamed(context, '/user-history');
@@ -421,8 +454,8 @@ class _HomepageState extends State<Homepage> {
 					FutureBuilder<Claims>(
 						future: ApiGraphQlServices()
 							.ClaimsServicesGQL(
-							auth.user['data']['insureeAuthOtp']['token'],
-							auth.user['data']['insureeAuthOtp']['insuree']['chfId']
+							env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123",
+							env.production ? auth.user['data']['insureeAuthOtp']['insuree']['chfId'] : "123", canRefresh
 						),
 						builder: (context, snapshot) {
 							if(snapshot.hasData && snapshot.data.data!=null) {
