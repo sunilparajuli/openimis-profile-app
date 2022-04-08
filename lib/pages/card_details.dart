@@ -89,31 +89,12 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                     builder: (context, snapshot) {
                                         if(snapshot.hasData) {
                                             var policyprofile = snapshot.data.data.insureeProfile;
-                                            var insureeProfile = snapshot.data.data.insureeProfile.insureePolicies[0];
-                                            var differenceInDays = dateTimeNow.difference(insureeProfile.policy.expiryDate).inDays;
+                                            var totalPolicies = snapshot.data.data.insureeProfile.insureePolicies.length -1;
+                                            var insureeProfile = snapshot.data.data.insureeProfile.insureePolicies[totalPolicies];
                                             return ListView(
                                                 children: [
                                                     // CARD
                                                     _virtualCardWidget(policyprofile, insureeProfile),
-                                                
-                                                    // FULL NAME
-                                                    // SizedBox(height: 20.0),
-                                                    // _buildNameTF(policyprofile),
-                                                
-                                                    // CARD NUMBER
-                                                    // SizedBox(height: 20.0),
-                                                    // _buildCardNumberTF(policyprofile),
-                                                
-                                                    // EXPIRY DATE
-                                                    // SizedBox(height: 20.0),
-                                                    // _buildExpiryDateTF(insureeProfile),
-                                                
-                                                    // RENEW SUBMISSION BUTTON
-                                                    /*SizedBox(height: 20.0),
-                                                    differenceInDays > 30 ?
-                                                     _buildRenewButtonWidget() : Text(""),
-                                                    widget.message!=null?
-                                                    _buildBackButtonWidget() : Text(""),*/
                                                 ],
                                             );
                                         }

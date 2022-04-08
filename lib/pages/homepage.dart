@@ -86,8 +86,11 @@ class _HomepageState extends State<Homepage> {
 	get_balance() async {
 		var user = await storage.read(key: 'user');
 		var j =  json.decode(user);
-		ApiRestServices().UspPolicyHIB(j['data']['insureeAuthOtp']['insuree']['chfId']).then((value){
-			balance = value.balance;
+		ApiRestServices().UspPolicyHIB("123", j['data']['insureeAuthOtp']['insuree']['chfId'],true).then((value){
+			setState(() {
+				balance = value.balance;
+			});
+
 		});
 		return balance;
 	}
@@ -226,14 +229,15 @@ class _HomepageState extends State<Homepage> {
 									),
 								),
 								SizedBox(height: 8.0),
-								Text(
-									env.Currency + '${balance.toString()}',
+							balance!=null ? Text(
+									"${env.Currency} ${balance.toString()}" ,
 									style: TextStyle(
 										fontSize: 16,
 										fontWeight: FontWeight.bold,
 										color: Colors.white
 									),
-								),
+								): Container(child: new CircularProgressIndicator(value: null,
+									strokeWidth: 1.0)),
 								SizedBox(height: 4.0),
 								Divider(
 									indent: 20.0,
@@ -265,6 +269,29 @@ class _HomepageState extends State<Homepage> {
 			)
 		);
 	}
+
+	String CalculateRemainingDays(args){
+		try {
+			var length = args.length;
+		} on Exception catch (_) {
+			return "No policy";
+		}
+		if(args.length == 0){
+			return "No policy";
+		}
+		var insureePolicies = args;
+		List listInsureePolicies = insureePolicies;
+		var lastPolicy = insureePolicies[listInsureePolicies.length-1];
+		DateTime expiryDate = lastPolicy.policy.expiryDate;
+		DateTime dateTimeCreatedAt = expiryDate;
+		DateTime dateTimeNow = DateTime.now();
+		final differenceInDays = dateTimeNow.difference(dateTimeCreatedAt).inDays;
+		if(differenceInDays > 0){
+			return "Expired";
+		}
+		return differenceInDays.abs().toString();
+	}
+
 
 	String _InsureeCardWidgetExpiresOn(args){
 		var insureePolicies = args['insureePolicies'];
@@ -323,8 +350,9 @@ class _HomepageState extends State<Homepage> {
 											),
 											SizedBox(height: 4.0),
 											Text(
-												'${int.parse(snapshot.data.data.profile.remainingDays) > 0 ?
-												snapshot.data.data.profile.remainingDays : "Expired" }',
+												// '${int.parse(snapshot.data.data.profile.remainingDays) > 0 ?
+												// snapshot.data.data.profile.remainingDays : "Expired" }',
+												CalculateRemainingDays(snapshot.data.data.profile.insuree.insureePolicies),
 												style: TextStyle(
 													fontSize: 16,
 													fontWeight: FontWeight.bold
@@ -417,6 +445,9 @@ class _HomepageState extends State<Homepage> {
 		return "-";
 	 }
 
+
+
+
 	Widget _ClaimHistoryWidget(){
 		return Container(
 			padding: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -465,6 +496,7 @@ class _HomepageState extends State<Homepage> {
 									physics: NeverScrollableScrollPhysics(),
 									itemCount: snapshot.data.data.insureeProfile.insureeClaim.length,
 									itemBuilder: (BuildContext context, int index){
+
 										var claims = snapshot.data.data.insureeProfile.insureeClaim[index];
 										return ListTile(
 											title: Text('${claims.healthFacility.name}'),

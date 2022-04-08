@@ -10,6 +10,7 @@ String uspPolicyInsureeHibToJson(UspPolicyInsureeHib data) => json.encode(data.t
 
 class UspPolicyInsureeHib {
   UspPolicyInsureeHib({
+    this.name,
     this.chfid,
     this.dateOfBirth,
     this.gender,
@@ -19,6 +20,7 @@ class UspPolicyInsureeHib {
     this.status,
   });
 
+  String name;
   String chfid;
   String dateOfBirth;
   String gender;
@@ -28,6 +30,7 @@ class UspPolicyInsureeHib {
   String status;
 
   factory UspPolicyInsureeHib.fromJson(Map<String, dynamic> json) => UspPolicyInsureeHib(
+    name: json["name"],
     chfid: json["chfid"],
     dateOfBirth: json["date_of_birth"],
     gender: json["gender"],
@@ -38,6 +41,7 @@ class UspPolicyInsureeHib {
   );
 
   Map<String, dynamic> toJson() => {
+    "name": name,
     "chfid": chfid,
     "date_of_birth": dateOfBirth,
     "gender": gender,

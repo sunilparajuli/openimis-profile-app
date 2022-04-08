@@ -4,6 +4,7 @@ import 'package:openimis_web_app/models/insuree_claims.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
 import 'package:openimis_web_app/models/insuree_policy_information.dart';
 import 'package:openimis_web_app/models/policy_information.dart';
+import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -34,6 +35,7 @@ class SessionManager {
   InsureePolicyInformation _informationpolicy;
   Claims _claims;
   InsureeData _insureedata;
+  UspPolicyInsureeHib _uspPolicyInsureeHib;
 //set data into shared preferences like this
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -140,6 +142,31 @@ class SessionManager {
     return _insureedata;
 
   }
+
+
+  Future<bool> getprocedureHIBstatus() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("procedureHIB") ??null;
+    if(jpt==null){
+      return false;
+    }
+    return true;
+  }
+
+  Future<String> setprocedureHIB(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("procedureHIB", args);
+  }
+
+  Future<UspPolicyInsureeHib> getprocedureHIB() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("procedureHIB") ??null;
+    _uspPolicyInsureeHib = UspPolicyInsureeHib.fromJson(json.decode(jpt));
+    return _uspPolicyInsureeHib;
+
+  }
+
+
 
 
 
