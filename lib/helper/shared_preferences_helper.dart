@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:openimis_web_app/models/insuree_claims.dart';
@@ -36,6 +37,7 @@ class SessionManager {
   Claims _claims;
   InsureeData _insureedata;
   UspPolicyInsureeHib _uspPolicyInsureeHib;
+  PolicyInformation _policyInformation;
 //set data into shared preferences like this
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -115,7 +117,9 @@ class SessionManager {
   Future<Claims> getClaimsServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var jpt = pref.getString("ClaimsServicesGQL") ??null;
-    print(jpt);
+    if(jpt==null){
+      return null;
+    }
     _claims = Claims.fromJson(json.decode(jpt));
     return _claims;
 
@@ -138,6 +142,9 @@ class SessionManager {
   Future<InsureeData> getInsureeInfoServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var jpt = pref.getString("InsureeInfoServicesGQL") ??null;
+    if(jpt==null){
+      return null;
+    }
     _insureedata = InsureeData.fromJson(json.decode(jpt));
     return _insureedata;
 
@@ -167,7 +174,57 @@ class SessionManager {
   }
 
 
+  // Future<bool> getprocedureHIBstatus() async{
+  //   final SharedPreferences pref = await SharedPreferences.getInstance();
+  //   var jpt = pref.getString("procedureHIB") ??null;
+  //   if(jpt==null){
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
+  Future<String> setPolicyInformationCardPage(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("PolicyInformationCardPage", args);
+  }
+
+  Future<PolicyInformation> getPolicyInformationCardPage() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var jpt = pref.getString("PolicyInformationCardPage") ??null;
+    if(jpt==null){
+      return null;
+    }
+    _policyInformation = PolicyInformation.fromJson(json.decode(jpt));
+    return _policyInformation;
+
+  }
+
+
+  Future<bool> setRefreshApi(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("refreshApi", args.toString());
+  }
+
+  Future<bool> getRefreshApi() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var exp = prefs.get("refreshApi");
+    return exp=="true";
+
+  }
+
+  Future<bool> getTrueSetFalseRefreshAPi() async{
+    var isRefresh = await getRefreshApi().then((value){
+      return value;
+    });
+
+    if(isRefresh==true){
+      Timer.periodic(Duration(milliseconds: 500), (timer)  async{
+        await setRefreshApi(false);
+        timer.cancel();
+      });
+    }
+    return isRefresh;
+  }
 
 
 }

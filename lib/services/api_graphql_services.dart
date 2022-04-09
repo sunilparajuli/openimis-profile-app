@@ -67,7 +67,16 @@ class ApiGraphQlServices {
             insuree_claims = Claims.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_claims()));
             return insuree_claims;
           }
-          if(canRefresh) {
+
+          var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
+            return value;
+          });
+          if(!isRefresh){
+            var ret = await helper.SessionManager().getClaimsServicesGQL().then((value) => value);
+            if(ret!=null) {
+              return ret;
+            }
+          }
             try {
               final response = await http.post(Uri.parse(env.API_BASE_URL),
                   headers: {
@@ -85,22 +94,20 @@ class ApiGraphQlServices {
               return insuree_claims;
             }
             return insuree_claims;
-          }
-          else {
-            return helper.SessionManager().getClaimsServicesGQL();
-          }
+
+
 
       }
 
 
 
     // Services api
-    Future<ClaimedServices> ClaimedServicesServicesGQL(int claimid) async { //todo pass claim id from widget
+    Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimid) async { //todo pass claim id from widget
         try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
                 headers: {
                     "Content-Type": "application/json",
-//                "Accept" : "application/json"
+                  "Insuree-Token" : "${token}"
                 },
                 body: jsonEncode(openimisGqlQueries()
                     .openimis_gql_insuree_claimed_services(claimid)) //todo map qs filtering
@@ -113,12 +120,12 @@ class ApiGraphQlServices {
         return claimedservices;
     }
     
-    Future<ClaimedItems> ClaimedItemServicesGQL(int claimid) async { //todo pass claim id from widget
+    Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimid) async { //todo pass claim id from widget
         try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
                 headers: {
                     "Content-Type": "application/json",
-//                "Accept" : "application/json"
+                    "Insuree-Token" : "${token}"
                 },
                 body: jsonEncode(openimisGqlQueries()
                     .openimis_gql_insuree_claimed_items(claimid)) //todo map qs filtering
@@ -148,9 +155,25 @@ class ApiGraphQlServices {
         }
         return healthFacilityCoordinates;
     }
-    
+
+
     Future<PolicyInformation> PolicyInformationServicesGQL(String token, chfid) async { //todo pass claim id from widget // this is for the homepage
-        try {
+
+
+      var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
+          return value;
+      });
+    if(!isRefresh){
+      var _policyinformation = await helper.SessionManager()
+            .getPolicyInformationCardPage()
+            .then((value) {
+          return value;
+        });
+        if (_policyinformation != null) {
+          return _policyinformation;
+        }
+    }
+      try {
             final response = await http.post(Uri.parse(env.API_BASE_URL),
                 headers: {
                     "Content-Type": "application/json",
@@ -160,8 +183,8 @@ class ApiGraphQlServices {
                     .openimis_gql_insuree_policy_information(chfid)) //todo map qs filtering
             );
             var jsonMap = json.decode(response.body);
-            print(openimisGqlQueries().openimis_gql_insuree_policy_information(chfid));
 
+            helper.SessionManager().setPolicyInformationCardPage(response.body);
             policyinformation = PolicyInformation.fromJson(jsonMap);
         } catch (Exception) {
             return  policyinformation;//claimeditems;
@@ -224,7 +247,17 @@ class ApiGraphQlServices {
         return insureedata;
       }
 
-      if(canRefresh) {
+      var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
+        return value;
+      });
+
+      if(!isRefresh){
+        var ret = await helper.SessionManager().getInsureeInfoServicesGQL().then((value) => value);
+        if(ret!=null) {
+          return ret;
+        }
+      }
+
         try {
           final response = await http.post(Uri.parse(env.API_BASE_URL),
               headers: {
@@ -236,16 +269,14 @@ class ApiGraphQlServices {
           );
           var jsonMap = json.decode(response.body);
           insureedata = InsureeData.fromJson(jsonMap);
-          helper.SessionManager().deletePoicyInfrmatin();
+          // helper.SessionManager().deletePoicyInfrmatin();
           helper.SessionManager().setInsureeInfoServicesGQL(response.body);
         } catch (Exception) {
           return insureedata;
         }
         return insureedata;
-      }
-      else {
-        return helper.SessionManager().getInsureeInfoServicesGQL();
-      }
+
+
     }
 
 

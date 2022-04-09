@@ -192,7 +192,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
 								  builder: (context, snapshot) {
 										if (snapshot.hasData && snapshot.data.data!=null) {
 											return ListView(
-
 												children: [
 													SizedBox(height: 20.0),
 													// PROFILE IMAGE

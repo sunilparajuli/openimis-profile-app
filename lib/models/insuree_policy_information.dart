@@ -20,7 +20,7 @@ class InsureePolicyInformation {
     );
     
     Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data.toJson()
     };
 }
 

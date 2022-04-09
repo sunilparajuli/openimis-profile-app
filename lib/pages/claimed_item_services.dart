@@ -9,7 +9,8 @@ import '../screen_size_reducers.dart';
 
 class ClaimedItemServicesPage extends StatefulWidget {
     final int claimid;
-    ClaimedItemServicesPage({Key key, this.claimid}) : super(key: key);
+    final String token;
+    ClaimedItemServicesPage({Key key, this.claimid, this.token}) : super(key: key);
     @override
     _ClaimedItemServicesPageState createState() =>
         _ClaimedItemServicesPageState();
@@ -24,8 +25,8 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
     void initState() {
         // TODO: implement initState
         super.initState();
-        _claimedservices = ApiGraphQlServices().ClaimedServicesServicesGQL(widget.claimid);
-        _claimeditems = ApiGraphQlServices().ClaimedItemServicesGQL(widget.claimid);
+        _claimedservices = ApiGraphQlServices().ClaimedServicesServicesGQL(widget.token,widget.claimid);
+        _claimeditems = ApiGraphQlServices().ClaimedItemServicesGQL(widget.token,widget.claimid);
     }
     
     @override

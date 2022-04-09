@@ -7,6 +7,7 @@ import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/langlang/application.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
 
 class CardDetailPage extends StatefulWidget {
     final String message;
@@ -107,7 +108,15 @@ class _CardDetailPageState extends State<CardDetailPage> {
                         )
                     )
                 ],
+
             ),
+            floatingActionButton : FloatingActionButton(onPressed: () async{
+                await helper.SessionManager().setRefreshApi(true);
+                setState(() {
+
+                });
+            },
+                child: Icon(Icons.refresh)),
         );
     }
 

@@ -38,6 +38,7 @@ class _HomepageState extends State<Homepage> {
 	dynamic insureeCardDetail;
 	SessionManager prefs =  SessionManager();
 	double balance;
+	bool isBalanceSavedToLocal = false;
 	final storage = FlutterSecureStorage();
 	// dynamic remainingDays;
 	bool canRefresh = false;
@@ -83,7 +84,7 @@ class _HomepageState extends State<Homepage> {
 
 
 
-	get_balance() async {
+	getapiPolicy() async{
 		var user = await storage.read(key: 'user');
 		var j =  json.decode(user);
 		ApiRestServices().UspPolicyHIB("123", j['data']['insureeAuthOtp']['insuree']['chfId'],true).then((value){
@@ -92,6 +93,64 @@ class _HomepageState extends State<Homepage> {
 			});
 
 		});
+	}
+
+	 get_balance() async {
+
+
+		var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
+			return value;
+		});
+
+		if(!isRefresh){
+			var ret = await helper.SessionManager().getprocedureHIBstatus().then((value) => value);
+			if(ret!=false) {
+				helper.SessionManager().getprocedureHIB().then((value) {
+					setState(() {
+						balance = value.balance;
+					});
+				});
+
+			}
+		}
+
+		try {
+			var user = await storage.read(key: 'user');
+			var j =  json.decode(user);
+			await ApiRestServices().UspPolicyHIB(auth.user['data']['insureeAuthOtp']['token'], j['data']['insureeAuthOtp']['insuree']['chfId'],true).then((value) {
+				setState(() {
+					balance = value.balance;
+				});
+
+			});
+		} catch (Exception) {
+			return Exception;
+		}
+
+
+
+	}
+
+	get_balance1() async {
+			await helper.SessionManager().getprocedureHIBstatus().then((value) {
+				if (value == true) {
+					helper.SessionManager().getprocedureHIB().then((value) {
+						setState(() {
+							balance = value.balance;
+						});
+					});
+				}
+				else {
+					getapiPolicy();
+				}
+
+			});
+		var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
+			return value;
+		});
+		if(isRefresh){
+			getapiPolicy();
+		}
 		return balance;
 	}
 	void onLocaleChange(Locale locale) async {
@@ -103,7 +162,6 @@ class _HomepageState extends State<Homepage> {
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
 		final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
-    
 		return Scaffold(
 			backgroundColor: CustomTheme.lightTheme.backgroundColor.withOpacity(0.5),
 			body: Stack(
@@ -147,6 +205,15 @@ class _HomepageState extends State<Homepage> {
 					// bottom_nav.currentIndex== 0 ? ExploreServicesPage() : Text(""),
 				],
 			),
+			floatingActionButton : FloatingActionButton(onPressed: () async{
+				await helper.SessionManager().setRefreshApi(true);
+				get_balance();
+				setState(() {
+					canRefresh = true;
+				});
+
+			},
+					child: Icon(Icons.refresh)),
 		);
 	}
 	
@@ -513,7 +580,7 @@ class _HomepageState extends State<Homepage> {
 												Navigator.push(
 													context,
 													MaterialPageRoute(
-														builder: (context) => ClaimedItemServicesPage(claimid: int.parse(claims.id)),
+														builder: (context) => ClaimedItemServicesPage(token : auth.user['data']['insureeAuthOtp']['token'],claimid: int.parse(claims.id)),
 													),
 												);
 											},

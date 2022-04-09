@@ -82,9 +82,11 @@ class _DisplayState extends State<Display> {
                 ),
             ),
            
-            body : connectionStatus==ConnectivityResult.none ?
-                    Container(child: Center(child: Text(AppTranslations.of(context).text('no_internet_connection')),),)
-                :_getDrawerItemWidget(bottom_nav.currentIndex),
+            body :
+            // connectionStatus==ConnectivityResult.none ?
+            //         Container(child: Center(child: Text(AppTranslations.of(context).text('no_internet_connection')),),)
+            //     :
+            _getDrawerItemWidget(bottom_nav.currentIndex),
             bottomNavigationBar: CurvedNavigationBar(
                 color: CustomTheme.lightTheme.primaryColor,
                 height: 60,
