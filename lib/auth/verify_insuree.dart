@@ -55,7 +55,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
             return "Day is invalid please enter valid one";
         }
     }
-    
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     @override
     Widget build(BuildContext context) {
         Size deviceSize = MediaQuery.of(context).size;
@@ -407,6 +407,11 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
         );
     }
 
+    void showMessage(String val, duration){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
+            Text(val, style: TextStyle(fontSize: 20.0),), duration: Duration(milliseconds: duration),),);
+
+    }
     // VERIFY BUTTON
     Widget _buildVerifyTF(){
         return Container(
@@ -421,9 +426,34 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                         _formKey.currentState.save();
                         // Hit Api
                     }
-                    var verify = await VerifyInsureeService()
-                        .VerifyInsureeData(_insuree);
 
+                    try {
+                        var verify = await VerifyInsureeService()
+                            .VerifyInsureeData(_insuree);
+
+                        if(verify['data']['insureeAuth']==null)
+                        {
+                            showMessage("Invalid Details", 5000);
+                            return;
+                        }
+                        bool ifSuccess =  verify['data']['insureeAuth']['issuccess'].toString() == 'true';
+                        showMessage(verify['data']['insureeAuth']['message'], 10000);
+
+                        if(ifSuccess==true) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LoginScreen(
+                                            chfid: _insuree.chfid,
+                                        ),
+                                ));
+                        }
+
+
+                    } catch (error) {
+                        showMessage('Something went wrong', 5000);
+                    }
 //                    if (verify == null) {
 //                        Fluttertoast.showToast(
 //                            msg: "Incorrect Details ",
@@ -432,19 +462,8 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
 //                            timeInSecForIos: 1,
 //                            fontSize: 16.0);
 //                    } else {
-                        Fluttertoast.showToast(
-                            msg: "Verify Your Otp for Login",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIos: 1,
-                            fontSize: 16.0);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen(
-                                    chfid: _insuree.chfid,
-                                ),
-                            ));
+
+
 //                    }
                 },
                 padding: EdgeInsets.all(16.0),

@@ -9,7 +9,7 @@ bool isLoading=false;
     isLoading = true;
     var body = {"query":"\n\nquery {\n "
         " insureeAuth(insureeCHFID: \"${_verifyInsuree.chfid.toString()}\", familyHeadCHFID: \""
-        "${_verifyInsuree.fhchfid.toString()}\", dob:\"${_verifyInsuree.dob}\"){\n    id\n  }\n}"};
+        "${_verifyInsuree.fhchfid.toString()}\", dob:\"${_verifyInsuree.dob}\"){\n    id\n message\n issuccess\n  }\n}"};
     //body = {"query":"\n\nquery {\n  insureeAuth(insureeCHFID: \"100\", familyHeadCHFID: \"200\", dob:\"1952-05-07\"){\n    id\n  }\n}\n","variables":null};
     final response = await http.post(Uri.parse(env.API_BASE_URL),
         headers: {
@@ -23,7 +23,8 @@ bool isLoading=false;
     var jpt = response.body;
       isLoading=false;
       var jdr = jsonDecode(response.body);
-      return jdr['data']['insureeAuth'];
+      //return jdr['data']['insureeAuth']; //{\"data\":{\"insureeAuth\":{\"id\":\"1\",\"message\":\"Phone number not found.Please contact HIB\"}}}
+    return jdr;
     }
 
   }

@@ -63,7 +63,7 @@ getFirebaseToken(){
 String API_BASE_LOCAL_URL =  "http://imistest.hib.gov.np/api/graphql"; //"http://10.0.2.2/api/graphql";//"http://imistest.hib.gov.np/api/graphql";//"https://oi.tinker.com.np/api/graphql";
 String OFFICE_LIST_URL = "";
 String FAQ_LIST_URL = "";
-String API_HIB_URL = 'http://imistest.hib.gov.np/api/graphql';
+String API_HIB_URL =  'https://connect.hib.gov.np/hibprofile/api/graphql';//'http://imistest.hib.gov.np/api/graphql';
 String API_HIB_REST_URL = 'http://imistest.hib.gov.np/api/';
 
 String LOGO_URL = 'assets/images/shs.png';

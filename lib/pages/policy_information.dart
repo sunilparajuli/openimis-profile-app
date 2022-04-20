@@ -174,7 +174,7 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                         color: Colors.green),
                   )
                 : Text(
-                    'Expire',
+                    'Expired',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
