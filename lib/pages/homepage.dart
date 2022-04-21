@@ -321,13 +321,15 @@ class _HomepageState extends State<Homepage> {
                                     ),
                                 ),
                                 SizedBox(height: 8.0),
-								Text(
+								Expanded(child:  Text(
 									'${snapshot.data.data.profile.insuree.healthFacility.name ?? "N/A"}',
 									style: TextStyle(
 										fontSize: 16,
 										fontWeight: FontWeight.normal,
 										color: Colors.white
 									),
+									overflow: TextOverflow.ellipsis,
+								)
 								)
 							],
 						),

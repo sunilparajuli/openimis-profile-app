@@ -52,8 +52,8 @@ android {
         applicationId "hib.np.com.tinker"
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 5
-        versionName '1.0.0'
+        versionCode 6
+        versionName '1.0.1'
     }
 
     signingConfigs {

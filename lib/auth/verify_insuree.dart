@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:openimis_web_app/auth/login_card.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +61,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
     final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     @override
     Widget build(BuildContext context) {
+        print("pages/verify_insuree.dart");
         Size deviceSize = MediaQuery.of(context).size;
         return Scaffold(
             backgroundColor: CustomTheme.lightTheme.primaryColor, //Color.fromRGBO(41, 127, 141, 25),,
@@ -236,6 +240,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                     ),
                     SizedBox(height: 8.0),
                     TextFormField(
+                        maxLength: 9,
                         keyboardType: TextInputType.number,
                         validator: (value) {
                             if (value.isEmpty) {
@@ -259,6 +264,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                             filled: true,
                             contentPadding: EdgeInsets.all(16.0),
                             prefixIcon: Icon(Icons.dialpad),
+
                         ),
                     ),
                 ],
@@ -284,6 +290,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                     ),
                     SizedBox(height: 8.0),
                     TextFormField(
+                        maxLength: 9,
                         validator: (value) {
                             if (value.isEmpty) {
                                 return 'Please enter family head insurance number';
@@ -450,8 +457,21 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                                 ));
                         }
 
+                    } on Exception catch (exception) {
+                        if(exception is SocketException){
+                            //treat SocketException
+                            showMessage("Cannot connect with server, please try again", 5000);
+                        }
+                        else if(exception is TimeoutException){
+                            //treat TimeoutException
+                            showMessage("The connection has timed out", 5000);
+                        }
+                        else {
+                            showMessage("The server couldn not handle your request at the moment", 3000);
+                        }
 
-                    } catch (error) {
+                    }
+                    catch (error) {
                         showMessage('Something went wrong', 5000);
                     }
 //                    if (verify == null) {
