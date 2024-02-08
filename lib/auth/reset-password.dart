@@ -218,27 +218,31 @@ class ResetPasswordState extends State<ResetPassword> {
                                                         width: double.infinity,
                                                         child: Consumer<AuthBlock>(
                                                             builder: (BuildContext context, AuthBlock auth, Widget child){
-                                                                return RaisedButton(
+                                                                return ElevatedButton(
                                                                     onPressed: () async {
-                                                                    
+                                                                        // Your asynchronous logic goes here
                                                                     },
-                                                                    padding: EdgeInsets.all(16.0),
-                                                                    shape: RoundedRectangleBorder(
-                                                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        padding: EdgeInsets.all(16.0),
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                                        ),
+                                                                        primary: Color.fromRGBO(254, 196, 45, 50),
                                                                     ),
-                                                                    color: Color.fromRGBO(254, 196, 45, 50),
                                                                     child: auth.loading && auth.loadingType == 'login'
                                                                         ? CircularProgressIndicator(
-                                                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+                                                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                                                    )
                                                                         : Text(
                                                                         "Sign In",
                                                                         style: TextStyle(
                                                                             fontSize: 16.0,
                                                                             fontWeight: FontWeight.w400,
-                                                                            fontFamily: "Open-sans"
+                                                                            fontFamily: "Open-sans",
                                                                         ),
                                                                     ),
                                                                 );
+
                                                             }
                                                         ),
                                                     ),

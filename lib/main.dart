@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:openimis_web_app/auth/register_card.dart';
 import 'package:openimis_web_app/auth/reset-password.dart';
 import 'package:openimis_web_app/models/insuree.dart';
@@ -18,7 +19,6 @@ import 'package:openimis_web_app/pages/profile.dart';
 import 'package:openimis_web_app/pages/userhistory.dart';
 import 'package:openimis_web_app/theme/dark_theme_provider.dart';
 import 'package:openimis_web_app/theme/dark_theme_styles.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

@@ -516,15 +516,17 @@ class _CardDetailPageState extends State<CardDetailPage> {
         return Container(
             padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
                 onPressed: () async {
                     Navigator.pushNamed(context, '/PaymentsubmissionPage');
                 },
-                padding: EdgeInsets.all(16.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
-                color: CustomTheme.lightTheme.primaryColor,
                 child: Text(
                     AppTranslations.of(context).text('renew_submission').toUpperCase(),
                     style: TextStyle(
@@ -542,15 +544,17 @@ class _CardDetailPageState extends State<CardDetailPage> {
         return Container(
             padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
                 onPressed: () async {
                     Navigator.pushNamed(context, '/card');
                 },
-                padding: EdgeInsets.all(16.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
-                color: CustomTheme.lightTheme.primaryColor,
                 child: Text(
                     AppTranslations.of(context).text('go_back').toUpperCase(),
                     style: TextStyle(
@@ -561,6 +565,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                     ),
                 ),
             ),
+
         );
     }
 }

@@ -327,40 +327,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
 														width: double.infinity,
 														child: Consumer<AuthBlock>(
 															builder: (BuildContext context, AuthBlock auth, Widget child){
-																return RaisedButton(
+																return ElevatedButton(
 																	onPressed: () async {
 																		// Validate form
-																		if (_formKey.currentState.validate() &&  !auth.loading) {
+																		if (_formKey.currentState.validate() && !auth.loading) {
 																			_formKey.currentState.save();
+
 																			// Hit Api
 																			var register = await auth.register(userRegister);
+
 																			Timer.periodic(Duration(milliseconds: 500), (timer) {
 																				print(DateTime.now());
 																				print('sign in');
-																				if(auth.isRegisterSuccess==true){
+																				if(auth.isRegisterSuccess == true) {
 																					Navigator.popAndPushNamed(context, '/otp-verify');
 																				}
 																				timer.cancel();
 																			});
 																		}
 																	},
-																	padding: EdgeInsets.all(16.0),
-																	shape: RoundedRectangleBorder(
-																		borderRadius: BorderRadius.all(Radius.circular(10.0)),
+																	style: ElevatedButton.styleFrom(
+																		padding: EdgeInsets.all(16.0),
+																		shape: RoundedRectangleBorder(
+																			borderRadius: BorderRadius.all(Radius.circular(10.0)),
+																		),
+																		primary: Color.fromRGBO(254, 196, 45, 50),
 																	),
-																	color: Color.fromRGBO(254, 196, 45, 50),
 																	child: auth.loading && auth.loadingType == 'register'
-																		? CircularProgressIndicator(
-																		valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
-																		: Text(
+																			? CircularProgressIndicator(
+																		valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+																	)
+																			: Text(
 																		"Sign Up".toUpperCase(),
 																		style: TextStyle(
 																			fontSize: 16.0,
 																			fontWeight: FontWeight.w400,
-																			fontFamily: "Open-sans"
+																			fontFamily: "Open-sans",
 																		),
 																	),
 																);
+
 															}
 														),
 													),

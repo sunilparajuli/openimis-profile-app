@@ -1,7 +1,5 @@
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:local_auth/auth_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/user.dart';
@@ -10,9 +8,6 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/cupertino.dart';
-import  'package:openimis_web_app/common/env.dart' as env;
-import 'package:openimis_web_app/pages/base.dart';
-import 'package:openimis_web_app/models/insuree.dart';
 class LoginScreen extends StatefulWidget {
 	@override
 	final String chfid;
@@ -24,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
 	final _formKey = GlobalKey<FormState>();
-//	final UserCredential userCredential = UserCredential();
 	final UserCredential _user = UserCredential();
 	Widget _buildOTPField(){
 		return Container(
@@ -195,71 +189,51 @@ class _LoginScreenState extends State<LoginScreen> {
 															width: double.infinity,
 															child: Consumer<AuthBlock>(
 																	builder: (BuildContext context, AuthBlock auth, Widget child){
-																		return RaisedButton(
+																		return ElevatedButton(
 																			onPressed: () async {
 																				// Validate form
 																				if (_formKey.currentState.validate() && !auth.loading) {
 																					// Update values
 																					_formKey.currentState.save();
 																					_user.chfid = widget.chfid;
+
 																					// Hit Api
 																					var login = await auth.login(_user);
+
 																					Timer.periodic(Duration(milliseconds: 500), (timer) {
 																						print(DateTime.now());
 																						if(auth.isLoggedIn){
 																							timer.cancel();
-																							// Navigator.pushNamed(context, '/card');
-																							Navigator.of(context)
-																									.pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+																							Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
 																						}
 																						timer.cancel();
 																					});
 																				}
 																			},
-																			padding: EdgeInsets.all(16.0),
-																			shape: RoundedRectangleBorder(
-																				borderRadius: BorderRadius.all(Radius.circular(10.0)),
+																			style: ElevatedButton.styleFrom(
+																				padding: EdgeInsets.all(16.0),
+																				shape: RoundedRectangleBorder(
+																					borderRadius: BorderRadius.all(Radius.circular(10.0)),
+																				),
+																				primary: CustomTheme.lightTheme.primaryColor,
 																			),
-																			color:CustomTheme.lightTheme.primaryColor,
 																			child: auth.loading && auth.loadingType == 'login'
 																					? CircularProgressIndicator(
-																					valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+																				valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+																			)
 																					: Text(
 																				"proceed".toUpperCase(),
 																				style: TextStyle(
 																					fontSize: 16.0,
 																					fontWeight: FontWeight.bold,
 																					fontFamily: "Open-sans",
-																					color: Colors.white
+																					color: Colors.white,
 																				),
 																			),
 																		);
 																	}
 															),
 														),
-
-														// CREATE AN ACCOUNT
-														/*Container(
-														padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-														width: double.infinity,
-														child: RaisedButton(
-															onPressed: (){
-																Navigator.pushNamed(context, '/register');
-															},
-															padding: EdgeInsets.all(16.0),
-															shape: RoundedRectangleBorder(
-																borderRadius: BorderRadius.all(Radius.circular(10.0)),
-															),
-															child: Text(
-																"Create an account",
-																style: TextStyle(
-																	fontSize: 16.0,
-																	fontWeight: FontWeight.w400,
-																	fontFamily: "Open-sans"
-																),
-															),
-														),
-													),*/
 													],
 												),
 											)

@@ -506,8 +506,13 @@ class OtpPageState extends State<OtpPage> {
 
                         Padding(
                             padding: const EdgeInsets.only(bottom: 0.0),
-                            child: RaisedButton(
-                                elevation: 5.0,
+                            child: ElevatedButton(
+                                onPressed: (){ matchOtp(); },
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 5.0,
+                                    padding: EdgeInsets.all(15.0),
+                                    primary: Color.fromRGBO(1, 153, 182, 50),
+                                ),
                                 child: Text(
                                     'Proceed to Register',
                                     style: TextStyle(
@@ -518,10 +523,8 @@ class OtpPageState extends State<OtpPage> {
                                         fontFamily: 'Futura',
                                     ),
                                 ),
-                                onPressed: (){ matchOtp();},
-                                padding: EdgeInsets.all(15.0),
-                                color: Color.fromRGBO(1, 153, 182, 50),
                             ),
+
                         ),
 
                         SizedBox(height: 10),

@@ -89,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
       print("Uploaded!");
       setState(() {
           print("Profile Picture uploaded");
-          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+          // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
        });
     });
 

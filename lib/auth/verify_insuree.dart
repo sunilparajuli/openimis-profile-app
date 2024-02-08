@@ -424,7 +424,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
         return Container(
             padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
                 onPressed: () async {
                     _insuree.dob = "${_yearController.text}-${_monthController.text}-${_dayController.text}";
                     // Validate form
@@ -435,77 +435,56 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                     }
 
                     try {
-                        var verify = await VerifyInsureeService()
-                            .VerifyInsureeData(_insuree);
+                        var verify = await VerifyInsureeService().VerifyInsureeData(_insuree);
 
-                        if(verify['data']['insureeAuth']==null)
-                        {
+                        if (verify['data']['insureeAuth'] == null) {
                             showMessage("Invalid Details", 5000);
                             return;
                         }
-                        bool ifSuccess =  verify['data']['insureeAuth']['issuccess'].toString() == 'true';
+                        bool ifSuccess =
+                            verify['data']['insureeAuth']['issuccess'].toString() == 'true';
                         showMessage(verify['data']['insureeAuth']['message'], 10000);
 
-                        if(ifSuccess==true) {
+                        if (ifSuccess == true) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginScreen(
-                                            chfid: _insuree.chfid,
-                                        ),
-                                ));
+                                    builder: (context) => LoginScreen(
+                                        chfid: _insuree.chfid,
+                                    ),
+                                ),
+                            );
                         }
-
-                    } on Exception catch (exception) {
-                        if(exception is SocketException){
-                            //treat SocketException
-                            showMessage("Cannot connect with server, please try again", 5000);
-                        }
-                        else if(exception is TimeoutException){
-                            //treat TimeoutException
-                            showMessage("The connection has timed out", 5000);
-                        }
-                        else {
-                            showMessage("The server couldn not handle your request at the moment", 3000);
-                        }
-
+                    } on SocketException {
+                        showMessage("Cannot connect with server, please try again", 5000);
+                    } on TimeoutException {
+                        showMessage("The connection has timed out", 5000);
+                    } catch (error) {
+                        showMessage("The server couldn't handle your request at the moment", 3000);
                     }
-                    catch (error) {
-                        showMessage('Something went wrong', 5000);
-                    }
-//                    if (verify == null) {
-//                        Fluttertoast.showToast(
-//                            msg: "Incorrect Details ",
-//                            toastLength: Toast.LENGTH_SHORT,
-//                            gravity: ToastGravity.CENTER,
-//                            timeInSecForIos: 1,
-//                            fontSize: 16.0);
-//                    } else {
-
-
-//                    }
                 },
-                padding: EdgeInsets.all(16.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(10.0)),
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
-                color: CustomTheme.lightTheme.primaryColor, //Color.fromRGBO(254, 196, 45, 50),
                 child: VerifyInsureeService().isLoading
                     ? CircularProgressIndicator(
-                    valueColor:
-                    AlwaysStoppedAnimation<Color>(Colors.white))
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
                     : Text(
                     "Verify".toUpperCase(),
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                         fontFamily: "Open-sans",
-                        color: Colors.white
+                        color: Colors.white,
                     ),
                 ),
-            )
+            ),
+
         );
     }
     

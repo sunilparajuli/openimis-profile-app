@@ -237,16 +237,17 @@ class _SubmissionPageState extends State<SubmissionPage> {
         return Container(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
                 onPressed: () async {
                     _image!=null ? uploadPic(): showMessage('Please upload image of your Paid Voucher ');
                 },
-                padding: EdgeInsets.all(16.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(10.0)),
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
-                color: CustomTheme.lightTheme.primaryColor,
                 child: Text(
                     AppTranslations.of(context).text('submit').toUpperCase(),
                     style: TextStyle(

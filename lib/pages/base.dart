@@ -1,7 +1,6 @@
-import 'package:openimis_web_app/pages/history.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:openimis_web_app/pages/policy_information.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
@@ -37,8 +36,6 @@ class _DisplayState extends State<Display> {
         switch (pos) {
             case 0:
                 return new Homepage();
-//	        case 1:
-//		        return new Homepage();
             case 1:
                 return new PolicyInformationPage();
             case 2:

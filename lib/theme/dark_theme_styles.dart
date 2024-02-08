@@ -7,8 +7,6 @@ class Styles {
     
     static ThemeData themeData(bool isDarkTheme, BuildContext context) {
         return ThemeData(
-            primarySwatch: Colors.blue,
-            // primaryColor: isDarkTheme ? Colors.black : Color(0xFF233049),
             primaryColor: isDarkTheme ? Colors.black : CustomTheme.lightTheme.primaryColor,
             
             primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
@@ -18,8 +16,6 @@ class Styles {
             iconTheme: Theme.of(context).primaryIconTheme.copyWith(
                 color: isDarkTheme ? Colors.white : Colors.black
             ),
-            
-            accentColor: isDarkTheme ? Colors.black : CustomTheme.lightTheme.accentColor,
             
             backgroundColor: isDarkTheme ? Colors.black : Color(0xffF1F5FB),
             
@@ -35,7 +31,6 @@ class Styles {
             hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
             focusColor: isDarkTheme ? Color(0xff0B2512) : Color(0xffA8DAB5),
             disabledColor: Colors.grey,
-            textSelectionColor: isDarkTheme ? Colors.white : Colors.black,
             cardColor: isDarkTheme ? Color(0xFF151515) : Colors.white,
             canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
             brightness: isDarkTheme ? Brightness.dark : Brightness.light,
@@ -43,7 +38,7 @@ class Styles {
                 colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light()),
             appBarTheme: AppBarTheme(
                 elevation: 0.0,
-            ),
+            ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: isDarkTheme ? Colors.black : CustomTheme.lightTheme.accentColor), textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
         );
         
     }

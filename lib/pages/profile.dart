@@ -574,15 +574,17 @@ class _ProfileInfoState extends State<ProfileInfo> {
 		return Container(
 			padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
 			width: double.infinity,
-			child: RaisedButton(
+			child: ElevatedButton(
 				onPressed: () async {
 					uploadProfile();
 				},
-				padding: EdgeInsets.all(16.0),
-				shape: RoundedRectangleBorder(
-					borderRadius: BorderRadius.all(Radius.circular(10.0)),
+				style: ElevatedButton.styleFrom(
+					padding: EdgeInsets.all(16.0),
+					shape: RoundedRectangleBorder(
+						borderRadius: BorderRadius.all(Radius.circular(10.0)),
+					),
+					primary: CustomTheme.lightTheme.primaryColor,
 				),
-				color: CustomTheme.lightTheme.primaryColor,
 				child: Text(
 					AppTranslations.of(context).text('submit'),
 					style: TextStyle(

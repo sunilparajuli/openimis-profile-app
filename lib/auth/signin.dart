@@ -33,27 +33,16 @@ class _SignInState extends State<SignIn> {
                 width: double.infinity,
                 child: Consumer<AuthBlock>(
                     builder: (BuildContext context, AuthBlock auth, Widget child){
-                        return RaisedButton(
-                            elevation: 5.0,
-                            child: auth.loading && auth.loadingType == 'login' ? CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-                            ) : Text(
-                                'Login',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(0, 153, 182, 50),
-                                    letterSpacing: 1.5,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Futura',
-                                ),
-                            ),
+                        return ElevatedButton(
                             onPressed: () async {
                                 // Validate form
                                 if (_formKey.currentState.validate() && !auth.loading) {
                                     // Update values
                                     _formKey.currentState.save();
+
                                     // Hit Api
                                     var login = await auth.login(userCredential);
+
                                     Timer.periodic(Duration(milliseconds: 500), (timer) {
                                         print(DateTime.now());
                                         print('sign in');
@@ -65,11 +54,28 @@ class _SignInState extends State<SignIn> {
                                     });
                                 }
                             },
-                            padding: EdgeInsets.all(15.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
+                            style: ElevatedButton.styleFrom(
+                                elevation: 5.0,
+                                padding: EdgeInsets.all(15.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                primary: Colors.white,
                             ),
-                            color: Colors.white,
+                            child: auth.loading && auth.loadingType == 'login'
+                                ? CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                            )
+                                : Text(
+                                'Login',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(0, 153, 182, 50),
+                                    letterSpacing: 1.5,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Futura',
+                                ),
+                            ),
                         );
                     },
                 ),

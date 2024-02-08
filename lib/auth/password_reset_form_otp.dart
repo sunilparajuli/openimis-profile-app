@@ -233,8 +233,16 @@ class _PasswordResetFormState extends State<PasswordResetForm> {
                 width: double.infinity,
                 child: Consumer<AuthBlock>(
                     builder: (BuildContext context, AuthBlock auth, Widget child){
-                        return RaisedButton(
-                            elevation: 5.0,
+                        return ElevatedButton(
+                            onPressed: changePassword,
+                            style: ElevatedButton.styleFrom(
+                                elevation: 5.0,
+                                padding: EdgeInsets.all(15.0),
+                                primary: Color.fromRGBO(0, 153, 182, 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                ),
+                            ),
                             child: Text(
                                 'Reset Password',
                                 style: TextStyle(
@@ -245,13 +253,8 @@ class _PasswordResetFormState extends State<PasswordResetForm> {
                                     fontFamily: 'Futura',
                                 ),
                             ),
-                            onPressed: changePassword,
-                            padding: EdgeInsets.all(15.0),
-//                            shape: RoundedRectangleBorder(
-//                                borderRadius: BorderRadius.circular(30.0),
-//                            ),
-                            color: Color.fromRGBO(0, 153, 182, 50),
                         );
+
                     },
                 ),
             );

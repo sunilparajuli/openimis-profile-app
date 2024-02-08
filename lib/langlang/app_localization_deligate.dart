@@ -25,7 +25,7 @@ class AppTranslationsDelegate extends LocalizationsDelegate<AppTranslations> {
         locale = Locale(__locale, 'US');
         break;
       case 'np':
-        locale = Locale(__locale, 'ET');
+        locale = Locale(__locale, 'ET'); //'NP' key was not supported at the moment when it was implemented , proxy
         break;
       default:
     }

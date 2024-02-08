@@ -188,7 +188,7 @@ class _PageViewScreenState extends State<PageViewScreen> {
                     height: 40.0,
                     width: 350.0,
                     color: Colors.pinkAccent,
-                    child: FlatButton(
+                    child: ElevatedButton(
                         onPressed: () async {
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           prefs.setBool('seen', true);
@@ -212,7 +212,7 @@ class _PageViewScreenState extends State<PageViewScreen> {
                     height: 40.0,
                     width: 350.0,
                     color: Colors.pinkAccent,
-                    child: FlatButton(
+                    child: ElevatedButton(
                         onPressed: () async{
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           prefs.setBool('seen', true);

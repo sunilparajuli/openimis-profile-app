@@ -119,18 +119,19 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Expanded(
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
                                     onPressed: () async {
                                       setState(() {
                                         //  isLoading = true;
                                       });
                                     },
-                                    padding: EdgeInsets.all(16.0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(16.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                      ),
+                                      primary: CustomTheme.lightTheme.primaryColor,
                                     ),
-                                    color: Colors.red.shade500,
                                     child: Text(
                                       AppTranslations.of(context)
                                           .text('cancel')
@@ -145,7 +146,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 ),
                                 SizedBox(width: 16.0),
                                 Expanded(
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
                                     onPressed: () async {
                                       setState(() {
                                            isLoading =true;                                   
@@ -162,13 +163,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                           Navigator.of(context).pop(MaterialPageRoute(builder:(context)=>SettingsPage('feedback has been sent')));
                                       }
                                     },
-                                    
-                                    padding: EdgeInsets.all(16.0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(16.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                      ),
+                                      primary: CustomTheme.lightTheme.primaryColor,
                                     ),
-                                    color: CustomTheme.lightTheme.primaryColor,
                                     child: Text(
                                       AppTranslations.of(context)
                                           .text('submit')
