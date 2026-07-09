@@ -1,7 +1,7 @@
 name: openimis_web_app
 description: "OpenIMIS extension as Mobile Application"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.4+14
+version: 1.0.4+15
 environment:
   sdk: ">=2.10.0 <3.0.0"
 
