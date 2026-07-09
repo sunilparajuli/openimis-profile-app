@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -236,9 +235,8 @@ class _PasswordResetFormState extends State<PasswordResetForm> {
                         return ElevatedButton(
                             onPressed: changePassword,
                             style: ElevatedButton.styleFrom(
-                                elevation: 5.0,
+                                elevation: 5.0, backgroundColor: Color.fromRGBO(0, 153, 182, 50),
                                 padding: EdgeInsets.all(15.0),
-                                primary: Color.fromRGBO(0, 153, 182, 50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                 ),

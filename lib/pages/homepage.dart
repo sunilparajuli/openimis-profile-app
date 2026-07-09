@@ -2,19 +2,18 @@ import 'dart:convert';
 
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
-import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
-import 'package:openimis_web_app/pages/exploreServices.dart';
+// import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
 import 'package:openimis_web_app/services/api_rest_services.dart';
-import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/pages/claimed_item_services.dart';
 import 'package:openimis_web_app/screen_size_reducers.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
-import 'package:openimis_web_app/models/medical_services.dart';
-import 'package:openimis_web_app/models/claimed_services_items.dart';
+// import 'package:openimis_web_app/models/medical_services.dart';
+
 import 'package:openimis_web_app/services/api_graphql_services.dart';
-import 'package:openimis_web_app/models/claimed.dart';
+// import 'package:openimis_web_app/models/claimed.dart';
 import 'package:openimis_web_app/models/insuree_claims.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:provider/provider.dart';
@@ -29,16 +28,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-	Future<MedicalServices> _medicalservices;
-	Future<UspPolicyInsureeHib> _usppolicybalance;
-	Future<Claims> _insureeclaims;
-	Future<Claimed> _claimed;
-	Future<ClaimedServicesItems> _claimedservicesitems;
+
 	AuthBlock auth;
-	dynamic insureeCardDetail;
 	SessionManager prefs =  SessionManager();
 	double balance;
-	bool isBalanceSavedToLocal = false;
 	final storage = FlutterSecureStorage();
 	// dynamic remainingDays;
 	bool canRefresh = false;
@@ -49,7 +42,7 @@ class _HomepageState extends State<Homepage> {
 		application.onLocaleChanged = onLocaleChange;
 			env.production ? get_balance() : balance = 123456.00;
 
-		_medicalservices = ApiGraphQlServices().MedicalServicesGQL('medicalservice');
+
 		get_canRefresh();
 		get_canRefreshInsureeData();
 	}
@@ -161,7 +154,6 @@ class _HomepageState extends State<Homepage> {
 	
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
-		final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
 		return Scaffold(
 			backgroundColor: CustomTheme.lightTheme.backgroundColor.withOpacity(0.5),
 			body: Stack(
@@ -253,7 +245,9 @@ class _HomepageState extends State<Homepage> {
 											image: snapshot.hasData ? snapshot.data.data.profile.photo.replaceAll('192.168.15.22', 'imistest.hib.gov.np'): //todo server returns local ip but we need domain ip need fix
 											"assets/images/openimis-logo.png",
 											placeholder: "assets/images/openimis-logo.png",
-											fit: BoxFit.contain,
+											fit: BoxFit.cover,
+											width: 100,
+											height: 100,
                                         ),
 									),
 								),
@@ -341,7 +335,7 @@ class _HomepageState extends State<Homepage> {
 
 	String CalculateRemainingDays(args){
 		try {
-			var length = args.length;
+
 		} on Exception catch (_) {
 			return "No policy";
 		}
@@ -582,7 +576,7 @@ class _HomepageState extends State<Homepage> {
 												Navigator.push(
 													context,
 													MaterialPageRoute(
-														builder: (context) => ClaimedItemServicesPage(token : auth.user['data']['insureeAuthOtp']['token'],claimid: int.parse(claims.id)),
+														builder: (context) => ClaimedItemServicesPage(token : env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123", claimid: int.parse(claims.id)),
 													),
 												);
 											},

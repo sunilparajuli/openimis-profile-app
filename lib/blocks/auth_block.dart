@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:openimis_web_app/models/user.dart';
 import 'package:openimis_web_app/services/auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBlock extends ChangeNotifier {

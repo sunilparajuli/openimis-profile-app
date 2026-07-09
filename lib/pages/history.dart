@@ -1,5 +1,4 @@
 import 'package:openimis_web_app/blocks/auth_block.dart';
-import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
 import 'package:openimis_web_app/pages/homepage.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -11,6 +10,7 @@ import 'package:openimis_web_app/services/api_graphql_services.dart';
 import 'package:openimis_web_app/models/claimed.dart';
 import 'package:openimis_web_app/models/insuree_claims.dart';
 import 'package:provider/provider.dart';
+import '../langlang/app_translation.dart';
 import '../screen_size_reducers.dart';
 import 'claimed_item_services.dart';
 import 'exploreServices.dart';
@@ -307,7 +307,6 @@ class _HistoryPageState extends State<HistoryPage> {
 															itemCount: snapshot.data.data.insureeProfile.insureeClaim.length,
 															itemBuilder: (BuildContext context, int index){
 																var claims = snapshot.data.data.insureeProfile.insureeClaim[index];
-																var date = '${claims.dateClaimed}';
 																return ListTile(
 																	title: Text('${claims.healthFacility.name}'),
 																	subtitle: Text('${claims.dateClaimed}'),
@@ -322,7 +321,7 @@ class _HistoryPageState extends State<HistoryPage> {
 																		Navigator.push(
 																			context,
 																			MaterialPageRoute(
-																				builder: (context) => ClaimedItemServicesPage(token: auth.user['data']['insureeAuthOtp']['token'],claimid: int.parse(claims.id)),
+																				builder: (context) => ClaimedItemServicesPage(token: env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123", claimid: int.parse(claims.id)),
 																			),
 																		);
 																	},

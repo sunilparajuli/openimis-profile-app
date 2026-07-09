@@ -1,14 +1,13 @@
 library env;
 //import  'package:openimis_web_app/common/env.dart' as env;
-import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'dart:io';
 
 bool registerSuccess = false;
 int ExpiryDate = 60;
+const String APP_VERSION = "2.0.0";
 
 setRegisterSuccessFalse(){
 	registerSuccess = false;
@@ -63,7 +62,7 @@ getFirebaseToken(){
 String API_BASE_LOCAL_URL =  "http://imistest.hib.gov.np/api/graphql"; //"http://10.0.2.2/api/graphql";//"http://imistest.hib.gov.np/api/graphql";//"https://oi.tinker.com.np/api/graphql";
 String OFFICE_LIST_URL = "";
 String FAQ_LIST_URL = "";
-String API_HIB_URL =  'https://connect.hib.gov.np/hibprofile/api/graphql';//'http://imistest.hib.gov.np/api/graphql';
+String API_HIB_URL =  'https://imistest.hib.gov.np/api/graphql';
 String API_HIB_REST_URL = 'http://imistest.hib.gov.np/api/';
 
 String LOGO_URL = 'assets/images/shs.png';
@@ -85,6 +84,7 @@ String getBaseUrl(){
 	} else if (Platform.isIOS) {
 		return API_HIB_URL;
 	}
+	return API_HIB_URL;
 }
 
 String API_BASE_URL =  getBaseUrl();

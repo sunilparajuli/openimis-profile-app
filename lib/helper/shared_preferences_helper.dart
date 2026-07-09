@@ -7,25 +7,6 @@ import 'package:openimis_web_app/models/insuree_policy_information.dart';
 import 'package:openimis_web_app/models/policy_information.dart';
 import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-//class SessionManager {
-//  final String auth_token = "auth_token";
-//
-////set data into shared preferences like this
-//  Future<void> setAuthToken(String auth_token) async {
-//    final SharedPreferences prefs = await SharedPreferences.getInstance();
-//    prefs.setString(this.auth_token, auth_token);
-//  }
-//
-////get value from shared preferences
-//  Future<String> getAuthToken() async {
-//    final SharedPreferences pref = await SharedPreferences.getInstance();
-//    String auth_token;
-//    auth_token = pref.getString(this.auth_token) ?? null;
-//    return auth_token;
-//  }
-//}
 
 
 class SessionManager {
@@ -52,7 +33,7 @@ class SessionManager {
     return fullname;
   }
 
-  Future<String>setImage(String image_url) async {
+  Future<void>setImage(String image_url) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(this.image_url, image_url);
   }
@@ -70,13 +51,13 @@ class SessionManager {
     prefs.setString(this.fullname, fullname);
   }
 
-  Future<String> setPolicyInformation(args) async {
+  Future<void> setPolicyInformation(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("policyinformation", args);
   }
 
 
-  Future<String> deletePoicyInfrmatin() async {
+  Future<void> deletePoicyInfrmatin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
@@ -108,7 +89,7 @@ class SessionManager {
     return true;
   }
 
-  Future<String> setClaimsServicesGQL(args) async {
+  Future<void> setClaimsServicesGQL(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.clear();
     prefs.setString("ClaimsServicesGQL", args);
@@ -134,7 +115,7 @@ class SessionManager {
     return true;
   }
 
-  Future<String> setInsureeInfoServicesGQL(args) async {
+  Future<void> setInsureeInfoServicesGQL(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("InsureeInfoServicesGQL", args);
   }
@@ -160,7 +141,7 @@ class SessionManager {
     return true;
   }
 
-  Future<String> setprocedureHIB(args) async {
+  Future<void> setprocedureHIB(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("procedureHIB", args);
   }
@@ -183,7 +164,7 @@ class SessionManager {
   //   return true;
   // }
 
-  Future<String> setPolicyInformationCardPage(args) async {
+  Future<void> setPolicyInformationCardPage(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("PolicyInformationCardPage", args);
   }
@@ -200,7 +181,7 @@ class SessionManager {
   }
 
 
-  Future<bool> setRefreshApi(args) async {
+  Future<void> setRefreshApi(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("refreshApi", args.toString());
   }

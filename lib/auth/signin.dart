@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/user.dart';
 import 'package:provider/provider.dart';
-import  'package:openimis_web_app/common/env.dart' as env;
 
 class SignIn extends StatefulWidget {
     @override
@@ -41,7 +37,7 @@ class _SignInState extends State<SignIn> {
                                     _formKey.currentState.save();
 
                                     // Hit Api
-                                    var login = await auth.login(userCredential);
+                                    await auth.login(userCredential);
 
                                     Timer.periodic(Duration(milliseconds: 500), (timer) {
                                         print(DateTime.now());
@@ -55,12 +51,11 @@ class _SignInState extends State<SignIn> {
                                 }
                             },
                             style: ElevatedButton.styleFrom(
-                                elevation: 5.0,
+                                elevation: 5.0, backgroundColor: Colors.white,
                                 padding: EdgeInsets.all(15.0),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                 ),
-                                primary: Colors.white,
                             ),
                             child: auth.loading && auth.loadingType == 'login'
                                 ? CircularProgressIndicator(

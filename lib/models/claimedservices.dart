@@ -59,19 +59,27 @@ class InsureeClaim {
 class ServiceElement {
   ServiceElement({
     this.id,
+    this.qtyProvided,
+    this.qtyApproved,
     this.service,
   });
 
   String id;
+  double qtyProvided;
+  double qtyApproved;
   ServiceService service;
 
   factory ServiceElement.fromJson(Map<String, dynamic> json) => ServiceElement(
     id: json["id"],
+    qtyProvided: json["qtyProvided"] != null ? json["qtyProvided"].toDouble() : null,
+    qtyApproved: json["qtyApproved"] != null ? json["qtyApproved"].toDouble() : null,
     service: ServiceService.fromJson(json["service"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "qtyProvided": qtyProvided,
+    "qtyApproved": qtyApproved,
     "service": service.toJson(),
   };
 }

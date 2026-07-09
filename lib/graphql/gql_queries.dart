@@ -1,250 +1,307 @@
-import 'dart:convert';
-
-class openimisGqlQueries {
-    
-    openimis_gql_medical_services(first) {
-        var qs;
-        first > 0 ? qs = "medicalServicesStr(first:$first)" : "medicalServicesStr";
-        return
-            {
-                "query": "query {\n  ${qs} {\n  edges{\n    node{\n     "
-                    " id\n      name\n    }\n  }\n    \n  }\n}",
-                "variables": null
-            };
-    }
-    
-    openimis_gql_insuree_claims(insuree_chfid) {
-        var query = """ 
-          {
-              insureeProfile(insureeCHFID: "${insuree_chfid}") {
-                insureeClaim {
+class OpenimisGqlQueries {
+  static Map<String, dynamic> medicalServices(int first) {
+    if (first > 0) {
+      return {
+        "query": r'''
+          query MedicalServicesQuery($first: Int!) {
+            medicalServicesStr(first: $first) {
+              edges {
+                node {
                   id
-                  dateClaimed
-                  claimed
-                  status
-                  healthFacility {
-                    name
-                  }
+                  name
                 }
               }
             }
-         """;
-        var _ret= {
-          "query": query, //jsonEncode(query),
-          "variables": null
-        };
-        return _ret;
+          }
+        ''',
+        "variables": {"first": first}
+      };
+    } else {
+      return {
+        "query": r'''
+          query MedicalServicesQuery {
+            medicalServicesStr {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        ''',
+        "variables": null
+      };
     }
-    
-    
-    openimis_gql_insuree_claimed_services(claimed_id) {
-        return
-            
-            //"query":"query{\n  insureeClaim(claimId: ${claimed_id}){\n   \n    services{\n      id\n      service{\n        id\n        name\n      }\n    }\n  }\n}","variables":null
-            {
-                "query": "query{\n  insureeClaim(claimId: ${claimed_id}){\n   \n    services{\n      id\n      service{\n        id\n        name\n        price\n      }\n    }\n  }\n}",
-                "variables": null
-            };
-    }
-    
-    openimis_gql_insuree_claimed_items(claimed_id) {
+  }
 
-      return
-            
-            {
-                "query": "query{\n  insureeClaim(claimId: ${claimed_id}){\n   \n    items{\n      id\n      item{\n        id\n        name\n        price\n      }\n    }\n  }\n}",
-                "variables": null
-            };
-    }
-    
-    health_facility_coordinate(args) {
-        var query="""
-        query {
-          healthFacilityCoordinate(inputLatitude:"${args['inputLatitude']}", inputLongitude:"${args['inputLongitude']}"){
-            id,
-            distance,
-            healthFacility{
-              id,
+  static Map<String, dynamic> insureeClaims(String chfid) {
+    return {
+      "query": r'''
+        query InsureeClaimsQuery($chfid: String!) {
+          insureeProfile(insureeCHFID: $chfid) {
+            insureeClaim {
+              id
+              dateClaimed
+              claimed
+              status
+              healthFacility {
+                name
+              }
+            }
+          }
+        }
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
+
+  static Map<String, dynamic> insureeClaimedServices(int claimId) {
+    return {
+      "query": r'''
+        query ClaimedServicesQuery($claimId: Int!) {
+          insureeClaim(claimId: $claimId) {
+            services {
+              id
+              qtyProvided
+              qtyApproved
+              service {
+                id
+                name
+                price
+              }
+            }
+          }
+        }
+      ''',
+      "variables": {"claimId": claimId}
+    };
+  }
+
+  static Map<String, dynamic> insureeClaimedItems(int claimId) {
+    return {
+      "query": r'''
+        query ClaimedItemsQuery($claimId: Int!) {
+          insureeClaim(claimId: $claimId) {
+            items {
+              id
+              qtyProvided
+              qtyApproved
+              item {
+                id
+                name
+                price
+              }
+            }
+          }
+        }
+      ''',
+      "variables": {"claimId": claimId}
+    };
+  }
+
+  static Map<String, dynamic> healthFacilityCoordinate(Map<String, dynamic> args) {
+    return {
+      "query": r'''
+        query HealthFacilityCoordinateQuery($inputLatitude: Decimal, $inputLongitude: Decimal) {
+          healthFacilityCoordinate(inputLatitude: $inputLatitude, inputLongitude: $inputLongitude) {
+            id
+            distance
+            healthFacility {
+              id
               name
             }
           }
         }
-      """;
-        var _ret= {
-            "query": query, //jsonEncode(query),
-            "variables": null
-        };
-        return _ret;
-    }
-    
-    
-    openimis_gql_insuree_policy_information(chfid) {
-        /*return {
-            "query": "query{\n  insureeProfile(insureeCHFID: \"${chfid}\"){\n    otherNames\n    lastName\n    chfId\n    insureePolicies{\n      expiryDate\n    }\n    \n  }\n}",
-            "variables": null
-        };*/
-//        return {"query":"query{\n  insureeProfile(insureeCHFID: \"${chfid}\"){\n    chfId\n    lastName\n    otherNames\n    insureePolicies{\n      policy{\n        expiryDate\n      }\n      insuree{\n        gender{\n          code\n          gender\n        }\n        dob\n        healthFacility{\n          code\n          name\n        }\n      }\n    }\n  }\n}","variables":null};
-    return {"query":"query {insureeProfile(insureeCHFID: \"${chfid}\"){\n    chfId\n    lastName\n    otherNames\n    insureePolicies{\n      policy{\n        value\n        expiryDate\n        status\n      }\n      insuree{\n        gender{\n          code\n          gender\n        }\n        dob\n        healthFacility{\n          code\n          name\n        }\n      }\n    }\n  }\n}","variables":null};
-    }
-    
-    openimis_insuree_policy_information_lists(chfid){ //for policyinformationpage
-        var query = """
-    query {insureeProfile(insureeCHFID: "${chfid}"){
-     chfId
-     lastName
-     otherNames
-     insureePolicies{
-       policy{
-        id
-         value
-         expiryDate
-         status
-        product{
-          name
-        }
-       }
-       insuree{
-         gender{
-           code
-           gender
-         }
-         dob
-         healthFacility{
-           code
-           name
-         }
-       }
-     }
-   }
- }
-   """;
-        var _ret= {
-            "query": query, //jsonEncode(query),
-            "variables": null
-        };
-        return _ret;
-//        return {
-//            "query":"query {\n  insureeProfile(insureeCHFID:\"${chfid}\"){\n    insureePolicies{\n      policy{\n        legacyId\n        effectiveDate\n        expiryDate\n        validityFrom\n        validityTo\n        status\n        value\n      }\n    }\n  }\n}","variables":null
-//        };
-    var x =  {"query":"query {insureeProfile(insureeCHFID: \"${chfid}\"){\n    chfId\n    insureePolicies{\n      policy{\n        value\n        expiryDate\n        status\n      }\n      insuree{\n        healthFacility{\n          code\n          name\n        }\n      }\n    }\n  }\n}","variables":null};
-    return x;
-    }
-    
-    openimis_gql_notices(){
-        return {
-            "query":"query\n{\n  notices(orderBy:[\"-created_at\"]){\n    edges{\n      node{\n        id\n        title\n        description\n      }\n    }\n  }\n}\n  \n",
-            "variables":null
-        };
-    }
+      ''',
+      "variables": {
+        "inputLatitude": args['inputLatitude']?.toString(),
+        "inputLongitude": args['inputLongitude']?.toString()
+      }
+    };
+  }
 
-
-    openimis_gql_insuree_info (String chfid)
-    {
-      var query="""
-        query {
-           profile(insureeCHFID: "${chfid}"){
-             phone
-                email
-                photo
-                remainingDays
-                insuree {
-                  insureePolicies {
-                    policy {
-                      value
-                      expiryDate
-                    }
-                  }
-                  otherNames
-                  lastName
-                  dob
-                  currentAddress
-                  validityTo
-                  healthFacility {
-                    name
-                  }
+  static Map<String, dynamic> insureePolicyInformation(String chfid) {
+    return {
+      "query": r'''
+        query InsureePolicyInformationQuery($chfid: String!) {
+          insureeProfile(insureeCHFID: $chfid) {
+            chfId
+            lastName
+            otherNames
+            insureePolicies {
+              policy {
+                value
+                startDate
+                enrollDate
+                expiryDate
+                status
+              }
+              insuree {
+                gender {
+                  code
+                  gender
+                }
+                dob
+                healthFacility {
+                  code
+                  name
                 }
               }
-        }
-      """;
-      var _ret= {
-        "query": query, //jsonEncode(query),
-        "variables": null
-      };
-      return _ret;
-    }
-
-    ///{
-//        return {
-//            "query":"{\n  insureeProfile(insureeCHFID: \"${chfid}\"){\n   remainingDays\n    otherNames\n    lastName\n    insureePolicies{\n      policy{\n        value\n        expiryDate\n      }\n      insuree{\n        healthFacility{\n          code\n          name\n        }\n      }\n      \n    }\n  }\n}","variables":null
-//        };
-   // }
-
-
-    openimis_gql_notifications(String chfid)
-    {
-        var query="""
-        query {
-           notifications(insureeCHFID: "${chfid}"){
-                edges
-                {
-                  node{
-                    message
-                    createdAt
-                  }
-                }
-              }
-        }
-      """;
-        var _ret= {
-            "query": query, //jsonEncode(query),
-            "variables": null
-        };
-        return _ret;
-    }
-
-
-    openimis_gql_profile(String chfid)
-    {
-      var query="""
-       {
-          profile(insureeCHFID: "${chfid}") {
-            phone
-            email
-            photo
-            insuree{
-               otherNames
-               lastName
-               dob
-               currentAddress
-               validityTo
             }
           }
         }
-      """;
-      var _ret= {
-        "query": query, //jsonEncode(query),
-        "variables": null
-      };
-      return _ret;
-    }
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
 
-  otp_verify(args) {
-    var query="""
-    {
-      insureeAuthOtp(chfid:"${args['chfid']}", otp:"${args['otp']}"){
-        token
-        insuree {
-          chfId
+  static Map<String, dynamic> insureePolicyInformationLists(String chfid) {
+    return {
+      "query": r'''
+        query InsureePolicyInformationListsQuery($chfid: String!) {
+          insureeProfile(insureeCHFID: $chfid) {
+            chfId
+            lastName
+            otherNames
+            insureePolicies {
+              policy {
+                id
+                value
+                startDate
+                enrollDate
+                expiryDate
+                status
+                product {
+                  name
+                }
+              }
+              insuree {
+                gender {
+                  code
+                  gender
+                }
+                dob
+                healthFacility {
+                  code
+                  name
+                }
+              }
+            }
+          }
         }
-      }
-    }
-      """;
-    var _ret= {
-      "query": query, //jsonEncode(query),
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
+
+  static Map<String, dynamic> notices() {
+    return {
+      "query": r'''
+        query NoticesQuery {
+          notices(orderBy: ["-created_at"]) {
+            edges {
+              node {
+                id
+                title
+                description
+              }
+            }
+          }
+        }
+      ''',
       "variables": null
     };
-    return _ret;
   }
-    
-}
 
+  static Map<String, dynamic> insureeInfo(String chfid) {
+    return {
+      "query": r'''
+        query InsureeInfoQuery($chfid: String!) {
+          profile(insureeCHFID: $chfid) {
+            phone
+            email
+            photo
+            remainingDays
+            insuree {
+              insureePolicies {
+                policy {
+                  value
+                  expiryDate
+                }
+              }
+              otherNames
+              lastName
+              dob
+              currentAddress
+              validityTo
+              healthFacility {
+                name
+              }
+            }
+          }
+        }
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
+
+  static Map<String, dynamic> notifications(String chfid) {
+    return {
+      "query": r'''
+        query NotificationsQuery($chfid: String!) {
+          notifications(insureeCHFID: $chfid) {
+            edges {
+              node {
+                message
+                createdAt
+              }
+            }
+          }
+        }
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
+
+  static Map<String, dynamic> profile(String chfid) {
+    return {
+      "query": r'''
+        query ProfileQuery($chfid: String!) {
+          profile(insureeCHFID: $chfid) {
+            phone
+            email
+            photo
+            insuree {
+              otherNames
+              lastName
+              dob
+              currentAddress
+              validityTo
+            }
+          }
+        }
+      ''',
+      "variables": {"chfid": chfid}
+    };
+  }
+
+  static Map<String, dynamic> otpVerify(Map<String, dynamic> args) {
+    return {
+      "query": r'''
+        query OtpVerifyQuery($chfid: String!, $otp: String!) {
+          insureeAuthOtp(chfid: $chfid, otp: $otp) {
+            token
+            insuree {
+              chfId
+            }
+          }
+        }
+      ''',
+      "variables": {
+        "chfid": args['chfid'].toString(),
+        "otp": args['otp'].toString()
+      }
+    };
+  }
+}

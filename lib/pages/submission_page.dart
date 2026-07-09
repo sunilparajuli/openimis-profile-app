@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -19,10 +18,9 @@ class SubmissionPage extends StatefulWidget {
 
 class _SubmissionPageState extends State<SubmissionPage> {
     File _image;
-    String message;
+
     final picker = ImagePicker();
-    final _formKey = GlobalKey<FormState>();
-    var _passKey = GlobalKey<FormFieldState>();
+
     AuthBlock auth;
     @override
     void initState() {
@@ -36,7 +34,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
         });
     }
     
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
     
     bool isLoading = false;
     
@@ -44,7 +42,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
         // File image = (await _picker.getImage(source: ImageSource.camera, imageQuality: 50)) as File;  // await ImagePicker.getImage(
         //source: ImageSource.camera, imageQuality: 50
         //);
-        PickedFile image = await picker.getImage(source: ImageSource.camera);
+        var image = await picker.pickImage(source: ImageSource.camera);
         setState(() {
             if (image != null) {
                 _image = File(image.path);
@@ -55,7 +53,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
     }
     
     _imgFromGallery() async {
-        PickedFile image = await picker.getImage(source: ImageSource.gallery);
+        var image = await picker.pickImage(source: ImageSource.gallery);
         setState(() {
             if (image != null) {
                 _image = File(image.path);
@@ -242,11 +240,10 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     _image!=null ? uploadPic(): showMessage('Please upload image of your Paid Voucher ');
                 },
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
                 child: Text(
                     AppTranslations.of(context).text('submit').toUpperCase(),

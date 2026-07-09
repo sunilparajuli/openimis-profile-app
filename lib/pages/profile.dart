@@ -1,20 +1,15 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/langlang/application.dart';
-import 'package:openimis_web_app/mock_api/mock_api_data_services.dart';
 import 'package:openimis_web_app/models/insuree_info.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:provider/provider.dart';
-import 'package:openimis_web_app/models/profile.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 
 
@@ -22,14 +17,13 @@ import 'package:openimis_web_app/services/api_graphql_services.dart';
 class ProfileInfo extends StatefulWidget {
 	@override
 	_ProfileInfoState createState() => _ProfileInfoState();
-	
+
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
 	File _image;
 	final picker = ImagePicker();
-	final _formKey = GlobalKey<FormState>();
-	var _passKey = GlobalKey<FormFieldState>();
+
 	TextEditingController phoneController = TextEditingController();
 	TextEditingController emailController = TextEditingController();
 
@@ -48,99 +42,59 @@ class _ProfileInfoState extends State<ProfileInfo> {
         });
     }
 
-	_imgFromCamera() async {
-		// File image = (await _picker.getImage(source: ImageSource.camera, imageQuality: 50)) as File;  // await ImagePicker.getImage(
-		//source: ImageSource.camera, imageQuality: 50
-		//);
-		PickedFile image = await picker.getImage(source: ImageSource.camera);
-		setState(() {
-			if (image != null) {
-				_image = File(image.path);
-			} else {
-				print('No image selected.');
-			}
-		});
-	}
 
-	_imgFromGallery() async {
-		PickedFile image = await picker.getImage(source: ImageSource.gallery);
-		setState(() {
-			if (image != null) {
-				_image = File(image.path);
-			} else {
-				print('No image selected.');
-			}
-		});
-	}
 
-	Future uploadProfile() async{
+	Future uploadProfile() async {
 		setState(() {
 			isLoading = !isLoading;
 		});
 		String url = env.API_BASE_URL;
 		var request = new http.MultipartRequest("POST", Uri.parse(url));
-//		request.headers.addAll(headers);
-		if (_image!=null) {
+		// Uncomment if you want to add headers
+		// request.headers.addAll(headers);
+
+		if (_image != null) {
 			request.files.add(new http.MultipartFile.fromBytes(
-					'file', await File.fromUri(Uri.parse(_image.path)).readAsBytes(),
-					filename: "jpt.jpg"));
+					'file',
+					await File.fromUri(Uri.parse(_image.path)).readAsBytes(),
+					filename: "profile_image.jpg"));
 		}
-		request.fields['query'] ='mutation {updateProfile(file: "file", email:"${emailController.text}", phone: "${phoneController.text}", insureeCHFID:"${auth.user['data']['insureeAuthOtp']['insuree']['chfId']}"){   ok  }  }';
-		print(request);
+
+		request.fields['query'] =
+		'mutation {updateProfile(file: "file", email:"${emailController.text}", phone: "${phoneController.text}", insureeCHFID:"${auth.user['data']['insureeAuthOtp']['insuree']['chfId']}"){   ok  }  }';
+
 		request.send().then((response) {
-			print(response.stream.bytesToString().toString());
-			if (response.statusCode == 200) {
-				if (response.reasonPhrase == "OK") {
-//					RedirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission'),);
+			response.stream.bytesToString().then((value) {
+				print(value); // Print the response body
+				if (response.statusCode == 200) {
+					if (response.reasonPhrase == "OK") {
+						// SnackBar()
+					} else {
+						// Handle other cases
+					}
+					setState(() {
+						isLoading = !isLoading;
+						//_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+					});
+				} else {
+					// Handle non-200 status code
 				}
-				else{
-//					RedirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission_error'));
-
-				}
-				setState(() {
-					isLoading = !isLoading;
-					//_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
-				});
-			}
+			}).catchError((error) {
+				// Handle error in converting response bytes to string
+				print("Error reading response: $error");
+			});
+		}).catchError((error) {
+			// Handle error in sending the request
+			print("Error sending request: $error");
 		});
-
 	}
 
-	void _showPicker(context) {
-		showModalBottomSheet(
-			context: context,
-			builder: (BuildContext bc) {
-				return SafeArea(
-					child: Container(
-						child: new Wrap(
-							children: <Widget>[
-								new ListTile(
-									leading: new Icon(Icons.photo_library),
-									title: new Text('Photo Library'),
-									onTap: () {
-										_imgFromGallery();
-										Navigator.of(context).pop();
-									}),
-								new ListTile(
-									leading: new Icon(Icons.photo_camera),
-									title: new Text('Camera'),
-									onTap: () {
-										_imgFromCamera();
-										Navigator.of(context).pop();
-									},
-								),
-							],
-						),
-					),
-				);
-			}
-		);
-	}
+
 
 	Widget _imageCardWidget(){
 		return GestureDetector(
 			onTap: (){
-				_showPicker(context);
+				return;
 			},
 			child: Card(
 				child: Image.file(
@@ -154,7 +108,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 	Widget _addImageCardWidget(){
 		return GestureDetector(
 			onTap: (){
-				_showPicker(context);
+				return;
 			},
 		);
 	}
@@ -273,7 +227,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
 													// SUBMIT BUTTON
 													SizedBox(height: 16.0),
-													// _buildSubmitButton()
+													_buildSubmitButton()
 												],
 											);
 										}
@@ -290,7 +244,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildFullnameWidget(firstname, lastname){
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -344,7 +298,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildDOBWidget(dob){
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -385,7 +339,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 									color: Colors.white,
 								)
 							),
-							
+
 							hintText: '${dob.year}-${dob.month}-${dob.day}',
 							hintStyle: TextStyle(
 								fontFamily: 'Open-sans'
@@ -399,7 +353,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildAddressWidget(current_address){
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -440,7 +394,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 									color: Colors.white,
 								)
 							),
-							
+
 							hintText: '${current_address ?? "Not Available"}',
 							hintStyle: TextStyle(
 								fontFamily: 'Open-sans'
@@ -454,7 +408,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildPhoneWidget(String phone_number){
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -497,7 +451,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 									color: Colors.white,
 								)
 							),
-							
+
 							hintText: '${phone_number}',
 							hintStyle: TextStyle(
 								fontFamily: 'Open-sans'
@@ -511,7 +465,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildEmailWidget(String email){
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -542,7 +496,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 						onSaved: (value) {
 							setState(() {
 
-								
+
 								uploadProfile();
 							});
 						},
@@ -555,7 +509,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 									color: Colors.white,
 								)
 							),
-							
+
 							hintText: '${email}',
 							hintStyle: TextStyle(
 								fontFamily: 'Open-sans'
@@ -569,7 +523,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 	Widget _buildSubmitButton(){
 		return Container(
 			padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
@@ -579,11 +533,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
 					uploadProfile();
 				},
 				style: ElevatedButton.styleFrom(
-					padding: EdgeInsets.all(16.0),
+					padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
 					shape: RoundedRectangleBorder(
 						borderRadius: BorderRadius.all(Radius.circular(10.0)),
 					),
-					primary: CustomTheme.lightTheme.primaryColor,
 				),
 				child: Text(
 					AppTranslations.of(context).text('submit'),
@@ -597,7 +550,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			),
 		);
 	}
-	
+
 }
 
 

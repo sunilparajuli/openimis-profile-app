@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:openimis_web_app/ui/RegisterMobilePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:openimis_web_app/auth/auth.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:provider/provider.dart';
@@ -194,10 +193,12 @@ class _PageViewScreenState extends State<PageViewScreen> {
                           prefs.setBool('seen', true);
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
+                                return Container();
                                 // return RegisterMobilePage();
                               }));
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
+                                return Container();
                             // return RegisterMobilePage();
                           }));
                         },
@@ -218,6 +219,7 @@ class _PageViewScreenState extends State<PageViewScreen> {
                           prefs.setBool('seen', true);
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
+                                return Container();
                             // return RegisterMobilePage();
                           }));
                         },

@@ -12,7 +12,7 @@ class UserHistoryPage extends StatefulWidget {
 }
 
 class _UserHistoryPageState extends State<UserHistoryPage> {
-	Future<Claims> _insureeclaims;
+// 	Future<Claims> _insureeclaims;
 	AuthBlock auth;
 	
 	@override
@@ -60,7 +60,6 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 											return ListView.builder(
 												shrinkWrap: true,
 												scrollDirection: Axis.vertical,
-												physics: NeverScrollableScrollPhysics(),
 												itemCount: snapshot.data.data.insureeProfile.insureeClaim.length,
 												itemBuilder: (BuildContext context, int index){
 													var claims = snapshot.data.data.insureeProfile.insureeClaim[index];
@@ -105,7 +104,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
                             // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(20)
                         ),
-                        color: CustomTheme.lightTheme.accentColor.withOpacity(1),
+                        color: CustomTheme.lightTheme.colorScheme.secondary.withOpacity(1),
                         child: Container(
                             padding: EdgeInsets.all(8.0),
                             child: Column(

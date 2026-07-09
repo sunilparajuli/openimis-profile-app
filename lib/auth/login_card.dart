@@ -1,13 +1,9 @@
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'dart:ui';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/cupertino.dart';
 class LoginScreen extends StatefulWidget {
 	@override
 	final String chfid;
@@ -80,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 	@override
 	Widget build(BuildContext context) {
-		Size deviceSize = MediaQuery.of(context).size;
+
 		return Scaffold(
 				backgroundColor: CustomTheme.lightTheme.primaryColor, //Color.fromRGBO(234, 239, 255, 30),
 				body: Container(
@@ -198,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
 																					_user.chfid = widget.chfid;
 
 																					// Hit Api
-																					var login = await auth.login(_user);
+																					await auth.login(_user);
 
 																					Timer.periodic(Duration(milliseconds: 500), (timer) {
 																						print(DateTime.now());
@@ -211,11 +207,10 @@ class _LoginScreenState extends State<LoginScreen> {
 																				}
 																			},
 																			style: ElevatedButton.styleFrom(
-																				padding: EdgeInsets.all(16.0),
+																				padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
 																				shape: RoundedRectangleBorder(
 																					borderRadius: BorderRadius.all(Radius.circular(10.0)),
 																				),
-																				primary: CustomTheme.lightTheme.primaryColor,
 																			),
 																			child: auth.loading && auth.loadingType == 'login'
 																					? CircularProgressIndicator(

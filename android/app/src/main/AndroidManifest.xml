@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.card_app">
+    package="hib.np.com.tinker">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -10,10 +10,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-
         android:label="HIB Profile"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon"
+        android:extractNativeLibs="true"
         >
         <activity
             android:name=".MainActivity"

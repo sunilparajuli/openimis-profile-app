@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:provider/provider.dart';
+import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
 
 class CardItem extends StatelessWidget {
   const CardItem({
@@ -24,8 +25,10 @@ class CardItem extends StatelessWidget {
               IconButton(
                onPressed: () async {
                                    await auth.logout();
-                                   Navigator.of(context)
-                                       .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                                   Navigator.of(context).pushAndRemoveUntil(
+                                     MaterialPageRoute(builder: (context) => OpenimisOnboardingPage()),
+                                     (Route<dynamic> route) => false
+                                   );
                                },
                 icon: Icon(
                   Icons.access_time,

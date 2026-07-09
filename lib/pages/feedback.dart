@@ -1,15 +1,9 @@
 import 'package:openimis_web_app/pages/settings.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/langlang/application.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import "package:openimis_web_app/services/api_graphql_services.dart";
-import 'package:openimis_web_app/graphql/gql_mutations.dart';
-import "package:openimis_web_app/models/feedback.dart";
-import "package:openimis_web_app/blocks/bool_provider.dart";
-import "package:openimis_web_app/common/global.dart" as globals;
-import 'package:provider/provider.dart';
 
 class FeedbackPage extends StatefulWidget {
   @override
@@ -126,11 +120,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                       });
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(16.0),
+                                      padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                       ),
-                                      primary: CustomTheme.lightTheme.primaryColor,
                                     ),
                                     child: Text(
                                       AppTranslations.of(context)
@@ -164,11 +157,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(16.0),
+                                      padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                       ),
-                                      primary: CustomTheme.lightTheme.primaryColor,
                                     ),
                                     child: Text(
                                       AppTranslations.of(context)

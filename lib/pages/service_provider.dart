@@ -4,7 +4,6 @@ import 'package:openimis_web_app/models/health_facility_coordinates.dart';
 import 'package:openimis_web_app/models/user_location.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 import 'package:provider/provider.dart';
 
@@ -53,6 +52,15 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
 					),
 				),
 				backgroundColor: CustomTheme.lightTheme.primaryColor,
+				// actions: <Widget>[
+				// 	IconButton(
+				// 		icon: Icon(Icons.map),
+				// 		onPressed: () {
+				// 			Navigator.pushNamed(context, "/map-services");
+				// 			// Handle map icon press
+				// 		},
+				// 	),
+				// ],
 			),
 			body:  Column(
 				children: [
@@ -86,66 +94,79 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
 			),
 		);
 	}
-	
 	Widget _HealthFacilities(){
 		return Container(
 			child: FutureBuilder<HealthFacilityCoordinates>(
 				future: _healthFacilityCoordinates,
 				builder: (context, snapshot) {
-					if (snapshot.hasData && snapshot.data.data!=null) {
+					if (snapshot.connectionState == ConnectionState.waiting) {
+						return Center(
+							child: CircularProgressIndicator(),
+						);
+					} else if (snapshot.hasError) {
+						return Center(
+							child: Text('Error: ${snapshot.error}'),
+						);
+					} else if (snapshot.hasData && snapshot.data.data != null) {
+						if (snapshot.data.data.healthFacilityCoordinate == null || snapshot.data.data.healthFacilityCoordinate.length == 0) {
+							return Center(
+								child: Text('No nearby Health Facility available'),
+							);
+						}
 						return ListView.builder(
-							shrinkWrap: true,
-							physics: NeverScrollableScrollPhysics(),
-							itemCount: snapshot.data.data.healthFacilityCoordinate.length,
-							itemBuilder: (BuildContext context, int index) {
-								var item = snapshot.data.data.healthFacilityCoordinate[index];
-								return Container(
-									padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
-									child: Card(
-										shape: RoundedRectangleBorder(
-											borderRadius: BorderRadius.circular(0.0),
-										),
-										elevation: 5,
-										shadowColor: CustomTheme.lightTheme.primaryColor,
-										child: Container(
-											padding: EdgeInsets.only(left: 16.0),
-											child: Column(
-												crossAxisAlignment: CrossAxisAlignment.start,
-												mainAxisSize: MainAxisSize.max,
-												children: [
-													ListTile(
-														title: Text(
-															'${item.healthFacility.name}',
-															style: TextStyle(
-																fontSize: 16.0,
-																fontWeight: FontWeight.normal
+								shrinkWrap: true,
+								physics: NeverScrollableScrollPhysics(),
+								itemCount: snapshot.data.data.healthFacilityCoordinate.length,
+								itemBuilder: (BuildContext context, int index) {
+									var item = snapshot.data.data.healthFacilityCoordinate[index];
+									return Container(
+											padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
+											child: Card(
+												shape: RoundedRectangleBorder(
+													borderRadius: BorderRadius.circular(0.0),
+												),
+												elevation: 5,
+												shadowColor: CustomTheme.lightTheme.primaryColor,
+												child: Container(
+													padding: EdgeInsets.only(left: 16.0),
+													child: Column(
+														crossAxisAlignment: CrossAxisAlignment.start,
+														mainAxisSize: MainAxisSize.max,
+														children: [
+															ListTile(
+																	title: Text(
+																		'${item.healthFacility.name}',
+																		style: TextStyle(
+																				fontSize: 16.0,
+																				fontWeight: FontWeight.normal
+																		),
+																	),
+																	subtitle: Padding(
+																		padding: EdgeInsets.only(top: 8.0),
+																		child: Text(
+																			'About ' + '${item.distance} ' + 'kms',
+																			style: TextStyle(
+																				fontSize: 14.0,
+																				fontWeight: FontWeight.w400,
+																			),
+																		),
+																	)
 															),
-														),
-														
-														subtitle: Padding(
-															padding: EdgeInsets.only(top: 8.0),
-															child: Text(
-																'About ' + '${item.distance} ' + 'kms',
-																style: TextStyle(
-																	fontSize: 14.0,
-																	fontWeight: FontWeight.w400,
-																),
-															),
-														)
+														],
 													),
-												],
-											),
-										),
-									)
-								);
-							});
+												),
+											)
+									);
+								}
+						);
+					} else {
+						return Center(
+							child: Text('No data available'),
+						);
 					}
-
-					else {
-						return Container(child: Center(
-								child: CircularProgressIndicator()));
-					}
-				}),
+				},
+			),
 		);
 	}
+
 }

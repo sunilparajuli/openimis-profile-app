@@ -4,11 +4,6 @@ import 'dart:io';
 import 'package:openimis_web_app/auth/login_card.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:ui';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:openimis_web_app/services/verify_insuree_service.dart';
 import 'package:openimis_web_app/models/insuree.dart';
 
@@ -58,11 +53,11 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
             return "Day is invalid please enter valid one";
         }
     }
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
     @override
     Widget build(BuildContext context) {
         print("pages/verify_insuree.dart");
-        Size deviceSize = MediaQuery.of(context).size;
+
         return Scaffold(
             backgroundColor: CustomTheme.lightTheme.primaryColor, //Color.fromRGBO(41, 127, 141, 25),,
             body: Container(
@@ -459,16 +454,24 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                         showMessage("Cannot connect with server, please try again", 5000);
                     } on TimeoutException {
                         showMessage("The connection has timed out", 5000);
-                    } catch (error) {
+                    } catch (error, stackTrace) {
+                        // 1. Print the exact error message
+                        print("Exact error: $error");
+
+                        // 2. Print the exact type (e.g., FormatException, HttpException)
+                        print("Error type: ${error.runtimeType}");
+
+                        // 3. Print the stack trace to see exactly which line caused it
+                        print("Stack trace: $stackTrace");
+
                         showMessage("The server couldn't handle your request at the moment", 3000);
                     }
                 },
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    primary: CustomTheme.lightTheme.primaryColor,
                 ),
                 child: VerifyInsureeService().isLoading
                     ? CircularProgressIndicator(
@@ -488,115 +491,4 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
         );
     }
     
-    // ALERT DIALOG - OFFICE DETAIL
-    Widget _OfficeDetailWidget(){
-        return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0)
-            ),
-            contentPadding: EdgeInsets.all(0.0),
-    
-            content:  Container(
-                height: 260,
-                color: CustomTheme.lightTheme.primaryColor,
-                child: Column(
-                    children: [
-                        Expanded(
-                            child: Container(
-                                margin: const EdgeInsets.only(top: 4.0),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                        Text('Office Details',
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                        ),
-                                    ],
-                                )
-                            ),
-                        ),
-                
-                        Container(
-                            color: Colors.white,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                    ListTile(
-                                        title: Text('openIMIS'),
-                                        subtitle: Text('Phone: 01-42xxxxx'),
-                                    ),
-                                    ListTile(
-                                        title: Text('Email'),
-                                        subtitle: Text('openimis@gmail.com'),
-                                    ),
-                                    ListTile(
-                                        title: Text('Address'),
-                                        subtitle: Text('Kathmandu, Nepal'),
-                                    ),
-                                ],
-                            ),
-                        )
-                    ],
-                ),
-            ),
-        );
-    }
-
-    // ALERT DIALOG - CONTACT DETAIL
-    Widget _ContactDetailsWidget(){
-        return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0)
-            ),
-            contentPadding: EdgeInsets.all(0.0),
-    
-            content:  Container(
-                height: 120,
-                color: CustomTheme.lightTheme.primaryColor,
-                child: Column(
-                    children: [
-                        Expanded(
-                            child: Container(
-                                margin: const EdgeInsets.only(top: 4.0),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                        Text('Contact Details',
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                        ),
-                                    ],
-                                )
-                            ),
-                        ),
-                
-                        Container(
-                            color: Colors.white,
-                            child: Column(
-                                children: [
-                                    ListTile(
-                                        title: Text('openIMIS'),
-                                        subtitle: Text('Phone: 01-42xxxxx'),
-                                    )
-                                ],
-                            ),
-                        )
-                    ],
-                ),
-            ),
-        );
-    }
 }

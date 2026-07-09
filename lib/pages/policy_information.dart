@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/insuree_policy_information.dart';
@@ -16,7 +15,7 @@ class PolicyInformationPage extends StatefulWidget {
 }
 
 class _PolicyInformationPageState extends State<PolicyInformationPage> {
-  Future<InsureePolicyInformation> _insureepolicyinformation;
+//   Future<InsureePolicyInformation> _insureepolicyinformation;
   AuthBlock auth;
 
   @override
@@ -123,6 +122,7 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
         ),
       ),
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -147,8 +147,15 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
 //                        fontWeight: FontWeight.w400,
 //                    ),
 //                ),
-        subtitle: Text(
-          'Expiry date: ${_data.policy.expiryDate.year}-${_data.policy.expiryDate.month}-${_data.policy.expiryDate.day}',
+        subtitle: Wrap(
+          spacing: 8.0,
+          children: [
+            if (_data.policy.startDate != null)
+              Text('Start: ${_data.policy.startDate.year}-${_data.policy.startDate.month.toString().padLeft(2, '0')}-${_data.policy.startDate.day.toString().padLeft(2, '0')}'),
+            if (_data.policy.enrollDate != null)
+              Text('Enroll: ${_data.policy.enrollDate.year}-${_data.policy.enrollDate.month.toString().padLeft(2, '0')}-${_data.policy.enrollDate.day.toString().padLeft(2, '0')}'),
+            Text('Expiry: ${_data.policy.expiryDate.year}-${_data.policy.expiryDate.month.toString().padLeft(2, '0')}-${_data.policy.expiryDate.day.toString().padLeft(2, '0')}'),
+          ],
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -15,7 +15,7 @@ class AuthService {
   // Create storage
   final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   Future<Map> login(UserCredential userCredential) async {
-    var q = openimisGqlQueries().otp_verify({"chfid":"${userCredential.chfid}", "otp": "${userCredential.otp}" });
+    var q = OpenimisGqlQueries.otpVerify({"chfid":"${userCredential.chfid}", "otp": "${userCredential.otp}" });
     final response = await http.post(Uri.parse(env.API_BASE_URL),
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ class AuthService {
           timeInSecForIos: 1,
           fontSize: 16.0);
     }
-
+    return null;
   }
 
   Future<Map> register(UserRegister userRegister) async {
@@ -126,8 +126,6 @@ class AuthService {
 
       return null;
     }
-
-    
   }
 
   setUser(String value) async {

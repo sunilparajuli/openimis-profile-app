@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 
-import '../screen_size_reducers.dart';
 
 class ClaimedItemServicesPage extends StatefulWidget {
     final int claimid;
@@ -53,8 +52,9 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                     topLeft: Radius.circular(30),
                                     topRight: Radius.circular(30)),
                             ),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            child: SingleChildScrollView(
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                     Container(
@@ -92,10 +92,9 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                         ),
                                     ),
                                     SizedBox(height: 8.0),
-                                    Expanded(
-                                        child: _claimServicesListWidget()
-                                    ),
+                                    _claimServicesListWidget(),
                                 ],
+                            ),
                             ),
                         ),
                     ),
@@ -112,8 +111,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                     if (snapshot.hasData) {
                         return ListView.builder(
                             shrinkWrap: true,
-                            // physics: NeverScrollableScrollPhysics(),
-                            physics: ScrollPhysics(),
+                            physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data.data
                                 .insureeClaim[0].items.length,
                             itemBuilder: (BuildContext context,
@@ -128,8 +126,16 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                         title: Text(
                                             '${claimeditems.item.name}',
                                             style: TextStyle(
-                                                fontSize: 14.0,
+                                                fontSize: 14.4,
                                                 fontWeight: FontWeight.normal
+                                            ),
+                                        ),
+                                        subtitle: Text(
+                                            'Quantity: ${claimeditems.qtyProvided ?? 0}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.grey[700]
                                             ),
                                         ),
                                         trailing: Text(
@@ -160,7 +166,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                     if (snapshot.hasData) {
                         return ListView.builder(
                             shrinkWrap: true,
-                            // physics: NeverScrollableScrollPhysics(),
+                            physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot
                                 .data.data.insureeClaim[0].services.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -171,8 +177,16 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                         title: Text(
                                             '${claimedservices.service.name}',
                                             style: TextStyle(
-                                                fontSize: 14.0,
+                                                fontSize: 14.4,
                                                 fontWeight: FontWeight.normal
+                                            ),
+                                        ),
+                                        subtitle: Text(
+                                            'Quantity/Days: ${claimedservices.qtyProvided ?? 0}',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.grey[700]
                                             ),
                                         ),
                                         trailing: Text(

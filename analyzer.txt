@@ -1,0 +1,53 @@
+Analyzing openimis_mobile_app...                                
+
+   info • The field doesn't override an inherited getter or setter • lib/auth/login_card.dart:9:15 • override_on_non_overriding_member
+   info • The value of the field '_medicalservices' isn't used • lib/card/card_homepage.dart:21:26 • unused_field
+   info • The value of the field '_claimed' isn't used • lib/card/card_homepage.dart:23:18 • unused_field
+   info • The value of the field '_claimedservicesitems' isn't used • lib/card/card_homepage.dart:24:31 • unused_field
+   info • The parameter 'initialData' is required • lib/main.dart:92:14 • missing_required_param
+   info • The parameter 'initialData' is required • lib/main.dart:93:17 • missing_required_param
+   info • The parameter 'chfid' is required • lib/main.dart:122:59 • missing_required_param
+   info • The parameter 'message' is required • lib/main.dart:141:69 • missing_required_param
+   info • 'List.List' is deprecated and shouldn't be used. Use a list literal, [], or the List.filled constructor instead • lib/models/health_facility_coordinates.dart:26:44 • deprecated_member_use
+   info • The value of the field '_policyinformation' isn't used • lib/pages/card_details.dart:21:31 • unused_field
+   info • The value of the field '_scaffoldKey' isn't used • lib/pages/card_details.dart:22:36 • unused_field
+   info • The declaration '_buildNameTF' isn't referenced • lib/pages/card_details.dart:350:12 • unused_element
+   info • The declaration '_buildCardNumberTF' isn't referenced • lib/pages/card_details.dart:404:12 • unused_element
+   info • The declaration '_buildExpiryDateTF' isn't referenced • lib/pages/card_details.dart:459:12 • unused_element
+   info • The declaration '_buildRenewButtonWidget' isn't referenced • lib/pages/card_details.dart:515:12 • unused_element
+   info • The declaration '_buildBackButtonWidget' isn't referenced • lib/pages/card_details.dart:542:12 • unused_element
+   info • The value of the field '_insureeclaims' isn't used • lib/pages/exploreServices.dart:23:17 • unused_field
+   info • The value of the field '_claimed' isn't used • lib/pages/exploreServices.dart:24:18 • unused_field
+   info • The value of the field '_insureepolicyinformation' isn't used • lib/pages/exploreServices.dart:26:35 • unused_field
+   info • The value of the local variable 'bottom_nav' isn't used • lib/pages/exploreServices.dart:40:9 • unused_local_variable
+   info • The value of the local variable 'medical_services' isn't used • lib/pages/healthFacilitiesCoordinates.dart:42:17 • unused_local_variable
+   info • The declaration '_getServices' isn't referenced • lib/pages/healthFacilitiesCoordinates.dart:86:15 • unused_element
+   info • The value of the local variable 'medical_services' isn't used • lib/pages/healthFacilitiesCoordinates.dart:115:14 • unused_local_variable
+   info • The declaration '_showRestaurantsBottomSheet' isn't referenced • lib/pages/healthFacilitiesMaps.dart:154:8 • unused_element
+   info • The parameter 'builder' is required • lib/pages/healthFacilitiesMaps.dart:202:11 • missing_required_param
+   info • The value of the field '_medicalservices' isn't used • lib/pages/history.dart:23:26 • unused_field
+   info • The value of the field '_insureeclaims' isn't used • lib/pages/history.dart:24:17 • unused_field
+   info • The value of the field '_claimed' isn't used • lib/pages/history.dart:25:18 • unused_field
+   info • The value of the local variable 'date' isn't used • lib/pages/history.dart:309:21 • unused_local_variable
+   info • The value of the field '_medicalservices' isn't used • lib/pages/homepage.dart:31:26 • unused_field
+   info • The value of the field '_usppolicybalance' isn't used • lib/pages/homepage.dart:32:30 • unused_field
+   info • The value of the field '_insureeclaims' isn't used • lib/pages/homepage.dart:33:17 • unused_field
+   info • The value of the field '_claimed' isn't used • lib/pages/homepage.dart:34:18 • unused_field
+   info • The value of the field '_claimedservicesitems' isn't used • lib/pages/homepage.dart:35:31 • unused_field
+   info • The value of the local variable 'bottom_nav' isn't used • lib/pages/homepage.dart:163:9 • unused_local_variable
+   info • The value of the local variable 'length' isn't used • lib/pages/homepage.dart:343:8 • unused_local_variable
+   info • The value of the field '_notice' isn't used • lib/pages/notice.dart:19:20 • unused_field
+   info • The value of the field '_notifications' isn't used • lib/pages/notification.dart:17:25 • unused_field
+   info • The declaration '_getNotifications' isn't referenced • lib/pages/notification.dart:121:16 • unused_element
+   info • The value of the field '_insureepolicyinformation' isn't used • lib/pages/policy_information.dart:18:36 • unused_field
+   info • Dead code • lib/pages/profile.dart:150:5 • dead_code
+   info • Dead code • lib/pages/profile.dart:165:5 • dead_code
+   info • Unused import: 'package:openimis_web_app/services/bottom_nav_bar_service.dart' • lib/pages/settings.dart:4:8 • unused_import
+   info • The value of the field '_prefs' isn't used • lib/pages/settings.dart:26:28 • unused_field
+   info • The declaration '_buildThemeWidget' isn't referenced • lib/pages/settings.dart:355:12 • unused_element
+   info • The declaration '_buildLogoutWidget' isn't referenced • lib/pages/settings.dart:411:12 • unused_element
+   info • The value of the field '_insureeclaims' isn't used • lib/pages/userhistory.dart:15:17 • unused_field
+   info • The value of the field '_appConfig' isn't used • lib/services/api_rest_services.dart:9:13 • unused_field
+   info • Dead code • lib/services/auth_service.dart:130:5 • dead_code
+   info • The value of the local variable 'jpt' isn't used • lib/services/verify_insuree_service.dart:23:9 • unused_local_variable
+

@@ -1,4 +1,4 @@
-package com.example.card_app
+package hib.np.com.tinker
 
 import io.flutter.embedding.android.FlutterActivity
 

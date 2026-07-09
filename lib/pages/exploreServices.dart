@@ -1,19 +1,17 @@
-import 'dart:ui';
 
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
-import 'package:openimis_web_app/models/claimed.dart';
-import 'package:openimis_web_app/models/insuree_claims.dart';
-import 'package:openimis_web_app/models/insuree_policy_information.dart';
-import 'package:openimis_web_app/models/user_location.dart';
+// import 'package:openimis_web_app/models/claimed.dart';
+// import 'package:openimis_web_app/models/insuree_claims.dart';
+// import 'package:openimis_web_app/models/insuree_policy_information.dart';
+// import 'package:openimis_web_app/models/user_location.dart';
 import 'package:openimis_web_app/screen_size_reducers.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/models/medical_services.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
-import 'package:provider/provider.dart';
-import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
+// import 'package:provider/provider.dart';
+// import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
 
 class ExploreServicesPage extends StatefulWidget {
 	@override
@@ -22,10 +20,7 @@ class ExploreServicesPage extends StatefulWidget {
 
 class _ExploreServicesPageState extends State<ExploreServicesPage> {
 	Future<MedicalServices> _medicalservices;
-	Future<Claims> _insureeclaims;
-	Future<Claimed> _claimed;
-	UserLocation userLocation;
-	Future<InsureePolicyInformation> _insureepolicyinformation;
+	
 	AuthBlock auth;
 
 	double min = 0.03, initial = 0.65, max = 0.7;
@@ -39,7 +34,6 @@ class _ExploreServicesPageState extends State<ExploreServicesPage> {
 	
 	@override
 	Widget build(BuildContext context) {
-		final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
 		return DraggableScrollableSheet(
 			//initialChildSize: initial, //0.65,
 			initialChildSize: initial,
@@ -53,7 +47,7 @@ class _ExploreServicesPageState extends State<ExploreServicesPage> {
 							topLeft: Radius.circular(20)
 						),
 						boxShadow: [
-							BoxShadow(color: CustomTheme.lightTheme.accentColor, spreadRadius: 1),
+							BoxShadow(color: CustomTheme.lightTheme.colorScheme.secondary, spreadRadius: 1),
 						],
 						color:CustomTheme.lightTheme.backgroundColor,
 					),

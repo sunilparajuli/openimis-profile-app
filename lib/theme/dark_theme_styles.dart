@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ class Styles {
             backgroundColor: isDarkTheme ? Colors.black : Color(0xffF1F5FB),
             
             indicatorColor: isDarkTheme ? Color(0xff0E1D36) : Color(0xffCBDCF8),
-            buttonColor: isDarkTheme ? Color(0xff3B3B3B) : Color(0xffF1F5FB),
             
             // hintColor: isDarkTheme ? Color(0xff280C0B) : Color(0xffEECED3),
             hintColor: isDarkTheme ? Colors.black : CustomTheme.lightTheme.primaryColor,
@@ -38,7 +36,7 @@ class Styles {
                 colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light()),
             appBarTheme: AppBarTheme(
                 elevation: 0.0,
-            ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: isDarkTheme ? Colors.black : CustomTheme.lightTheme.accentColor), textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
+            ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: isDarkTheme ? Colors.black : CustomTheme.lightTheme.colorScheme.secondary), textSelectionTheme: TextSelectionThemeData(selectionColor: isDarkTheme ? Colors.white : Colors.black),
         );
         
     }

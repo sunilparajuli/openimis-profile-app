@@ -1,6 +1,5 @@
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -223,11 +222,10 @@ class ResetPasswordState extends State<ResetPassword> {
                                                                         // Your asynchronous logic goes here
                                                                     },
                                                                     style: ElevatedButton.styleFrom(
-                                                                        padding: EdgeInsets.all(16.0),
+                                                                        padding: EdgeInsets.all(16.0), backgroundColor: Color.fromRGBO(254, 196, 45, 50),
                                                                         shape: RoundedRectangleBorder(
                                                                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                                         ),
-                                                                        primary: Color.fromRGBO(254, 196, 45, 50),
                                                                     ),
                                                                     child: auth.loading && auth.loadingType == 'login'
                                                                         ? CircularProgressIndicator(

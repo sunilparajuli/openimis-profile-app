@@ -8,8 +8,9 @@ import 'package:openimis_web_app/models/insuree_policy_information.dart';
 import 'package:openimis_web_app/models/notices.dart';
 import 'package:openimis_web_app/models/notifications.dart';
 import 'package:openimis_web_app/models/office.dart';
-import 'package:openimis_web_app/models/faq.dart';
-import 'package:http/http.dart' as http;
+// import 'package:openimis_web_app/models/faq.dart';
+// import 'package:http/http.dart' as http;
+import 'package:openimis_web_app/services/api_client.dart';
 import 'package:openimis_web_app/models/medical_services.dart';
 import 'package:openimis_web_app/models/insuree_claims.dart';
 import 'package:openimis_web_app/models/claimed.dart';
@@ -44,16 +45,8 @@ class ApiGraphQlServices {
 
     Future<MedicalServices> MedicalServicesGQL(String args) async {
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-//                "Accept" : "application/json"
-                },
-                body: jsonEncode(openimisGqlQueries()
-                    .openimis_gql_medical_services(100)) //todo map qs filtering
-            );
-            print(jsonEncode(openimisGqlQueries()
-                .openimis_gql_medical_services(100)));
+            final response = await ApiClient.postGraphQL(null, OpenimisGqlQueries.medicalServices(100));
+            print(jsonEncode(OpenimisGqlQueries.medicalServices(100)));
             var jsonMap = json.decode(response.body);
             medicalServices = MedicalServices.fromJson(jsonMap);
         } catch (Exception) {
@@ -78,15 +71,8 @@ class ApiGraphQlServices {
             }
           }
             try {
-              final response = await http.post(Uri.parse(env.API_BASE_URL),
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token": "${token}"
-                  },
-                  body: jsonEncode(
-                      openimisGqlQueries().openimis_gql_insuree_claims(chfID))
-
-              );
+              final response = await ApiClient.postGraphQL(token, 
+                      OpenimisGqlQueries.insureeClaims(chfID));
               var jsonMap = response.body;
               helper.SessionManager().setClaimsServicesGQL(response.body);
               insuree_claims = Claims.fromJson(jsonDecode(jsonMap));
@@ -104,14 +90,7 @@ class ApiGraphQlServices {
     // Services api
     Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimid) async { //todo pass claim id from widget
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                  "Insuree-Token" : "${token}"
-                },
-                body: jsonEncode(openimisGqlQueries()
-                    .openimis_gql_insuree_claimed_services(claimid)) //todo map qs filtering
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedServices(claimid));
             var jsonMap = json.decode(response.body);
             claimedservices = ClaimedServices.fromJson(jsonMap);
         } catch (Exception) {
@@ -122,14 +101,7 @@ class ApiGraphQlServices {
     
     Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimid) async { //todo pass claim id from widget
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token" : "${token}"
-                },
-                body: jsonEncode(openimisGqlQueries()
-                    .openimis_gql_insuree_claimed_items(claimid)) //todo map qs filtering
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedItems(claimid));
             var jsonMap = json.decode(response.body);
             claimeditems = ClaimedItems.fromJson(jsonMap);
             
@@ -142,12 +114,7 @@ class ApiGraphQlServices {
     
     Future<HealthFacilityCoordinates> HealthFacilityCoordinatesServicesGQL(args) async {
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: jsonEncode(openimisGqlQueries().health_facility_coordinate(args))
-            );
+            final response = await ApiClient.postGraphQL(null, OpenimisGqlQueries.healthFacilityCoordinate(args));
             var jsonMap = json.decode(response.body);
             healthFacilityCoordinates = HealthFacilityCoordinates.fromJson(jsonMap);
         } catch (Exception) {
@@ -174,14 +141,7 @@ class ApiGraphQlServices {
         }
     }
       try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token" : "${token}"
-                },
-                body: jsonEncode(openimisGqlQueries()
-                    .openimis_gql_insuree_policy_information(chfid)) //todo map qs filtering
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureePolicyInformation(chfid));
             var jsonMap = json.decode(response.body);
 
             helper.SessionManager().setPolicyInformationCardPage(response.body);
@@ -200,13 +160,7 @@ class ApiGraphQlServices {
       if(canRefresh==true){
 
       try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token": "${token}"
-                },
-                body: jsonEncode(openimisGqlQueries().openimis_insuree_policy_information_lists(chfid)) //todo map qs filtering
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureePolicyInformationLists(chfid));
             resbody = response.body;
              jsonMap = json.decode(response.body);
             insureepolicyinformation = InsureePolicyInformation.fromJson(jsonMap);
@@ -226,13 +180,7 @@ class ApiGraphQlServices {
     
     Future<Notice> NoticesServicesGQL(String token) async {
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                     "Insuree-Token": '${token}'
-                },
-                body: jsonEncode(openimisGqlQueries().openimis_gql_notices())
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.notices());
             var jsonMap = json.decode(response.body);
             notices = Notice.fromJson(jsonMap);
         } catch (Exception) {
@@ -259,14 +207,8 @@ class ApiGraphQlServices {
       }
 
         try {
-          final response = await http.post(Uri.parse(env.API_BASE_URL),
-              headers: {
-                "Content-Type": "application/json",
-                "Insuree-Token": '${token}'
-              },
-              body: jsonEncode(
-                  openimisGqlQueries().openimis_gql_insuree_info(chfid))
-          );
+          final response = await ApiClient.postGraphQL(token, 
+                  OpenimisGqlQueries.insureeInfo(chfid));
           var jsonMap = json.decode(response.body);
           insureedata = InsureeData.fromJson(jsonMap);
           // helper.SessionManager().deletePoicyInfrmatin();
@@ -282,13 +224,7 @@ class ApiGraphQlServices {
 
     Future<Notifications> NotificationsServicesGQL(String token, String chfid) async {
         try {
-            final response = await http.post(Uri.parse(env.API_BASE_URL),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Insuree-Token": '${token}'
-                },
-                body: jsonEncode(openimisGqlQueries().openimis_gql_notifications(chfid))
-            );
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.notifications(chfid));
             var jsonMap = json.decode(response.body);
             notifications = Notifications.fromJson(jsonMap);
         } catch (Exception) {
@@ -304,15 +240,9 @@ class ApiGraphQlServices {
         var jsonmap;
         globals.isLoading = true;
         try {
-               final response = await http.post(Uri.parse(env.API_BASE_URL),
-                   headers: {
-                       "Content-Type": "application/json",
-                   },
-                   body: jsonEncode(
+               final response = await ApiClient.postGraphQL(null, 
                        openimisGQLMutation().createFeedbackMutation(
-                           fullname, email, mobile_number, queries))
-
-               );
+                           fullname, email, mobile_number, queries));
                jsonmap = jsonDecode(response.body);
            } catch (Exception)
             {

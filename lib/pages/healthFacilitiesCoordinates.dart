@@ -39,8 +39,8 @@ class _HealthFacilityCoordinatesPageState extends State<HealthFacilityCoordinate
 										return ListView.builder(
 											itemCount: 0,//snapshot.data.data.healthFacilityCoordinate.length,
 											itemBuilder: (BuildContext context, int index) {
-												var medical_services = snapshot.data.data
-													.healthFacilityCoordinate[index];
+// 												var medical_services = snapshot.data.data
+//													.healthFacilityCoordinate[index];
 												return Container(
 													decoration: BoxDecoration(
 														border: Border(
@@ -83,50 +83,6 @@ class _HealthFacilityCoordinatesPageState extends State<HealthFacilityCoordinate
 		);
 	}
 	
-	List<Widget> _getServices() {
-		List<Widget> service = [];
-		service.add(
-			_getService('M1 OBG Cervical Cerclage - Shrodikar')
-		);
-		return service;
-	}
-	
-	Widget _getService(String service) {
-		return Container(
-			padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0, bottom: 16.0),
-			decoration: BoxDecoration(
-				border: Border(
-					bottom: BorderSide(color: Colors.grey.withOpacity(0.2), width: 1.0)
-				)
-			),
-			child: GestureDetector(
-				onTap: (){
-					print("Tab View clicked");
-				},
-				
-				child: FutureBuilder<HealthFacilityCoordinates>(
-					future: _healthFacilityCoordinates,
-					builder: (context, snapshot) {
-						if(snapshot.hasData) {
-							return ListView.builder(
-//												controller: scrollController,
-								itemCount: snapshot.data.data.healthFacilityCoordinate.length,
-								itemBuilder: (BuildContext context, int index) {
-									var medical_services = snapshot.data.data
-										.healthFacilityCoordinate[index];
-									return
-										//Text('${medical_services.node.name} $index');
-										Text('jpt1');
-								}
-							
-							);
-						}
-						else{
-							return Center(child: CircularProgressIndicator());
-						}
-					}
-				),
-			)
-		);
-	}
+
+
 }

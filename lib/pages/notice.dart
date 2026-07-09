@@ -16,13 +16,13 @@ class NoticePage extends StatefulWidget {
 class _NoticePageState extends State<NoticePage> {
     bool hasNotification = false;
 
-    Future<Notice> _notice;
+//     Future<Notice> _notice;
     AuthBlock auth;
     @override
     initState(){
         super.initState();
         application.onLocaleChanged = onLocaleChange;
-        _notice = ApiGraphQlServices().NoticesServicesGQL("332D7B1");
+        // _notice = ApiGraphQlServices().NoticesServicesGQL("332D7B1");
     }
 
     void onLocaleChange(Locale locale) async {

@@ -1,7 +1,7 @@
 name: openimis_web_app
 description: "OpenIMIS extension as Mobile Application"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+1
+version: 1.0.4+13
 environment:
   sdk: ">=2.10.0 <3.0.0"
 
@@ -11,7 +11,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: 0.17.0
-  http: 0.13.1
+  http: 0.13.4
   provider: 5.0.0
   path_provider : ^2.0.0
   flutter_cache_manager : ^3.0.0
@@ -31,6 +31,10 @@ dependencies:
   getwidget: ^1.1.0
   qr_flutter: ^4.0.0
   flutter_launcher_icons: ^0.9.2
+  flutter_map:
+  flutter_map_marker_cluster:
+  image_cropper: ^3.0.1
+  latlong2:
 
 dev_dependencies:
   flutter_test:

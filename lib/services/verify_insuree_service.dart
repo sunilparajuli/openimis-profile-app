@@ -20,7 +20,7 @@ bool isLoading=false;
         jsonEncode(body));
 
     print(response.body);
-    var jpt = response.body;
+//     var jpt = response.body;
       isLoading=false;
       var jdr = jsonDecode(response.body);
       //return jdr['data']['insureeAuth']; //{\"data\":{\"insureeAuth\":{\"id\":\"1\",\"message\":\"Phone number not found.Please contact HIB\"}}}

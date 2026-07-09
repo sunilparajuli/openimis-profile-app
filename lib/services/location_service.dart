@@ -63,7 +63,7 @@ class LocationService {
         return false;
       }
     }
-
+    return true;
   }
 
 }

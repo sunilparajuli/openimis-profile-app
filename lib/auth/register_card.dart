@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/models/user.dart';
-import 'dart:ui';
 import 'dart:async';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 	bool _checkbox = false;
 	@override
 	Widget build(BuildContext context) {
-		Size deviceSize = MediaQuery.of(context).size;
+
 		auth = Provider.of<AuthBlock>(context);
 		return Scaffold(
 			backgroundColor: Color.fromRGBO(234, 239, 255, 30),
@@ -334,7 +333,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																			_formKey.currentState.save();
 
 																			// Hit Api
-																			var register = await auth.register(userRegister);
+																			await auth.register(userRegister);
 
 																			Timer.periodic(Duration(milliseconds: 500), (timer) {
 																				print(DateTime.now());
@@ -347,11 +346,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																		}
 																	},
 																	style: ElevatedButton.styleFrom(
-																		padding: EdgeInsets.all(16.0),
+																		padding: EdgeInsets.all(16.0), backgroundColor: Color.fromRGBO(254, 196, 45, 50),
 																		shape: RoundedRectangleBorder(
 																			borderRadius: BorderRadius.all(Radius.circular(10.0)),
 																		),
-																		primary: Color.fromRGBO(254, 196, 45, 50),
 																	),
 																	child: auth.loading && auth.loadingType == 'register'
 																			? CircularProgressIndicator(

@@ -3,7 +3,6 @@ import 'package:openimis_web_app/models/notifications.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:openimis_web_app/models/notifications.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -15,7 +14,7 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   bool hasNotification = false;
-  Future<Notifications> _notifications;
+//   Future<Notifications> _notifications;
 	AuthBlock auth;
   @override
   Widget build(BuildContext context) {
@@ -119,61 +118,4 @@ class _NotificationPageState extends State<NotificationPage> {
 	  );
   }
 
-  List<Widget> _getNotifications() {
-
-	  List<Widget> notifications = [];
-	  notifications.add(_getNotification(
-		  'You have memories with Taliah Rossi and Mabel Quintero to look back on today.', '3 hours ago', false));
-	  notifications.add(_getNotification(
-		  'Susan Preece changed his profile picture.', 'Yesterday at 11:22pm', true));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  notifications.add(_getNotification(
-		  'Macaulay Dolan\'s birthday was yesterday.', '10 hours ago', true));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  notifications.add(_getNotification(
-		  'David Beckham changed his profile picture.', 'Yesterday at 8:28pm', false));
-	  return notifications;
-  }
-
-  Widget _getNotification(String notificaiton, String time, bool hasStory) {
-	  return Container(
-		  decoration: BoxDecoration(
-			  color: (hasStory == true) ? Theme.of(context).highlightColor : Colors.transparent
-		  ),
-		  child: ListTile(
-			  title: Text(
-				  notificaiton,
-				  style: TextStyle(fontWeight: FontWeight.w400),
-			  ),
-			  leading: CircleAvatar(
-				  backgroundImage: AssetImage('assets/images/notification-icon.png',), //NetworkImage(userProfileImage),
-				  radius: 20.0,
-			  ),
-			  subtitle: Text(
-				  '\n' + time,
-				  style: TextStyle(
-					  fontSize: 12,
-				  ),
-			  ),
-			  isThreeLine: true,
-			  /*trailing: IconButton(
-				  icon: Icon(Icons.more_horiz),
-				  disabledColor: Colors.black,
-			  ),*/
-			  onTap: () {
-				  setState(() {
-					  hasStory = (hasStory == true) ? false : true;
-				  });
-			  },
-		  ),
-	  );
-  }
 }

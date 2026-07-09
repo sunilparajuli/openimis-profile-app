@@ -18,8 +18,7 @@ class CardDetailPage extends StatefulWidget {
 
 class _CardDetailPageState extends State<CardDetailPage> {
     AuthBlock auth;
-    Future<PolicyInformation> _policyinformation;
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
     DateTime dateTimeNow = DateTime.now();
     
     @override
@@ -316,27 +315,53 @@ class _CardDetailPageState extends State<CardDetailPage> {
                             ),
     
                             SizedBox(height: 8.0),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
+                            Wrap(
+                                spacing: 16.0,
+                                runSpacing: 8.0,
                                 children: [
-                                    Text(
-                                        AppTranslations.of(context).text('expiry_date')+ ':',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.normal,
+                                    if (insureeProfile.policy.startDate != null)
+                                        Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                                Text(
+                                                    'Start Date:',
+                                                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+                                                ),
+                                                SizedBox(width: 4.0),
+                                                Text(
+                                                    '${insureeProfile.policy.startDate.year}-${insureeProfile.policy.startDate.month}-${insureeProfile.policy.startDate.day}',
+                                                    style: TextStyle(fontSize: 16.0, decoration: TextDecoration.underline, decorationStyle: TextDecorationStyle.dotted),
+                                                ),
+                                            ],
                                         ),
-                                    ),
-                                    SizedBox(width: 8.0),
-                                    Text(
-                                        insureeProfile.policy.expiryDate!=null ?
-                                        '${insureeProfile.policy.expiryDate.year}-${insureeProfile.policy.expiryDate.month}-${insureeProfile.policy.expiryDate.day}' : Text(""),
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.normal,
-                                            decoration: TextDecoration.underline,
-                                            decorationStyle: TextDecorationStyle.dotted,
+                                    if (insureeProfile.policy.enrollDate != null)
+                                        Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                                Text(
+                                                    'Enroll Date:',
+                                                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+                                                ),
+                                                SizedBox(width: 4.0),
+                                                Text(
+                                                    '${insureeProfile.policy.enrollDate.year}-${insureeProfile.policy.enrollDate.month}-${insureeProfile.policy.enrollDate.day}',
+                                                    style: TextStyle(fontSize: 16.0, decoration: TextDecoration.underline, decorationStyle: TextDecorationStyle.dotted),
+                                                ),
+                                            ],
                                         ),
+                                    Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                            Text(
+                                                AppTranslations.of(context).text('expiry_date') + ':',
+                                                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+                                            ),
+                                            SizedBox(width: 4.0),
+                                            Text(
+                                                insureeProfile.policy.expiryDate != null ? '${insureeProfile.policy.expiryDate.year}-${insureeProfile.policy.expiryDate.month}-${insureeProfile.policy.expiryDate.day}' : "",
+                                                style: TextStyle(fontSize: 16.0, decoration: TextDecoration.underline, decorationStyle: TextDecorationStyle.dotted),
+                                            ),
+                                        ],
                                     ),
                                 ],
                             ),
@@ -347,225 +372,5 @@ class _CardDetailPageState extends State<CardDetailPage> {
         );
     }
     
-    Widget _buildNameTF(policyprofile){
-        return Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                    Text(
-                        AppTranslations.of(context).text('full_name'),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Open-sans",
-                            color: Colors.grey
-                        ),
-                    ),
-                    SizedBox(height: 8.0),
-                    TextFormField(
-                        keyboardType: TextInputType.text,
-                        readOnly: true,
-                        validator: (value) {
-                            if (value.isEmpty) {
-                                return 'Please enter full name';
-                            }
-                            return null;
-                        },
-                        onSaved: (value) {
-                            setState(() {
-                                // userCredential.usernameOrEmail = value;
-                            });
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0)
-                                ),
-                                borderSide: BorderSide(
-                                    color: Colors.white,
-                                )
-                            ),
-                            hintText: '${policyprofile.otherNames} ${policyprofile.lastName}',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Open-sans'
-                            ),
-                            filled: true,
-                            contentPadding: EdgeInsets.all(16.0),
-                            prefixIcon: Icon(Icons.person_outline),
-                        ),
-                    ),
-                ],
-            ),
-        );
-    }
-    
-    Widget _buildCardNumberTF(policyprofile){
-        return Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                    Text(
-                        AppTranslations.of(context).text('card_number'),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Open-sans",
-                            color: Colors.grey
-                        ),
-                    ),
-                    SizedBox(height: 8.0),
-                    TextFormField(
-                        keyboardType: TextInputType.number,
-                        readOnly: true,
-                        validator: (value) {
-                            if (value.isEmpty) {
-                                return 'Please enter phone number';
-                            }
-                            return null;
-                        },
-                        onSaved: (value) {
-                            setState(() {
-                                // userCredential.usernameOrEmail = value;
-                            });
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0)
-                                ),
-                                borderSide: BorderSide(
-                                    color: Colors.white,
-                                )
-                            ),
-                    
-                            hintText: '${policyprofile.chfId}',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Open-sans'
-                            ),
-                            filled: true,
-                            contentPadding: EdgeInsets.all(16.0),
-                            prefixIcon: Icon(Icons.dialpad),
-                        ),
-                    ),
-                ],
-            ),
-        );
-    }
-    
-    Widget _buildExpiryDateTF(insureeProfile){
-        return Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                    Text(
-                        AppTranslations.of(context).text('expiry_date'),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Open-sans",
-                            color: Colors.grey
-                        ),
-                    ),
-                    SizedBox(height: 8.0),
-                    TextFormField(
-                        keyboardType: TextInputType.text,
-                        readOnly: true,
-                        validator: (value) {
-                            if (value.isEmpty) {
-                                return 'Please enter email address';
-                            }
-                            return null;
-                        },
-                        onSaved: (value) {
-                            setState(() {
-                                // userCredential.usernameOrEmail = value;
-                            });
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0)
-                                ),
-                                borderSide: BorderSide(
-                                    color: Colors.white,
-                                )
-                            ),
-    
-//                            hintText: '${DateTime.parse(insureeProfile.policy.expiryDate.toString())}',
-                            hintText: '${insureeProfile.policy.expiryDate.year}-${insureeProfile.policy.expiryDate.month}-${insureeProfile.policy.expiryDate.day}',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Open-sans'
-                            ),
-                            filled: true,
-                            contentPadding: EdgeInsets.all(16.0),
-                            prefixIcon: Icon(Icons.date_range),
-                        ),
-                    ),
-                ],
-            ),
-        );
-    }
-    
-    Widget _buildRenewButtonWidget(){
-        return Container(
-            padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
-            width: double.infinity,
-            child: ElevatedButton(
-                onPressed: () async {
-                    Navigator.pushNamed(context, '/PaymentsubmissionPage');
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    primary: CustomTheme.lightTheme.primaryColor,
-                ),
-                child: Text(
-                    AppTranslations.of(context).text('renew_submission').toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Open-sans",
-                        color: Colors.white
-                    ),
-                ),
-            ),
-        );
-    }
-    
-    Widget _buildBackButtonWidget(){
-        return Container(
-            padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
-            width: double.infinity,
-            child: ElevatedButton(
-                onPressed: () async {
-                    Navigator.pushNamed(context, '/card');
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    primary: CustomTheme.lightTheme.primaryColor,
-                ),
-                child: Text(
-                    AppTranslations.of(context).text('go_back').toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Open-sans",
-                        color: Colors.white
-                    ),
-                ),
-            ),
 
-        );
-    }
 }

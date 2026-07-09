@@ -1,18 +1,10 @@
 import 'package:openimis_web_app/pages/claimed_item_services.dart';
-import 'package:openimis_web_app/pages/settings.dart';
 import 'package:openimis_web_app/screen_size_reducers.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
-import 'package:openimis_web_app/models/medical_services.dart';
-import 'package:openimis_web_app/models/claimed_services_items.dart';
-import 'package:openimis_web_app/services/api_graphql_services.dart';
-import 'package:openimis_web_app/models/claimed.dart';
+
 import 'package:openimis_web_app/models/insuree_claims.dart';
-import 'package:flutter/services.dart';
-import 'package:openimis_web_app/pages/homepage.dart';
-import 'package:openimis_web_app/langlang/application.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 
 
@@ -23,16 +15,15 @@ class CardHome extends StatefulWidget {
 }
 
 class _CardHomeState extends State<CardHome> {
-	Future<MedicalServices> _medicalservices;
+// 	Future<MedicalServices> _medicalservices;
 	Future<Claims> _insureeclaims;
-	Future<Claimed> _claimed;
-	Future<ClaimedServicesItems> _claimedservicesitems;
+// 	Future<Claimed> _claimed;
+// 	Future<ClaimedServicesItems> _claimedservicesitems;
 	
 	@override
 	void initState(){
 		super.initState();
 		
-		_medicalservices = ApiGraphQlServices().MedicalServicesGQL('medicalservice');
 	}
 	
 	Widget build(BuildContext context) {

@@ -6,7 +6,6 @@ class CustomTheme{
 		return ThemeData(
 			primaryColor: CustomColors.LightGreen,
 			splashColor: CustomColors.LightGreen1,
-			accentColor: CustomColors.LightGreen2,
 			backgroundColor: CustomColors.PinkLight,
 			scaffoldBackgroundColor: Colors.white,
 			dialogBackgroundColor: Colors.orangeAccent,
@@ -25,7 +24,7 @@ class CustomTheme{
 					borderRadius: BorderRadius.circular(18.0)
 				),
 				buttonColor: CustomColors.BlueDark
-			)
+			), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: CustomColors.LightGreen2)
 		);
 	}
 }

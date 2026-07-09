@@ -155,22 +155,30 @@ class HealthFacility {
 class Policy {
   Policy({
     this.value,
+    this.startDate,
+    this.enrollDate,
     this.expiryDate,
     this.status,
   });
   
   double value;
+  DateTime startDate;
+  DateTime enrollDate;
   DateTime expiryDate;
   int status;
   
   factory Policy.fromJson(Map<String, dynamic> json) => Policy(
-    value: json["value"],
+    value: json["value"] == null ? 0.0 : json["value"].toDouble(),
+    startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : null,
+    enrollDate: json["enrollDate"] != null ? DateTime.parse(json["enrollDate"]) : null,
     expiryDate: DateTime.parse(json["expiryDate"]),
     status: json["status"],
   );
   
   Map<String, dynamic> toJson() => {
     "value": value,
+    "startDate": startDate != null ? "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}" : null,
+    "enrollDate": enrollDate != null ? "${enrollDate.year.toString().padLeft(4, '0')}-${enrollDate.month.toString().padLeft(2, '0')}-${enrollDate.day.toString().padLeft(2, '0')}" : null,
     "expiryDate": "${expiryDate.year.toString().padLeft(4, '0')}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')}",
     "status": status,
   };

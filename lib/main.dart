@@ -10,6 +10,7 @@ import 'package:openimis_web_app/pages/card_details.dart';
 import 'package:openimis_web_app/pages/contactus.dart';
 import 'package:openimis_web_app/pages/faq.dart';
 import 'package:openimis_web_app/pages/feedback.dart';
+import 'package:openimis_web_app/pages/healthFacilitiesMaps.dart';
 import 'package:openimis_web_app/pages/service_provider.dart';
 import 'package:openimis_web_app/pages/notice.dart';
 import 'package:openimis_web_app/pages/notification.dart';
@@ -23,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:openimis_web_app/auth/auth.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/ui/splash_screen.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
@@ -150,6 +150,7 @@ class _MyAppState extends State<MyApp> {
                             '/offices': (BuildContext context) => OfficePage(),
                             // CONTACT US
                             '/contact': (BuildContext context) => ContactUsPage(),
+                            '/map-services' : (BuildContext context) => MapPage(),
                         },
                     );
                 }));

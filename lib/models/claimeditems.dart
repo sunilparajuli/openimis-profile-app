@@ -59,19 +59,27 @@ class InsureeClaim {
 class ItemElement {
   ItemElement({
     this.id,
+    this.qtyProvided,
+    this.qtyApproved,
     this.item,
   });
 
   String id;
+  double qtyProvided;
+  double qtyApproved;
   ItemItem item;
 
   factory ItemElement.fromJson(Map<String, dynamic> json) => ItemElement(
     id: json["id"],
+    qtyProvided: json["qtyProvided"] != null ? json["qtyProvided"].toDouble() : null,
+    qtyApproved: json["qtyApproved"] != null ? json["qtyApproved"].toDouble() : null,
     item: ItemItem.fromJson(json["item"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "qtyProvided": qtyProvided,
+    "qtyApproved": qtyApproved,
     "item": item.toJson(),
   };
 }

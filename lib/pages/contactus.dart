@@ -41,7 +41,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 									child: Column(
 										children: <Widget>[
 											TabBar(
-												indicatorColor: CustomTheme.lightTheme.accentColor,
+												indicatorColor: CustomTheme.lightTheme.colorScheme.secondary,
 												indicatorWeight: 2,
 												tabs: [
 													Tab(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:openimis_web_app/common/env.dart' as env;
 
 class OtpPage extends StatefulWidget {
     @override
@@ -509,9 +508,8 @@ class OtpPageState extends State<OtpPage> {
                             child: ElevatedButton(
                                 onPressed: (){ matchOtp(); },
                                 style: ElevatedButton.styleFrom(
-                                    elevation: 5.0,
+                                    elevation: 5.0, backgroundColor: Color.fromRGBO(1, 153, 182, 50),
                                     padding: EdgeInsets.all(15.0),
-                                    primary: Color.fromRGBO(1, 153, 182, 50),
                                 ),
                                 child: Text(
                                     'Proceed to Register',
