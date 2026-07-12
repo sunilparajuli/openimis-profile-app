@@ -54,11 +54,9 @@
   "first_hf" : "First HealthFacility",
   "gender" : "Gender",
   "org" : "Service Providers Near You",
-  "member_id" : "Insuree No"
-
-
-
-  
-
-
+  "member_id" : "Insuree No",
+  "logout_confirmation_title" : "Logout Confirmation",
+  "logout_confirmation_message" : "Are you sure you want to logout?",
+  "yes" : "Yes",
+  "no" : "No"
 }

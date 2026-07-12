@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:openimis_web_app/pages/claimed_item_services.dart';
 import 'package:openimis_web_app/screen_size_reducers.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -16,7 +17,7 @@ class CardHome extends StatefulWidget {
 
 class _CardHomeState extends State<CardHome> {
 // 	Future<MedicalServices> _medicalservices;
-	Future<Claims> _insureeclaims;
+	late Future<Claims> _insureeclaims;
 // 	Future<Claimed> _claimed;
 // 	Future<ClaimedServicesItems> _claimedservicesitems;
 	
@@ -28,7 +29,7 @@ class _CardHomeState extends State<CardHome> {
 	
 	Widget build(BuildContext context) {
 		return Scaffold(
-            backgroundColor: CustomTheme.lightTheme.backgroundColor.withOpacity(0.5),
+            backgroundColor: CustomTheme.lightTheme.colorScheme.surface.withOpacity(0.5),
             body: Stack(
                 children: [
                     SingleChildScrollView(
@@ -298,7 +299,7 @@ class _CardHomeState extends State<CardHome> {
                                                         fontWeight: FontWeight.normal
                                                     ),
                                                 ),
-                                                leading: Icon(Icons.history, color: Colors.green, size: 30,),
+                                                leading: Icon(Icons.history, color: CustomTheme.lightTheme.primaryColor, size: 30,),
                                                 trailing: GestureDetector(
                                                     onTap: (){
                                                         Navigator.pushNamed(context, '/user-history');
@@ -315,14 +316,14 @@ class _CardHomeState extends State<CardHome> {
                                             FutureBuilder<Claims>(
                                                 future: _insureeclaims,
                                                 builder: (context, snapshot) {
-                                                    if(snapshot.hasData && snapshot.data.data!=null) {
+                                                    if(snapshot.hasData && snapshot.data!.data!=null) {
                                                         return ListView.builder(
                                                             shrinkWrap: true,
                                                             scrollDirection: Axis.vertical,
                                                             physics: NeverScrollableScrollPhysics(),
-                                                            itemCount: snapshot.data.data.insureeProfile.insureeClaim.length,
+                                                            itemCount: snapshot.data!.data.insureeProfile.insureeClaim.length,
                                                             itemBuilder: (BuildContext context, int index){
-                                                                var claims = snapshot.data.data.insureeProfile.insureeClaim[index];
+                                                                var claims = snapshot.data!.data.insureeProfile.insureeClaim[index];
                                                                 return ListTile(
                                                                     title: Text('${claims.healthFacility.name}'),
                                                                     subtitle: Text('${claims.dateClaimed}'),
@@ -331,7 +332,7 @@ class _CardHomeState extends State<CardHome> {
                                                                         Navigator.push(
                                                                             context,
                                                                             MaterialPageRoute(
-                                                                                builder: (context) => ClaimedItemServicesPage(claimid: int.parse(claims.id)),
+                                                                                builder: (context) => ClaimedItemServicesPage(claimId: int.parse(claims.id), token: ''),
                                                                             ),
                                                                         );
                                                                     },
@@ -342,7 +343,7 @@ class _CardHomeState extends State<CardHome> {
                                                     else if(snapshot.hasError){
                                                         return Center(child: Text('Failed To Fetch the data'));
                                                     }
-                                                    else if(snapshot.hasData && snapshot.data.data.insureeProfile.insureeClaim.isEmpty) {
+                                                    else if(snapshot.hasData && snapshot.data!.data.insureeProfile.insureeClaim.isEmpty) {
                                                         // got data from snapshot but it is empty
 
                                                         return Center(child:Text("No Health Facility Available "));

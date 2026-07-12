@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:openimis_web_app/models/claimeditems.dart';
 import 'package:openimis_web_app/models/claimedservices.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -7,9 +8,9 @@ import 'package:openimis_web_app/services/api_graphql_services.dart';
 
 
 class ClaimedItemServicesPage extends StatefulWidget {
-    final int claimid;
+    final int claimId;
     final String token;
-    ClaimedItemServicesPage({Key key, this.claimid, this.token}) : super(key: key);
+    ClaimedItemServicesPage({Key? key, required this.claimId, required this.token}) : super(key: key);
     @override
     _ClaimedItemServicesPageState createState() =>
         _ClaimedItemServicesPageState();
@@ -17,15 +18,15 @@ class ClaimedItemServicesPage extends StatefulWidget {
 
 class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
     bool hasNotification = false;
-    Future<ClaimedServices> _claimedservices;
-    Future<ClaimedItems> _claimeditems;
+    late Future<ClaimedServices> _claimedServices;
+    late Future<ClaimedItems> _claimedItems;
     
     @override
     void initState() {
         // TODO: implement initState
         super.initState();
-        _claimedservices = ApiGraphQlServices().ClaimedServicesServicesGQL(widget.token,widget.claimid);
-        _claimeditems = ApiGraphQlServices().ClaimedItemServicesGQL(widget.token,widget.claimid);
+        _claimedServices = ApiGraphQlServices().ClaimedServicesServicesGQL(widget.token, widget.claimId);
+        _claimedItems = ApiGraphQlServices().ClaimedItemServicesGQL(widget.token, widget.claimId);
     }
     
     @override
@@ -63,7 +64,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                             border: Border(
                                                 bottom: BorderSide(
                                                     color: Colors.grey
-                                                        .withOpacity(0.25)))),
+                                                        .withValues(alpha: 0.25)))),
                                         width: double.infinity,
                                         child: Text(
                                             'Items',
@@ -81,7 +82,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                             border: Border(
                                                 bottom: BorderSide(
                                                     color: Colors.grey
-                                                        .withOpacity(0.25)))),
+                                                        .withValues(alpha: 0.25)))),
                                         width: double.infinity,
                                         child: Text(
                                             'Services',
@@ -106,32 +107,38 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
     Widget _claimItemListWidget(){
         return Container(
             child: FutureBuilder<ClaimedItems>(
-                future: _claimeditems,
+                future: _claimedItems,
                 builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                        if (snapshot.data!.data.insureeClaim.isEmpty || snapshot.data!.data.insureeClaim[0].items.isEmpty) {
+                            return Center(child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("No items claimed"),
+                            ));
+                        }
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data.data
+                            itemCount: snapshot.data!.data
                                 .insureeClaim[0].items.length,
                             itemBuilder: (BuildContext context,
                                 int index) {
-                                var claimeditems = snapshot
+                                var item = snapshot
                                     .data
-                                    .data
+                                    !.data
                                     .insureeClaim[0]
                                     .items[index];
                                 return Container(
                                     child: ListTile(
                                         title: Text(
-                                            '${claimeditems.item.name}',
+                                            '${item.item.name}',
                                             style: TextStyle(
                                                 fontSize: 14.4,
                                                 fontWeight: FontWeight.normal
                                             ),
                                         ),
                                         subtitle: Text(
-                                            'Quantity: ${claimeditems.qtyProvided ?? 0}',
+                                            'Quantity: ${item.qtyProvided}',
                                             style: TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.normal,
@@ -139,7 +146,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                             ),
                                         ),
                                         trailing: Text(
-                                            '${env.Currency} ' + '${claimeditems.item.price.toString()}',
+                                            '${env.Currency} ' + '${item.item.price.toString()}',
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
@@ -149,6 +156,13 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                     ),
                                 );
                             });
+                    } else if (snapshot.hasError) {
+                        return Center(
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Error: ${snapshot.error}"),
+                            ),
+                        );
                     } else {
                         return Center(
                             child: CircularProgressIndicator());
@@ -161,28 +175,34 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
         return Container(
             // height: screenHeight(context, dividedBy: 2),
             child: FutureBuilder<ClaimedServices>(
-                future: _claimedservices,
+                future: _claimedServices,
                 builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                        if (snapshot.data!.data.insureeClaim.isEmpty || snapshot.data!.data.insureeClaim[0].services.isEmpty) {
+                            return Center(child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("No services claimed"),
+                            ));
+                        }
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot
-                                .data.data.insureeClaim[0].services.length,
+                                .data!.data.insureeClaim[0].services.length,
                             itemBuilder: (BuildContext context, int index) {
-                                var claimedservices = snapshot
-                                    .data.data.insureeClaim[0].services[index];
+                                var service = snapshot
+                                    .data!.data.insureeClaim[0].services[index];
                                 return Container(
                                     child: ListTile(
                                         title: Text(
-                                            '${claimedservices.service.name}',
+                                            '${service.service.name}',
                                             style: TextStyle(
                                                 fontSize: 14.4,
                                                 fontWeight: FontWeight.normal
                                             ),
                                         ),
                                         subtitle: Text(
-                                            'Quantity/Days: ${claimedservices.qtyProvided ?? 0}',
+                                            'Quantity/Days: ${service.qtyProvided}',
                                             style: TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.normal,
@@ -190,7 +210,7 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                             ),
                                         ),
                                         trailing: Text(
-                                            '${env.Currency} ' + '${claimedservices.service.price.toString()}',
+                                            '${env.Currency} ' + '${service.service.price.toString()}',
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
@@ -200,6 +220,13 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                                     ),
                                 );
                             });
+                    } else if (snapshot.hasError) {
+                        return Center(
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Error: ${snapshot.error}"),
+                            ),
+                        );
                     } else {
                         return Center(
                             child: CircularProgressIndicator()

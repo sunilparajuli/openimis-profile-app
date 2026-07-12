@@ -28,7 +28,7 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
 
 
   }
-    final Insuree _insuree = Insuree();
+    final Insuree _insuree = Insuree(chfid: '');
     
     final double circleRadius = 100.0;
     final double circleBorderWidth = 8.0;
@@ -238,14 +238,14 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                         maxLength: 9,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                                 return 'Please enter insurance number';
                             }
                             return null;
                         },
                         onSaved: (value) {
                             setState(() {
-                                _insuree.chfid = value;
+                                _insuree.chfid = value ?? '';
                             });
                         },
                         decoration: InputDecoration(
@@ -287,14 +287,14 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                     TextFormField(
                         maxLength: 9,
                         validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                                 return 'Please enter family head insurance number';
                             }
                             return null;
                         },
                         onSaved: (value) {
                             setState(() {
-                                _insuree.fhchfid = value;
+                                _insuree.fhchfid = value ?? '';
                             });
                         },
                         decoration: InputDecoration(
@@ -423,9 +423,9 @@ class _VerifyInsureeState extends State<VerifyInsuree> {
                 onPressed: () async {
                     _insuree.dob = "${_yearController.text}-${_monthController.text}-${_dayController.text}";
                     // Validate form
-                    if (_formKey.currentState.validate()) {
+                    if (_formKey.currentState!.validate()) {
                         // Update values
-                        _formKey.currentState.save();
+                        _formKey.currentState!.save();
                         // Hit Api
                     }
 

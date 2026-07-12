@@ -1,66 +1,64 @@
 class HealthFacilityCoordinates {
-    Data data;
+    Data? data;
     
     HealthFacilityCoordinates({this.data});
     
     HealthFacilityCoordinates.fromJson(Map<String, dynamic> json) {
-        data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+        data = json['data'] != null ? Data.fromJson(json['data']) : null;
     }
     
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
+        final Map<String, dynamic> data = Map<String, dynamic>();
         if (this.data != null) {
-            data['data'] = this.data.toJson();
+            data['data'] = this.data!.toJson();
         }
         return data;
     }
 }
 
 class Data {
-    List<HealthFacilityCoordinate> healthFacilityCoordinate;
+    List<HealthFacilityCoordinate> healthFacilityCoordinate = [];
     
-    Data({this.healthFacilityCoordinate});
+    Data({List<HealthFacilityCoordinate>? healthFacilityCoordinate})
+        : healthFacilityCoordinate = healthFacilityCoordinate ?? [];
     
     Data.fromJson(Map<String, dynamic> json) {
         if (json['healthFacilityCoordinate'] != null) {
-            healthFacilityCoordinate = new List<HealthFacilityCoordinate>();
-            json['healthFacilityCoordinate'].forEach((v) {
-                healthFacilityCoordinate.add(new HealthFacilityCoordinate.fromJson(v));
+            healthFacilityCoordinate = <HealthFacilityCoordinate>[];
+            json['healthFacilityCoordinate'].forEach((item) {
+                healthFacilityCoordinate.add(HealthFacilityCoordinate.fromJson(item));
             });
         }
     }
     
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
-        if (this.healthFacilityCoordinate != null) {
-            data['healthFacilityCoordinate'] =
-                this.healthFacilityCoordinate.map((v) => v.toJson()).toList();
-        }
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['healthFacilityCoordinate'] =
+            this.healthFacilityCoordinate.map((item) => item.toJson()).toList();
         return data;
     }
 }
 
 class HealthFacilityCoordinate {
     String id;
-    double distance;
-    HealthFacility healthFacility;
+    double distance = 0.0;
+    HealthFacility? healthFacility;
     
-    HealthFacilityCoordinate({this.id, this.distance, this.healthFacility});
+    HealthFacilityCoordinate({required this.id, this.distance = 0.0, this.healthFacility});
     
-    HealthFacilityCoordinate.fromJson(Map<String, dynamic> json) {
-        id = json['id'];
-        distance = json['distance'];
-        healthFacility = json['healthFacility'] != null
-            ? new HealthFacility.fromJson(json['healthFacility'])
+    HealthFacilityCoordinate.fromJson(Map<String, dynamic> json)
+        : id = json['id'] ?? '',
+          distance = (json['distance'] ?? 0).toDouble(),
+          healthFacility = json['healthFacility'] != null
+            ? HealthFacility.fromJson(json['healthFacility'])
             : null;
-    }
     
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
+        final Map<String, dynamic> data = Map<String, dynamic>();
         data['id'] = this.id;
         data['distance'] = this.distance;
         if (this.healthFacility != null) {
-            data['healthFacility'] = this.healthFacility.toJson();
+            data['healthFacility'] = this.healthFacility!.toJson();
         }
         return data;
     }
@@ -68,17 +66,16 @@ class HealthFacilityCoordinate {
 
 class HealthFacility {
     String id;
-    String name;
+    String name = "";
     
-    HealthFacility({this.id, this.name});
+    HealthFacility({required this.id, this.name = ""});
     
-    HealthFacility.fromJson(Map<String, dynamic> json) {
-        id = json['id'];
-        name = json['name'];
-    }
+    HealthFacility.fromJson(Map<String, dynamic> json)
+        : id = json['id'] ?? '',
+          name = json['name'] ?? '';
     
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
+        final Map<String, dynamic> data = Map<String, dynamic>();
         data['id'] = this.id;
         data['name'] = this.name;
         return data;

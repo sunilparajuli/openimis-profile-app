@@ -22,7 +22,7 @@ class Application {
   Iterable<Locale> supportedLocales() =>
       supportedLanguagesCodes.map<Locale>((language) => Locale(language, ""));
   //function to be invoked when changing the language
-  LocaleChangeCallback onLocaleChanged;
+  late LocaleChangeCallback onLocaleChanged;
 }
 Application application = Application();
 typedef void LocaleChangeCallback(Locale locale);

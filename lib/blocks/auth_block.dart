@@ -20,7 +20,7 @@ class AuthBlock extends ChangeNotifier {
 
 
 //getters for token expiry checker
-  bool isTokenExpired;
+  bool isTokenExpired = false;
   bool get tokenExpired => isTokenExpired;
   set tokenExpired(bool check){
     isTokenExpired = check;
@@ -29,7 +29,7 @@ class AuthBlock extends ChangeNotifier {
 
   // Loading
   bool _loading = false;
-  String _loadingType;
+  String _loadingType = '';
   bool get loading => _loading;
   String get loadingType => _loadingType;
   set loading(bool loadingState) {
@@ -55,10 +55,10 @@ class AuthBlock extends ChangeNotifier {
   Map _user = {};
   Map get user => _user;
   setUser() async {
-    _user = await _authService.getUser();
-    isLoggedIn = _user == null ? false : true;
+    var u = await _authService.getUser();
+    _user = u ?? {};
+    isLoggedIn = u == null ? false : true;
     notifyListeners();
-
   }
 
   login(UserCredential userCredential) async {
@@ -106,6 +106,7 @@ class AuthBlock extends ChangeNotifier {
   logout() async {
     await _authService.logout();
     isLoggedIn = false;
+    _currentIndex = 0; // Reset index to homepage
     await storage.deleteAll();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();

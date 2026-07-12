@@ -13,7 +13,7 @@ void ToastDanger(argMessage){
       gravity: ToastGravity.BOTTOM,
 
       //timeInSecForIosWeb: 1,
-      timeInSecForIos: 1,
+      timeInSecForIosWeb: 1,
       backgroundColor: Colors.red,
       textColor: Colors.white,
       fontSize: 16.0
@@ -29,7 +29,7 @@ void ToastSuccess(argMessage){
       gravity: ToastGravity.BOTTOM,
 
       //timeInSecForIosWeb: 1,
-      timeInSecForIos: 1,
+      timeInSecForIosWeb: 1,
       backgroundColor: Colors.green,
       textColor: Colors.white,
       fontSize: 16.0

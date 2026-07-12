@@ -17,7 +17,7 @@ class _NoticePageState extends State<NoticePage> {
     bool hasNotification = false;
 
 //     Future<Notice> _notice;
-    AuthBlock auth;
+    late AuthBlock auth;
     @override
     initState(){
         super.initState();
@@ -64,11 +64,11 @@ class _NoticePageState extends State<NoticePage> {
                                 child: FutureBuilder<Notice>(
                                     future: ApiGraphQlServices().NoticesServicesGQL(auth.user['data']['insureeAuthOtp']['token']),
                                     builder: (context, snapshot) {
-                                        if(snapshot.hasData && snapshot.data.data!=null) {
+                                        if(snapshot.hasData) {
                                             return ListView.builder(
-                                                itemCount: snapshot.data.data.notices.edges.length,
+                                                itemCount: snapshot.data!.data.notices.edges.length,
                                                 itemBuilder: (BuildContext context, int index) {
-                                                    var notices = snapshot.data.data.notices.edges[index];
+                                                    var notices = snapshot.data!.data.notices.edges[index];
                                                     return Container(
                                                         height: screenHeight(context, dividedBy: 3),//200,
                                                         margin: EdgeInsets.only(bottom: 8.0),

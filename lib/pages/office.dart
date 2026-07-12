@@ -42,9 +42,9 @@ class _OfficePageState extends State<OfficePage> {
 							    return Padding(
 							    	padding: const EdgeInsets.all(16.0),
 							    	child: ListView.builder(
-                      itemCount: snapshot.data.branchOfficeDetails.length,
+                      itemCount: snapshot.data!.branchOfficeDetails.length,
 							    		itemBuilder: (BuildContext context, int index){
-                        var offices = snapshot.data.branchOfficeDetails[index];
+                        var offices = snapshot.data!.branchOfficeDetails[index];
 
 							    			return Container(
 							    				padding: EdgeInsets.only(top: 4.0, bottom: 4.0),

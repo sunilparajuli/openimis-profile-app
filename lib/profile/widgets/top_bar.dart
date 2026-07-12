@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

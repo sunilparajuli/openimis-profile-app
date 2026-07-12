@@ -13,7 +13,7 @@ class UserHistoryPage extends StatefulWidget {
 
 class _UserHistoryPageState extends State<UserHistoryPage> {
 // 	Future<Claims> _insureeclaims;
-	AuthBlock auth;
+	late AuthBlock auth;
 	
 	@override
 	void initState(){
@@ -21,6 +21,22 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 		// _insureeclaims = ApiGraphQlServices().ClaimsServicesGQL(auth.user['data']['insureeAuthOtp']['token']);
 	}
 	
+	String _claimStatusString(int status) {
+		if (status == 2) return "Unverifed";
+		if (status == 4) return "Checked";
+		if (status == 8) return "Reviewed";
+		if (status == 16) return "Valuated";
+		return "-";
+	}
+
+	Color _claimStatusColor(int status) {
+		if (status == 2) return Colors.red;
+		if (status == 4) return Colors.orange;
+		if (status == 8) return Colors.blue;
+		if (status == 16) return Colors.green;
+		return Colors.black;
+	}
+
 	@override
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
@@ -56,13 +72,13 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 										auth.user['data']['insureeAuthOtp']['insuree']['chfId'], true
 									),
 									builder: (context, snapshot){
-										if(snapshot.hasData && snapshot.data.data!=null) {
+										if(snapshot.hasData) {
 											return ListView.builder(
 												shrinkWrap: true,
 												scrollDirection: Axis.vertical,
-												itemCount: snapshot.data.data.insureeProfile.insureeClaim.length,
+												itemCount: snapshot.data!.data.insureeProfile.insureeClaim.length,
 												itemBuilder: (BuildContext context, int index){
-													var claims = snapshot.data.data.insureeProfile.insureeClaim[index];
+													var claims = snapshot.data!.data.insureeProfile.insureeClaim[index];
 													
 													return _getHistoryWidgetCard(claims);
 												}
@@ -82,53 +98,48 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 	}
 	
 	Widget _getHistoryWidgetCard(claims){
-        return Container(
-            padding: EdgeInsets.all(2),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                        child: Text(
-                            '${claims.dateClaimed}', // 'Fri, May 28th',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                        ),
-                    ),
-                    
-                    Card(
-                        shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
-                            borderRadius: BorderRadius.circular(20)
-                        ),
-                        color: CustomTheme.lightTheme.colorScheme.secondary.withOpacity(1),
-                        child: Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                    ListTile(
-                                        title:  Text('${claims.healthFacility.name}'),
-                                        trailing: Text(
-                                            '${env.Currency} ${claims.claimed}',
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white70
-                                            ),
-                                        ),
-                                    ),
-                                ],
-                            ),
-                        ),
-                    ),
-                ],
-            )
-        );
-    }
+		return Card(
+			elevation: 0,
+			color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.05),
+			shape: RoundedRectangleBorder(
+				borderRadius: BorderRadius.circular(12),
+				side: BorderSide(
+					color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1),
+					width: 1,
+				),
+			),
+			child: ListTile(
+				title: Text(
+					'${claims.healthFacility.name}',
+					style: TextStyle(fontWeight: FontWeight.w600),
+				),
+				subtitle: Text(
+					'${claims.dateClaimed.year}-${claims.dateClaimed.month.toString().padLeft(2, '0')}-${claims.dateClaimed.day.toString().padLeft(2, '0')}',
+					style: TextStyle(color: Colors.grey[700]),
+				),
+				trailing: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					crossAxisAlignment: CrossAxisAlignment.end,
+					children: [
+						Text(
+							'${env.Currency} ${claims.claimed}',
+							style: TextStyle(fontWeight: FontWeight.bold),
+						),
+						Text(
+							_claimStatusString(claims.status),
+							style: TextStyle(
+								color: _claimStatusColor(claims.status),
+								fontSize: 12,
+								fontWeight: FontWeight.w500,
+							),
+						)
+					],
+				),
+				onTap: () {
+					// Add navigation if needed, consistent with home/history
+				},
+			),
+		);
+	}
 }
 

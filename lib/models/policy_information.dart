@@ -10,7 +10,7 @@ String policyInformationToJson(PolicyInformation data) => json.encode(data.toJso
 
 class PolicyInformation {
   PolicyInformation({
-    this.data,
+    required this.data,
   });
   
   Data data;
@@ -26,7 +26,7 @@ class PolicyInformation {
 
 class Data {
   Data({
-    this.insureeProfile,
+    required this.insureeProfile,
   });
   
   InsureeProfile insureeProfile;
@@ -42,10 +42,10 @@ class Data {
 
 class InsureeProfile {
   InsureeProfile({
-    this.chfId,
-    this.lastName,
-    this.otherNames,
-    this.insureePolicies,
+    required this.chfId,
+    required this.lastName,
+    required this.otherNames,
+    required this.insureePolicies,
   });
   
   String chfId;
@@ -70,8 +70,8 @@ class InsureeProfile {
 
 class InsureePolicy {
   InsureePolicy({
-    this.policy,
-    this.insuree,
+    required this.policy,
+    required this.insuree,
   });
   
   Policy policy;
@@ -90,9 +90,9 @@ class InsureePolicy {
 
 class Insuree {
   Insuree({
-    this.gender,
-    this.dob,
-    this.healthFacility,
+    required this.gender,
+    required this.dob,
+    required this.healthFacility,
   });
   
   Gender gender;
@@ -114,8 +114,8 @@ class Insuree {
 
 class Gender {
   Gender({
-    this.code,
-    this.gender,
+    required this.code,
+    required this.gender,
   });
   
   String code;
@@ -134,8 +134,8 @@ class Gender {
 
 class HealthFacility {
   HealthFacility({
-    this.code,
-    this.name,
+    required this.code,
+    required this.name,
   });
   
   String code;
@@ -154,16 +154,16 @@ class HealthFacility {
 
 class Policy {
   Policy({
-    this.value,
-    this.startDate,
-    this.enrollDate,
-    this.expiryDate,
-    this.status,
+    required this.value,
+    required this.startDate,
+    required this.enrollDate,
+    required this.expiryDate,
+    required this.status,
   });
   
   double value;
-  DateTime startDate;
-  DateTime enrollDate;
+  DateTime? startDate;
+  DateTime? enrollDate;
   DateTime expiryDate;
   int status;
   
@@ -177,8 +177,8 @@ class Policy {
   
   Map<String, dynamic> toJson() => {
     "value": value,
-    "startDate": startDate != null ? "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}" : null,
-    "enrollDate": enrollDate != null ? "${enrollDate.year.toString().padLeft(4, '0')}-${enrollDate.month.toString().padLeft(2, '0')}-${enrollDate.day.toString().padLeft(2, '0')}" : null,
+    "startDate": startDate != null ? "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}" : null,
+    "enrollDate": enrollDate != null ? "${enrollDate!.year.toString().padLeft(4, '0')}-${enrollDate!.month.toString().padLeft(2, '0')}-${enrollDate!.day.toString().padLeft(2, '0')}" : null,
     "expiryDate": "${expiryDate.year.toString().padLeft(4, '0')}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')}",
     "status": status,
   };

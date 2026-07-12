@@ -10,7 +10,7 @@ String notificationsToJson(Notifications data) => json.encode(data.toJson());
 
 class Notifications {
   Notifications({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class Notifications {
 
 class Data {
   Data({
-    this.notifications,
+    required this.notifications,
   });
 
   NotificationsClass notifications;
@@ -42,7 +42,7 @@ class Data {
 
 class NotificationsClass {
   NotificationsClass({
-    this.edges,
+    required this.edges,
   });
 
   List<Edge> edges;
@@ -58,7 +58,7 @@ class NotificationsClass {
 
 class Edge {
   Edge({
-    this.node,
+    required this.node,
   });
 
   Node node;
@@ -74,8 +74,8 @@ class Edge {
 
 class Node {
   Node({
-    this.message,
-    this.createdAt,
+    required this.message,
+    required this.createdAt,
   });
 
   String message;

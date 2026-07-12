@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:openimis_web_app/models/insuree.dart';
 import 'package:http/http.dart' as http;
 import 'package:openimis_web_app/common/env.dart' as env;
+import 'package:openimis_web_app/services/api_client.dart';
+
 class VerifyInsureeService {
 bool isLoading=false;
 
@@ -11,20 +14,14 @@ bool isLoading=false;
         " insureeAuth(insureeCHFID: \"${_verifyInsuree.chfid.toString()}\", familyHeadCHFID: \""
         "${_verifyInsuree.fhchfid.toString()}\", dob:\"${_verifyInsuree.dob}\"){\n    id\n message\n issuccess\n  }\n}"};
     //body = {"query":"\n\nquery {\n  insureeAuth(insureeCHFID: \"100\", familyHeadCHFID: \"200\", dob:\"1952-05-07\"){\n    id\n  }\n}\n","variables":null};
-    final response = await http.post(Uri.parse(env.API_BASE_URL),
-        headers: {
-          "Content-Type": "application/json",
-//                "Accept" : "application/json"
-        },
-        body:
-        jsonEncode(body));
+    final response = await ApiClient.postGraphQL('', body);
 
     print(response.body);
-//     var jpt = response.body;
+//     var responseBody = response.body;
       isLoading=false;
-      var jdr = jsonDecode(response.body);
-      //return jdr['data']['insureeAuth']; //{\"data\":{\"insureeAuth\":{\"id\":\"1\",\"message\":\"Phone number not found.Please contact HIB\"}}}
-    return jdr;
+      var responseData = jsonDecode(response.body);
+      //return responseData['data']['insureeAuth']; //{\"data\":{\"insureeAuth\":{\"id\":\"1\",\"message\":\"Phone number not found.Please contact HIB\"}}}
+    return responseData;
     }
 
   }

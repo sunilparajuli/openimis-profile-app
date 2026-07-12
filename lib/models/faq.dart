@@ -10,7 +10,7 @@ String faqToJson(Faq data) => json.encode(data.toJson());
 
 class Faq {
   Faq({
-    this.faq,
+    required this.faq,
   });
 
   List<FaqElement> faq;
@@ -26,8 +26,8 @@ class Faq {
 
 class FaqElement {
   FaqElement({
-    this.question,
-    this.answer,
+    required this.question,
+    required this.answer,
   });
 
   String question;

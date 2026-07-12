@@ -10,8 +10,8 @@ String appConfigToJson(AppConfig data) => json.encode(data.toJson());
 
 class AppConfig {
   AppConfig({
-    this.appUrl,
-    this.appVersion,
+    required this.appUrl,
+    required this.appVersion,
   });
 
   String appUrl;

@@ -11,38 +11,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionManager {
   final String fullname = "";
-  final String image_url = null;
+  final String? image_url = null;
 
 
-  InsureePolicyInformation _informationpolicy;
-  Claims _claims;
-  InsureeData _insureedata;
-  UspPolicyInsureeHib _uspPolicyInsureeHib;
-  PolicyInformation _policyInformation;
+  InsureePolicyInformation? _informationpolicy;
+  Claims? _claims;
+  InsureeData? _insureedata;
+  UspPolicyInsureeHib? _uspPolicyInsureeHib;
+  PolicyInformation? _policyInformation;
 //set data into shared preferences like this
+  static const String KEY_FULLNAME = "saved_fullname";
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(this.fullname, fullname);
+    await prefs.setString(KEY_FULLNAME, fullname);
   }
 
-//get value from shared preferences
   Future<String> getFullname() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String fullname;
-    fullname = pref.getString(this.fullname) ?? "";
-    return fullname;
+    String? val = pref.getString(KEY_FULLNAME);
+    return val ?? "";
   }
 
+  static const String KEY_IMAGE = "saved_image";
   Future<void>setImage(String image_url) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(this.image_url, image_url);
+    await prefs.setString(KEY_IMAGE, image_url);
   }
 
     Future<String> getImage() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String image_url;
-    image_url = pref.getString(this.image_url) ?? "";
-    return image_url;
+    String? val = pref.getString(KEY_IMAGE);
+    return val ?? "";
   }
 
 
@@ -57,33 +56,33 @@ class SessionManager {
   }
 
 
-  Future<void> deletePoicyInfrmatin() async {
+  Future<void> clearAll() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
 
   Future<bool> getInfoStatus() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("policyinformation") ??null;
-    if(jpt==null){
+    var cachedData = pref.getString("policyinformation");
+    if(cachedData==null){
       return false;
     }
     return true;
   }
-  Future<InsureePolicyInformation> getPolicyInformation() async {
+  Future<InsureePolicyInformation?> getPolicyInformation() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("policyinformation") ??null;
-    _informationpolicy = InsureePolicyInformation.fromJson(json.decode(jpt));
+    var cachedData = pref.getString("policyinformation");
+    if (cachedData == null) return null;
+    _informationpolicy = InsureePolicyInformation.fromJson(json.decode(cachedData));
     return _informationpolicy;
-
   }
 
 
 
   Future<bool> getClaimsServicesStatus() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("ClaimsServicesGQL") ??null;
-    if(jpt==null){
+    var cachedData = pref.getString("ClaimsServicesGQL");
+    if(cachedData==null){
       return false;
     }
     return true;
@@ -95,21 +94,18 @@ class SessionManager {
     prefs.setString("ClaimsServicesGQL", args);
   }
 
-  Future<Claims> getClaimsServicesGQL() async {
+  Future<Claims?> getClaimsServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("ClaimsServicesGQL") ??null;
-    if(jpt==null){
-      return null;
-    }
-    _claims = Claims.fromJson(json.decode(jpt));
+    var cachedData = pref.getString("ClaimsServicesGQL");
+    if (cachedData == null) return null;
+    _claims = Claims.fromJson(json.decode(cachedData));
     return _claims;
-
   }
 
   Future<bool> getInsureeInfoServicesStatus() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("InsureeInfoServicesGQL") ??null;
-    if(jpt==null){
+    var cachedData = pref.getString("InsureeInfoServicesGQL");
+    if(cachedData==null){
       return false;
     }
     return true;
@@ -120,22 +116,19 @@ class SessionManager {
     prefs.setString("InsureeInfoServicesGQL", args);
   }
 
-  Future<InsureeData> getInsureeInfoServicesGQL() async {
+  Future<InsureeData?> getInsureeInfoServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("InsureeInfoServicesGQL") ??null;
-    if(jpt==null){
-      return null;
-    }
-    _insureedata = InsureeData.fromJson(json.decode(jpt));
+    var cachedData = pref.getString("InsureeInfoServicesGQL");
+    if (cachedData == null) return null;
+    _insureedata = InsureeData.fromJson(json.decode(cachedData));
     return _insureedata;
-
   }
 
 
   Future<bool> getprocedureHIBstatus() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("procedureHIB") ??null;
-    if(jpt==null){
+    var cachedData = pref.getString("procedureHIB");
+    if(cachedData==null){
       return false;
     }
     return true;
@@ -146,19 +139,19 @@ class SessionManager {
     prefs.setString("procedureHIB", args);
   }
 
-  Future<UspPolicyInsureeHib> getprocedureHIB() async {
+  Future<UspPolicyInsureeHib?> getprocedureHIB() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("procedureHIB") ??null;
-    _uspPolicyInsureeHib = UspPolicyInsureeHib.fromJson(json.decode(jpt));
+    var cachedData = pref.getString("procedureHIB");
+    if (cachedData == null) return null;
+    _uspPolicyInsureeHib = UspPolicyInsureeHib.fromJson(json.decode(cachedData));
     return _uspPolicyInsureeHib;
-
   }
 
 
   // Future<bool> getprocedureHIBstatus() async{
   //   final SharedPreferences pref = await SharedPreferences.getInstance();
-  //   var jpt = pref.getString("procedureHIB") ??null;
-  //   if(jpt==null){
+  //   var cachedData = pref.getString("procedureHIB") ??null;
+  //   if(cachedData==null){
   //     return false;
   //   }
   //   return true;
@@ -169,15 +162,12 @@ class SessionManager {
     prefs.setString("PolicyInformationCardPage", args);
   }
 
-  Future<PolicyInformation> getPolicyInformationCardPage() async {
+  Future<PolicyInformation?> getPolicyInformationCardPage() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var jpt = pref.getString("PolicyInformationCardPage") ??null;
-    if(jpt==null){
-      return null;
-    }
-    _policyInformation = PolicyInformation.fromJson(json.decode(jpt));
+    var cachedData = pref.getString("PolicyInformationCardPage");
+    if (cachedData == null) return null;
+    _policyInformation = PolicyInformation.fromJson(json.decode(cachedData));
     return _policyInformation;
-
   }
 
 
@@ -194,7 +184,7 @@ class SessionManager {
   }
 
   Future<bool> getTrueSetFalseRefreshAPi() async{
-    var isRefresh = await getRefreshApi().then((value){
+    var isRefresh = await getRefreshApi() .then((value){
       return value;
     });
 

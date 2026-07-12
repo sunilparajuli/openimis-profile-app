@@ -7,7 +7,7 @@ import 'dart:async';
 class LoginScreen extends StatefulWidget {
 	@override
 	final String chfid;
-	LoginScreen({Key key, @required this.chfid}): super(key: key);
+	LoginScreen({Key? key, required this.chfid}): super(key: key);
 	_LoginScreenState createState() => _LoginScreenState();
 
 }
@@ -36,14 +36,14 @@ class _LoginScreenState extends State<LoginScreen> {
 					TextFormField(
 						keyboardType: TextInputType.text,
 						validator: (value) {
-							if (value.isEmpty) {
+							if (value!.isEmpty) {
 								return 'Please enter verification code ';
 							}
 							return null;
 						},
 						onSaved: (value) {
 							setState(() {
-								_user.otp = value;
+								_user.otp = value ?? '';
 							});
 						},
 						decoration: InputDecoration(
@@ -184,13 +184,13 @@ class _LoginScreenState extends State<LoginScreen> {
 															padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
 															width: double.infinity,
 															child: Consumer<AuthBlock>(
-																	builder: (BuildContext context, AuthBlock auth, Widget child){
+																	builder: (BuildContext context, AuthBlock auth, Widget? child){
 																		return ElevatedButton(
 																			onPressed: () async {
 																				// Validate form
-																				if (_formKey.currentState.validate() && !auth.loading) {
+																				if (_formKey.currentState!.validate() && !auth.loading) {
 																					// Update values
-																					_formKey.currentState.save();
+																					_formKey.currentState!.save();
 																					_user.chfid = widget.chfid;
 
 																					// Hit Api

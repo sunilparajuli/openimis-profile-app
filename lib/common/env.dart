@@ -1,9 +1,8 @@
 library env;
-//import  'package:openimis_web_app/common/env.dart' as env;
-import 'dart:io' show Platform;
+
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 bool registerSuccess = false;
 int ExpiryDate = 60;
@@ -21,49 +20,44 @@ getRegisterSuccess(){
 	return registerSuccess;
 }
 
-getAuthToken(AuthBlock auth1){
-	if(auth1==null){
-		auth1=auth;
+getAuthToken(AuthBlock authBlock){
+	if(authBlock==null){
+		authBlock=auth;
 	}
-	if(auth1.isLoggedIn){
-		print(auth1);
-		return auth1.user['token'];
+	if(authBlock.isLoggedIn){
+		return authBlock.user['token'];
 	}
 	return "isLoggedIn=false";
 }
 
-AuthBlock auth;
+late AuthBlock auth;
 
-setAuth(AuthBlock ab){
-	auth =ab;
+setAuth(AuthBlock authBlock){
+	auth = authBlock;
 }
 
+late String CHFID;
 
-String CHFID;
-
-setCHFID(String s){
-	CHFID =s;
+setCHFID(String id){
+	CHFID = id;
 }
 getCHFID(){
 	return CHFID;
 }
 
-String FirebaseToken; //
+late String FirebaseToken;
 
 setFirebaseToken(token){
 	FirebaseToken = token;
 }
 
 getFirebaseToken(){
-
 	return FirebaseToken;
 }
 
-String API_BASE_LOCAL_URL =  "http://imistest.hib.gov.np/api/graphql"; //"http://10.0.2.2/api/graphql";//"http://imistest.hib.gov.np/api/graphql";//"https://oi.tinker.com.np/api/graphql";
-String OFFICE_LIST_URL = "";
-String FAQ_LIST_URL = "";
-String API_HIB_URL =  'https://imistest.hib.gov.np/api/graphql';
-String API_HIB_REST_URL = 'http://imistest.hib.gov.np/api/';
+String API_HIB_URL = dotenv.env['API_BASE_URL'] ?? 'https://imistest.hib.gov.np/api/graphql';
+String API_HIB_REST_URL = dotenv.env['API_HIB_REST_URL'] ?? 'http://imistest.hib.gov.np/api/';
+String API_BASE_URL = API_HIB_URL;
 
 String LOGO_URL = 'assets/images/shs.png';
 String SPLASH_SCREEN = 'assets/images/HIB.jpg';
@@ -71,26 +65,6 @@ String ONBOARDING_SCREEN_1 = 'assets/images/smcard/splash1.jpg';
 String ONBOARDING_SCREEN_2 = 'assets/images/smcard/splash2.jpg';
 String ONBOARDING_SCREEN_3 = 'assets/images/smcard/splash3.jpg';
 
-bool production = true;
+bool production = dotenv.env['PRODUCTION']?.toLowerCase() == 'true';
 
-String getBaseUrl(){
-	if (kReleaseMode) {
-		return API_HIB_URL;
-	} else {
-	}
-
-	if (Platform.isAndroid) {
-		return API_HIB_URL;
-	} else if (Platform.isIOS) {
-		return API_HIB_URL;
-	}
-	return API_HIB_URL;
-}
-
-String API_BASE_URL =  getBaseUrl();
-
-String Currency = "Npr.";
-
-
-
-
+String Currency = dotenv.env['CURRENCY'] ?? "Npr.";

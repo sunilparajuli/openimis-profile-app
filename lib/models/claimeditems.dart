@@ -10,7 +10,7 @@ String claimedItemsToJson(ClaimedItems data) => json.encode(data.toJson());
 
 class ClaimedItems {
   ClaimedItems({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class ClaimedItems {
 
 class Data {
   Data({
-    this.insureeClaim,
+    required this.insureeClaim,
   });
 
   List<InsureeClaim> insureeClaim;
@@ -42,7 +42,7 @@ class Data {
 
 class InsureeClaim {
   InsureeClaim({
-    this.items,
+    required this.items,
   });
 
   List<ItemElement> items;
@@ -58,10 +58,10 @@ class InsureeClaim {
 
 class ItemElement {
   ItemElement({
-    this.id,
-    this.qtyProvided,
-    this.qtyApproved,
-    this.item,
+    required this.id,
+    required this.qtyProvided,
+    required this.qtyApproved,
+    required this.item,
   });
 
   String id;
@@ -70,10 +70,10 @@ class ItemElement {
   ItemItem item;
 
   factory ItemElement.fromJson(Map<String, dynamic> json) => ItemElement(
-    id: json["id"],
-    qtyProvided: json["qtyProvided"] != null ? json["qtyProvided"].toDouble() : null,
-    qtyApproved: json["qtyApproved"] != null ? json["qtyApproved"].toDouble() : null,
-    item: ItemItem.fromJson(json["item"]),
+    id: json["id"]?.toString() ?? "",
+    qtyProvided: (json["qtyProvided"] ?? 0).toDouble(),
+    qtyApproved: (json["qtyApproved"] ?? 0).toDouble(),
+    item: ItemItem.fromJson(json["item"] ?? {}),
   );
 
   Map<String, dynamic> toJson() => {
@@ -86,9 +86,9 @@ class ItemElement {
 
 class ItemItem {
   ItemItem({
-    this.id,
-    this.name,
-    this.price,
+    required this.id,
+    required this.name,
+    required this.price,
   });
 
   String id;
@@ -96,9 +96,9 @@ class ItemItem {
   double price;
 
   factory ItemItem.fromJson(Map<String, dynamic> json) => ItemItem(
-    id: json["id"],
-    name: json["name"],
-    price: json["price"],
+    id: json["id"]?.toString() ?? "",
+    name: json["name"] ?? "N/A",
+    price: (json["price"] ?? 0).toDouble(),
   );
 
   Map<String, dynamic> toJson() => {

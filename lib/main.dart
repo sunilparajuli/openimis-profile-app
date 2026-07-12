@@ -4,22 +4,22 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:openimis_web_app/auth/register_card.dart';
 import 'package:openimis_web_app/auth/reset-password.dart';
 import 'package:openimis_web_app/models/insuree.dart';
-import 'package:openimis_web_app/models/user_location.dart';
 import 'package:openimis_web_app/pages/base.dart';
 import 'package:openimis_web_app/pages/card_details.dart';
-import 'package:openimis_web_app/pages/contactus.dart';
+import 'package:openimis_web_app/pages/contactus_page.dart';
 import 'package:openimis_web_app/pages/faq.dart';
 import 'package:openimis_web_app/pages/feedback.dart';
 import 'package:openimis_web_app/pages/healthFacilitiesMaps.dart';
-import 'package:openimis_web_app/pages/service_provider.dart';
+import 'package:openimis_web_app/pages/service_provider_page.dart';
 import 'package:openimis_web_app/pages/notice.dart';
 import 'package:openimis_web_app/pages/notification.dart';
 import 'package:openimis_web_app/pages/office.dart';
-import 'package:openimis_web_app/pages/policy_information.dart';
-import 'package:openimis_web_app/pages/profile.dart';
+import 'package:openimis_web_app/pages/policy_information_page.dart';
+import 'package:openimis_web_app/pages/profile_page.dart';
 import 'package:openimis_web_app/pages/userhistory.dart';
+import 'package:openimis_web_app/services/api_graphql_services.dart';
+import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:openimis_web_app/theme/dark_theme_provider.dart';
-import 'package:openimis_web_app/theme/dark_theme_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -28,9 +28,8 @@ import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/ui/splash_screen.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
 import 'package:openimis_web_app/auth/login_card.dart';
-import 'package:openimis_web_app/pages/settings.dart';
+import 'package:openimis_web_app/pages/settings_page.dart';
 import 'package:openimis_web_app/auth/validate_otp_card.dart';
-import 'package:openimis_web_app/services/location_service.dart';
 import 'langlang/app_localization_deligate.dart';
 import 'package:openimis_web_app/auth/verify_insuree.dart';
 import 'package:openimis_web_app/services/connectivity.dart';
@@ -39,8 +38,11 @@ import 'package:openimis_web_app/pages/submission_page.dart';
 import 'package:openimis_web_app/langlang/application.dart';
 import 'package:openimis_web_app/blocks/bool_provider.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: ".env");
     ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
     SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
     SystemChrome.setPreferredOrientations(
@@ -56,20 +58,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-    AppTranslationsDelegate _newLocaleDelegate;
-    Insuree insuree;
+    late AppTranslationsDelegate _newLocaleDelegate;
+    late Insuree insuree;
     DarkThemeProvider themeChangeProvider = new DarkThemeProvider();
     ConnectivityService connectivityStatus = new ConnectivityService();
 
     @override
     void initState() {
         super.initState();
-        _newLocaleDelegate = AppTranslationsDelegate(newLocale: null);
+        //await ApiGraphQlServices().service_providers();
+        _newLocaleDelegate = AppTranslationsDelegate(newLocale: const Locale('en'));
         application.onLocaleChanged = onLocaleChange;
         getCurrentAppTheme();
     }
 
     void getCurrentAppTheme() async {
+        await ApiGraphQlServices().service_providers();
         themeChangeProvider.darkTheme =
         await themeChangeProvider.darkThemePreference.getTheme();
     }
@@ -89,66 +93,50 @@ class _MyAppState extends State<MyApp> {
                 ChangeNotifierProvider(create: (_) {
                     return themeChangeProvider;
                 }),
-	            StreamProvider<UserLocation>.value(value: LocationService().locationStream),
-                StreamProvider(
-                    create: (context) => Connectivity().onConnectivityChanged),
 
+                StreamProvider<ConnectivityResult>.value(
+                    value: Connectivity().onConnectivityChanged.map((list) => list.isNotEmpty ? list.first : ConnectivityResult.none),
+                    initialData: ConnectivityResult.none),
             ],
             child: Consumer<DarkThemeProvider>(
-                builder: (BuildContext context, value, Widget child) {
+                builder: (BuildContext context, value, Widget? child) {
                     return MaterialApp(
-
                         localizationsDelegates: [
                             _newLocaleDelegate,
-                            //provides localised strings
                             GlobalMaterialLocalizations.delegate,
-                            //provides RTL support
                             GlobalWidgetsLocalizations.delegate,
                         ],
                         supportedLocales: [
                             const Locale("en", ""),
-                            const Locale("es", ""), //"np locale is not available set 'es' for proxy for nepali
+                            const Locale("es", ""),
                         ],
-                        // locale: locale,
                         debugShowCheckedModeBanner: false,
-                        theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+                        theme: CustomTheme.lightTheme,
+                        darkTheme: CustomTheme.darkTheme,
+                        themeMode: themeChangeProvider.darkTheme ? ThemeMode.dark : ThemeMode.light,
+
                         initialRoute: '/splash',
                         routes: <String, WidgetBuilder>{
-                            //'/ggg': (BuildContext context) => Auth(),
-                            '/card' :(BuildContext context) => Display(initIndex: null,),
-                           // '/splash' :(BuildContext context) => Display(initIndex: null,),
+                            '/card' :(BuildContext context) => Display(initIndex: 0,),
                             '/profile' :(BuildContext context) => SettingsPage(null),
                             '/splash':(BuildContext context) => SplashScreen(),
-                            '/':(BuildContext context) => LoginScreen(), //OTP this is
+                            '/':(BuildContext context) => LoginScreen(chfid: ''),
                             '/register':(BuildContext context) => RegisterScreen(),
                             '/otp-verify' :(BuildContext context) => OtpScreen(),
                             '/insuree_verify' :(BuildContext context) => VerifyInsuree(),
-                            // SIGN UP
                             '/reset-password':(BuildContext context) => ResetPassword(),
-                            //POLICY INFORMATION
                             '/policy-information':(BuildContext context) => PolicyInformationPage(),
-                            // SERVICES
                             '/service-provider-list':(BuildContext context) => ServiceProviderPage(),
-                            // NOTIFICATIONS
                             '/notifications':(BuildContext context) => NotificationPage(),
-                            // FEEDBACK
                             '/feedback':(BuildContext context) => FeedbackPage(),
-                            // PROFILE INFO
                             '/profile-info' :(BuildContext context) => ProfileInfo(),
-                            // USER HISTORY
                             '/user-history' :(BuildContext context) => UserHistoryPage(),
-                            // SHOW VIRTUAL CARD
-                            '/show-card' :(BuildContext context) => CardDetailPage(),
-                            // FAQ
+                            '/show-card' :(BuildContext context) => CardDetailPage(message: ''),
                             '/faq' :(BuildContext context) => FAQ(),
-                            //Claimed item Services
-                            '/claimed_item_services' : (BuildContext context) => ClaimedItemServicesPage(),
+                            '/claimed_item_services' : (BuildContext context) => ClaimedItemServicesPage(claimId: 0, token: ''),
                             '/PaymentsubmissionPage': (BuildContext context) => SubmissionPage(),
-                            // NOTICE BOARD
                             '/notice': (BuildContext context) => NoticePage(),
-                            // OFFICE RELATED TO HIB
                             '/offices': (BuildContext context) => OfficePage(),
-                            // CONTACT US
                             '/contact': (BuildContext context) => ContactUsPage(),
                             '/map-services' : (BuildContext context) => MapPage(),
                         },

@@ -10,7 +10,7 @@ String medicalServicesToJson(MedicalServices data) => json.encode(data.toJson())
 
 class MedicalServices {
   MedicalServices({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class MedicalServices {
 
 class Data {
   Data({
-    this.medicalServicesStr,
+    required this.medicalServicesStr,
   });
 
   MedicalServicesStr medicalServicesStr;
@@ -42,7 +42,7 @@ class Data {
 
 class MedicalServicesStr {
   MedicalServicesStr({
-    this.edges,
+    required this.edges,
   });
 
   List<Edge> edges;
@@ -58,7 +58,7 @@ class MedicalServicesStr {
 
 class Edge {
   Edge({
-    this.node,
+    required this.node,
   });
 
   Node node;
@@ -74,8 +74,8 @@ class Edge {
 
 class Node {
   Node({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
   });
 
   String id;

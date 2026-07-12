@@ -100,7 +100,8 @@ class OpenimisGqlQueries {
     };
   }
 
-  static Map<String, dynamic> healthFacilityCoordinate(Map<String, dynamic> args) {
+  static Map<String, dynamic> healthFacilityCoordinate(
+      Map<String, dynamic> params) {
     return {
       "query": r'''
         query HealthFacilityCoordinateQuery($inputLatitude: Decimal, $inputLongitude: Decimal) {
@@ -115,8 +116,8 @@ class OpenimisGqlQueries {
         }
       ''',
       "variables": {
-        "inputLatitude": args['inputLatitude']?.toString(),
-        "inputLongitude": args['inputLongitude']?.toString()
+        "inputLatitude": params['inputLatitude']?.toString(),
+        "inputLongitude": params['inputLongitude']?.toString()
       }
     };
   }
@@ -172,6 +173,7 @@ class OpenimisGqlQueries {
                 enrollDate
                 expiryDate
                 status
+                stage
                 product {
                   name
                 }
@@ -302,6 +304,49 @@ class OpenimisGqlQueries {
         "chfid": args['chfid'].toString(),
         "otp": args['otp'].toString()
       }
+    };
+  }
+
+  static Map<String, dynamic> service_providers() {
+    return {
+      "query": r'''
+        query ServiceProvidersQuery {
+          serviceProviders {
+            edges {
+              node {
+                name
+                code
+                
+              }
+            }
+          }
+        }
+      ''',
+      "variables": null
+    };
+  }
+
+  static Map<String, dynamic> appContactsQuery() {
+    return {
+      "query": r'''
+      query AppContactsQuery {
+        appContacts {
+          provinceContacts {
+            branch
+            address
+            email
+            phone
+          }
+          districtContacts {
+            branch
+            address
+            email
+            phone
+          }
+        }
+      }
+    ''',
+      "variables": null
     };
   }
 }

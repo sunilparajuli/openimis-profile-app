@@ -10,7 +10,7 @@ String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
   Profile({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class Profile {
 
 class Data {
   Data({
-    this.profile,
+    required this.profile,
   });
 
   ProfileClass profile;
@@ -42,10 +42,10 @@ class Data {
 
 class ProfileClass {
   ProfileClass({
-    this.phone,
-    this.email,
-    this.photo,
-    this.insuree,
+    required this.phone,
+    required this.email,
+    required this.photo,
+    required this.insuree,
   });
 
   String phone;
@@ -70,10 +70,10 @@ class ProfileClass {
 
 class Insuree {
   Insuree({
-    this.otherNames,
-    this.lastName,
-    this.dob,
-    this.currentAddress,
+    required this.otherNames,
+    required this.lastName,
+    required this.dob,
+    required this.currentAddress,
     this.validityTo,
   });
 

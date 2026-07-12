@@ -10,7 +10,7 @@ String insureeDataToJson(InsureeData data) => json.encode(data.toJson());
 
 class InsureeData {
   InsureeData({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class InsureeData {
 
 class Data {
   Data({
-    this.profile,
+    required this.profile,
   });
 
   Profile profile;
@@ -42,24 +42,24 @@ class Data {
 
 class Profile {
   Profile({
-    this.phone,
+    required this.phone,
     this.email,
     this.photo,
-    this.remainingDays,
-    this.insuree,
+    required this.remainingDays,
+    required this.insuree,
   });
 
   String phone;
-  String email;
-  String photo;
+  String? email;
+  String? photo;
   String remainingDays;
   Insuree insuree;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-    phone: json["phone"],
+    phone: json["phone"] ?? "",
     email: json["email"],
     photo: json["photo"],
-    remainingDays: json["remainingDays"],
+    remainingDays: json["remainingDays"]?.toString() ?? "",
     insuree: Insuree.fromJson(json["insuree"]),
   );
 
@@ -74,31 +74,33 @@ class Profile {
 
 class Insuree {
   Insuree({
-    this.insureePolicies,
-    this.otherNames,
-    this.lastName,
-    this.dob,
+    required this.insureePolicies,
+    required this.otherNames,
+    required this.lastName,
+    required this.dob,
     this.currentAddress,
     this.validityTo,
-    this.healthFacility,
+    required this.healthFacility,
   });
 
   List<InsureePolicy> insureePolicies;
   String otherNames;
   String lastName;
   DateTime dob;
-  String currentAddress;
+  String? currentAddress;
   dynamic validityTo;
   HealthFacility healthFacility;
 
   factory Insuree.fromJson(Map<String, dynamic> json) => Insuree(
-    insureePolicies: List<InsureePolicy>.from(json["insureePolicies"].map((x) => InsureePolicy.fromJson(x))),
-    otherNames: json["otherNames"],
-    lastName: json["lastName"],
-    dob: DateTime.parse(json["dob"]),
+    insureePolicies: json["insureePolicies"] == null 
+        ? [] 
+        : List<InsureePolicy>.from(json["insureePolicies"].map((x) => InsureePolicy.fromJson(x))),
+    otherNames: json["otherNames"] ?? "",
+    lastName: json["lastName"] ?? "",
+    dob: json["dob"] == null ? DateTime.now() : DateTime.parse(json["dob"]),
     currentAddress: json["currentAddress"],
     validityTo: json["validityTo"],
-    healthFacility: HealthFacility.fromJson(json["healthFacility"]),
+    healthFacility: HealthFacility.fromJson(json["healthFacility"] ?? {}),
   );
 
   Map<String, dynamic> toJson() => {
@@ -117,7 +119,7 @@ class HealthFacility {
     this.name,
   });
 
-  String name;
+  String? name;
 
   factory HealthFacility.fromJson(Map<String, dynamic> json) => HealthFacility(
     name: json["name"],
@@ -130,7 +132,7 @@ class HealthFacility {
 
 class InsureePolicy {
   InsureePolicy({
-    this.policy,
+    required this.policy,
   });
 
   Policy policy;
@@ -146,16 +148,16 @@ class InsureePolicy {
 
 class Policy {
   Policy({
-    this.value,
-    this.expiryDate,
+    required this.value,
+    required this.expiryDate,
   });
 
   double value;
   DateTime expiryDate;
 
   factory Policy.fromJson(Map<String, dynamic> json) => Policy(
-    value: json["value"],
-    expiryDate: DateTime.parse(json["expiryDate"]),
+    value: (json["value"] ?? 0).toDouble(),
+    expiryDate: json["expiryDate"] == null ? DateTime.now() : DateTime.parse(json["expiryDate"]),
   );
 
   Map<String, dynamic> toJson() => {

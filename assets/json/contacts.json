@@ -1,0 +1,24 @@
+{
+  "eo_contacts": [
+    {
+      "branch": "Kathmandu Branch (EO)",
+      "address": "Kathmandu, Nepal",
+      "email": "eo_kathmandu@gmail.com",
+      "phone": "01-42xxxxx"
+    },
+    {
+      "branch": "Lalitpur Branch (EO)",
+      "address": "Lalitpur, Nepal",
+      "email": "eo_lalitpur@gmail.com",
+      "phone": "01-55xxxxx"
+    }
+  ],
+  "po_contacts": [
+    {
+      "branch": "Pokhara Branch (PO)",
+      "address": "Pokhara, Nepal",
+      "email": "po_pokhara@gmail.com",
+      "phone": "061-52xxxxx"
+    }
+  ]
+}

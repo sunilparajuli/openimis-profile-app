@@ -10,14 +10,14 @@ String uspPolicyInsureeHibToJson(UspPolicyInsureeHib data) => json.encode(data.t
 
 class UspPolicyInsureeHib {
   UspPolicyInsureeHib({
-    this.name,
-    this.chfid,
-    this.dateOfBirth,
-    this.gender,
-    this.balance,
-    this.firstServiceHospital,
-    this.expiryDate,
-    this.status,
+    required this.name,
+    required this.chfid,
+    required this.dateOfBirth,
+    required this.gender,
+    required this.balance,
+    required this.firstServiceHospital,
+    required this.expiryDate,
+    required this.status,
   });
 
   String name;

@@ -45,10 +45,10 @@ class _FAQState extends State<FAQ> {
 										return Container(
 												padding: EdgeInsets.only(top: 16.0),
 												child: ListView.builder(
-														itemCount: snapshot.data.faq.length,
+														itemCount: snapshot.data!.faq.length,
 														shrinkWrap: true,
 														itemBuilder: (BuildContext context, int index) {
-															var faqs = snapshot.data.faq[index];
+															var faqs = snapshot.data!.faq[index];
 															return Container(
 																padding: EdgeInsets.only(bottom: 8.0),
 																child: Card(

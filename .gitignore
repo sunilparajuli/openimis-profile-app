@@ -36,6 +36,10 @@ lib/generated_plugin_registrant.dart
 # Symbolication related
 app.*.symbols
 
+# Environment variables
+.env
+.env.*
+
 # Obfuscation related
 app.*.map.json
 

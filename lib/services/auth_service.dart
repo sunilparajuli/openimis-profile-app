@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/models/user.dart';
@@ -8,34 +9,31 @@ import 'package:openimis_web_app/blocks/auth_block.dart';
 import  'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/graphql/gql_queries.dart';
 
+import 'package:openimis_web_app/services/api_client.dart';
+
 class AuthService {
 
-  AuthBlock auth;
+  late AuthBlock auth;
   final storage = FlutterSecureStorage();
   // Create storage
   final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   Future<Map> login(UserCredential userCredential) async {
     var q = OpenimisGqlQueries.otpVerify({"chfid":"${userCredential.chfid}", "otp": "${userCredential.otp}" });
-    final response = await http.post(Uri.parse(env.API_BASE_URL),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body:
-        jsonEncode(q));
+    final response = await ApiClient.postGraphQL('', q);
     print(jsonDecode(response.body));
 
 
     if (response.statusCode == 200) {
-        var jdr = jsonDecode(response.body);
-        if (jdr['data']['insureeAuthOtp']==null)
+        var responseData = jsonDecode(response.body);
+        if (responseData['data']['insureeAuthOtp']==null)
           {
             Fluttertoast.showToast(
                 msg: "Incorrect OTP Details Pls try again ",
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
-                timeInSecForIos: 1,
+                timeInSecForIosWeb: 1,
                 fontSize: 16.0);
-            return null;
+            throw Exception("Not implemented");
           }
 
       setUser(response.body);
@@ -43,35 +41,34 @@ class AuthService {
           msg: "Login success",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
+          timeInSecForIosWeb: 1,
           fontSize: 16.0);
-      return jsonDecode(response.body);
+      return responseData;
     }
     else{
       Fluttertoast.showToast(
           msg: "Server Error",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
+          timeInSecForIosWeb: 1,
           fontSize: 16.0);
     }
-    return null;
+    throw Exception("Not implemented");
   }
 
   Future<Map> register(UserRegister userRegister) async {
     //String abcd = user.password;
     // user.isRegisterSuccess =false;
-  env.setRegisterSuccessFalse();
-    //final response = await http.post('$BASE_URL/tradebakerz/wc/v1/register',
-    final response = await http.post(Uri.parse(''),
-        body: {
-          'mobile': userRegister.mobile,//user.username,
-          'email': userRegister.email,
-          'password': userRegister.password,
-          'firstname': userRegister.firstname,
-          'lastname': userRegister.lastname
-//          'password_confirm': user.password,
-        });
+    env.setRegisterSuccessFalse();
+    
+    // Using ApiClient to ensure Token and App-Version are sent
+    final response = await ApiClient.postRest("${env.API_HIB_REST_URL}register", {
+      'mobile': userRegister.mobile,
+      'email': userRegister.email,
+      'password': userRegister.password,
+      'firstname': userRegister.firstname,
+      'lastname': userRegister.lastname
+    });
 
     if (response.statusCode == 200) {
       env.setRegisterSuccessTrue();
@@ -81,7 +78,7 @@ class AuthService {
           msg: 'Account Created',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
+          timeInSecForIosWeb: 1,
           fontSize: 16.0);
         var u = jsonDecode(response.body);
          u['isRegisterSuccess'] = true;
@@ -93,7 +90,7 @@ class AuthService {
             msg: response.body,
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
-            timeInSecForIos: 1,
+            timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
@@ -104,7 +101,7 @@ class AuthService {
             msg: 'Server Error',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
-            timeInSecForIos: 1,
+            timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
@@ -115,16 +112,16 @@ class AuthService {
             msg: 'Server Error',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
-            timeInSecForIos: 1,
+            timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
-          return null;
+          throw Exception("Not implemented");
       }
       // If that call was not successful, throw an error.
 //      throw Exception(response.body);
 
-      return null;
+      throw Exception("Not implemented");
     }
   }
 
@@ -133,10 +130,11 @@ class AuthService {
   }
 
   getUser() async {
-    String user = await storage.read(key: 'user');
-    if (user != null) {
+    String? user = await storage.read(key: 'user');
+    if (user != null && user.isNotEmpty) {
       return jsonDecode(user);
     }
+    return null;
   }
   logout() async {
     await storage.delete(key: 'user');

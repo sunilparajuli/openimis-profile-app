@@ -10,7 +10,7 @@ String officesToJson(Offices data) => json.encode(data.toJson());
 
 class Offices {
     Offices({
-        this.branchOfficeDetails,
+        required this.branchOfficeDetails,
     });
 
     List<BranchOfficeDetail> branchOfficeDetails;
@@ -26,10 +26,10 @@ class Offices {
 
 class BranchOfficeDetail {
     BranchOfficeDetail({
-        this.name,
-        this.address,
-        this.email,
-        this.phone,
+        required this.name,
+        required this.address,
+        required this.email,
+        required this.phone,
     });
 
     String name;

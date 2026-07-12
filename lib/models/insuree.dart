@@ -2,12 +2,12 @@ import 'dart:convert';
 
 class Insuree { //for auth only
   String chfid;
-  String fhchfid;
-  String dob;
+  String fhchfid = "";
+  String dob = "";
 //  String firstname;
 //  String lastname;
-  bool isRegisterSuccess;
-  Insuree({this.chfid, this.fhchfid, this.dob});
+  bool isRegisterSuccess = false;
+  Insuree({required this.chfid, this.fhchfid = "", this.dob = ""});
 
 }
 
@@ -23,7 +23,7 @@ String insureeDetailsToJson(InsureeDetails data) => json.encode(data.toJson());
 
 class InsureeDetails {
   InsureeDetails({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -39,7 +39,7 @@ class InsureeDetails {
 
 class Data {
   Data({
-    this.insureeProfile,
+    required this.insureeProfile,
   });
 
   InsureeProfile insureeProfile;
@@ -55,9 +55,9 @@ class Data {
 
 class InsureeProfile {
   InsureeProfile({
-    this.otherNames,
-    this.lastName,
-    this.insureePolicies,
+    required this.otherNames,
+    required this.lastName,
+    required this.insureePolicies,
   });
 
   String otherNames;
@@ -79,11 +79,11 @@ class InsureeProfile {
 
 class InsureePolicy {
   InsureePolicy({
-    this.enrollmentDate,
-    this.startDate,
-    this.expiryDate,
-    this.effectiveDate,
-    this.validityFrom,
+    required this.enrollmentDate,
+    required this.startDate,
+    required this.expiryDate,
+    required this.effectiveDate,
+    required this.validityFrom,
     this.validityTo,
   });
 

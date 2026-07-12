@@ -11,7 +11,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
 	final _formKey = GlobalKey<FormState>();
 	final UserRegister userRegister = UserRegister();
-	AuthBlock auth;
+	late AuthBlock auth;
 	
 	final double circleRadius =100.0;
 	final double circleBorderWidth = 8.0;
@@ -160,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																TextFormField(
 																	keyboardType: TextInputType.text,
 																	validator: (value) {
-																		if (value.isEmpty) {
+																		if (value!.isEmpty) {
 																			return 'Please enter full name';
 																		}
 																		return null;
@@ -214,7 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																TextFormField(
 																	keyboardType: TextInputType.emailAddress,
 																	validator: (value) {
-																		if (value.isEmpty) {
+																		if (value!.isEmpty) {
 																			return 'Please Enter mobile number';
 																		}
 																		return null;
@@ -266,7 +266,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																SizedBox(height: 8.0),
 																TextFormField(
 																	validator: (value) {
-																		if (value.isEmpty) {
+																		if (value!.isEmpty) {
 																			return 'Please enter password';
 																		}
 																		return null;
@@ -325,12 +325,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 														padding: EdgeInsets.fromLTRB(20, 8, 20, 10),
 														width: double.infinity,
 														child: Consumer<AuthBlock>(
-															builder: (BuildContext context, AuthBlock auth, Widget child){
+															builder: (BuildContext context, AuthBlock auth, Widget? child){
 																return ElevatedButton(
 																	onPressed: () async {
 																		// Validate form
-																		if (_formKey.currentState.validate() && !auth.loading) {
-																			_formKey.currentState.save();
+																		if (_formKey.currentState!.validate() && !auth.loading) {
+																			_formKey.currentState!.save();
 
 																			// Hit Api
 																			await auth.register(userRegister);

@@ -8,9 +8,9 @@ class ConnectivityService {
 
   ConnectivityService() {
     // Subscribe to the connectivity Chanaged Steam
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
       // Use Connectivity() here to gather more info if you need t
-
+      final result = results.isNotEmpty ? results.first : ConnectivityResult.none;
       connectionStatusController.add(_getStatusFromResult(result));
     });
   }

@@ -126,7 +126,7 @@ class ResetPasswordState extends State<ResetPassword> {
                                                                 TextFormField(
                                                                     keyboardType: TextInputType.emailAddress,
                                                                     validator: (value) {
-                                                                        if (value.isEmpty) {
+                                                                        if (value!.isEmpty) {
                                                                             return 'Please Enter mobile number';
                                                                         }
                                                                         return null;
@@ -179,7 +179,7 @@ class ResetPasswordState extends State<ResetPassword> {
                                                                 SizedBox(height: 8.0),
                                                                 TextFormField(
                                                                     validator: (value) {
-                                                                        if (value.isEmpty) {
+                                                                        if (value!.isEmpty) {
                                                                             return 'Please enter password';
                                                                         }
                                                                         return null;
@@ -216,7 +216,7 @@ class ResetPasswordState extends State<ResetPassword> {
                                                         padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                                                         width: double.infinity,
                                                         child: Consumer<AuthBlock>(
-                                                            builder: (BuildContext context, AuthBlock auth, Widget child){
+                                                            builder: (BuildContext context, AuthBlock auth, Widget? child){
                                                                 return ElevatedButton(
                                                                     onPressed: () async {
                                                                         // Your asynchronous logic goes here

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:openimis_web_app/models/health_facility_coordinates.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -9,7 +10,7 @@ class HealthFacilityCoordinatesPage extends StatefulWidget {
 }
 
 class _HealthFacilityCoordinatesPageState extends State<HealthFacilityCoordinatesPage> {
-	Future<HealthFacilityCoordinates> _healthFacilityCoordinates;
+	late Future<HealthFacilityCoordinates> _healthFacilityCoordinates;
 	@override
 	initState(){
 		super.initState();
@@ -45,7 +46,7 @@ class _HealthFacilityCoordinatesPageState extends State<HealthFacilityCoordinate
 													decoration: BoxDecoration(
 														border: Border(
 															bottom: BorderSide(
-																color: Colors.grey.withOpacity(0.25),
+																color: Colors.grey.withValues(alpha: 0.25),
 																width: 1.0
 															),
 														),
@@ -56,7 +57,7 @@ class _HealthFacilityCoordinatesPageState extends State<HealthFacilityCoordinate
 														},
 														child: ListTile(
 															title: Text(
-																'jpt',//'${medical_services.node.name} $index' ,
+																'Facility Name',//'${medical_services.node.name} $index' ,
 																style: TextStyle(
 																	fontSize: 16.0,
 																	fontWeight: FontWeight.normal

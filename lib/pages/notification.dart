@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
-  NotificationPage({Key key}) : super(key: key);
+  NotificationPage({Key? key}) : super(key: key);
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
@@ -15,7 +15,7 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   bool hasNotification = false;
 //   Future<Notifications> _notifications;
-	AuthBlock auth;
+	late AuthBlock auth;
   @override
   Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
@@ -48,14 +48,14 @@ class _NotificationPageState extends State<NotificationPage> {
 											auth.user['data']['insureeAuthOtp']['insuree']['chfId']
 									),
 									builder: (context, snapshot) {
-										if(snapshot.hasData && snapshot.data.data!=null) {
+										if(snapshot.hasData) {
 											return ListView.builder(
 													shrinkWrap: true,
 													scrollDirection: Axis.vertical,
 													physics: NeverScrollableScrollPhysics(),
-													itemCount: snapshot.data.data.notifications.edges.length,
+													itemCount: snapshot.data!.data.notifications.edges.length,
 													itemBuilder: (BuildContext context, int index){
-														var _notifications = snapshot.data.data.notifications.edges[index];
+														var _notifications = snapshot.data!.data.notifications.edges[index];
 														var date = "${_notifications.node.createdAt.year}-${_notifications.node.createdAt.month}-${_notifications.node.createdAt.day}";
 														/*return ListTile(
 															title: Text('${_notifications.node.message}'),

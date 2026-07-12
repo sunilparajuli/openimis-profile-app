@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
@@ -13,9 +14,10 @@ import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
+import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
 
 class SettingsPage extends StatefulWidget {
-  final feedbackMessage;
+  final dynamic feedbackMessage;
   SettingsPage(this.feedbackMessage);
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -33,18 +35,18 @@ class _SettingsPageState extends State<SettingsPage> {
   };
   SessionManager prefs = SessionManager();
 
-  File _image;
+  File? _image;
   final picker = ImagePicker();
-  AuthBlock auth;
+  late AuthBlock auth;
 
-  Future getImage() async {
+  Future<void> getImage() async {
     var image = await picker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = image as File;
-      print('Image Path $_image');
-    });
-    if (_image != null) {
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+        print('Image Path $_image');
+      });
       uploadPic();
     }
   }
@@ -67,8 +69,8 @@ class _SettingsPageState extends State<SettingsPage> {
     onLocaleChange(Locale(languagesMap[language]));
   }
 
-  Future uploadPic() async {
-    final dynamic fileName = basename(_image.path);
+  Future<void> uploadPic() async {
+    final dynamic fileName = basename(_image!.path);
     //  StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
     //  StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
     //  StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
@@ -104,16 +106,17 @@ class _SettingsPageState extends State<SettingsPage> {
     }
     return Scaffold(
       backgroundColor: CustomTheme
-          .lightTheme.backgroundColor, //Color.fromRGBO(234, 239, 255, 50),
+          .lightTheme.colorScheme.surface, //Color.fromRGBO(234, 239, 255, 50),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             // PROFILE INFO
             Container(
-              margin: EdgeInsets.fromLTRB(20, 8, 20, 0),
+              margin: EdgeInsets.fromLTRB(16, 8, 16, 4),
               child: Card(
+                elevation: 0,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.white70, width: 1),
+                  side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1), width: 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: InkWell(
@@ -128,41 +131,47 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (snapshot.hasData) {
                           return Container(
                             child: ListTile(
-                              title: Text('${fullname}'),
-                              //									    		subtitle: Text('9841-xxx-xxx'),
-                              trailing: Icon(Icons.arrow_forward_ios),
+                              title: Text('${fullname}', style: TextStyle(fontWeight: FontWeight.w600)),
+                              trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
                               leading: Container(
-                                padding: EdgeInsets.all(8.0),
+                                width: 50.0,
+                                height: 50.0,
                                 child: FutureBuilder<String>(
                                     future: prefs.getImage(),
                                     builder: (context, snapshot) {
                                       return Card(
+                                        elevation: 0,
                                         semanticContainer: true,
                                         clipBehavior:
                                             Clip.antiAliasWithSaveLayer,
                                         child: (_image != null)
                                             ? Image.file(
-                                                _image,
-                                                fit: BoxFit.fill,
+                                                _image!,
+                                                fit: BoxFit.cover,
                                               )
-                                            : Icon(
-                                                Icons.supervised_user_circle),
-//                                                          Image.asset(
-//                                                              'assets/images/shs.png',
-//                                                              fit: BoxFit.fill,
-//                                                          )
+                                            : (snapshot.hasData && snapshot.data!.isNotEmpty)
+                                                ? Image.network(
+                                                    snapshot.data!.replaceAll('192.168.15.22', 'imistest.hib.gov.np'),
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context, error, stackTrace) => Icon(Icons.person, color: CustomTheme.lightTheme.primaryColor, size: 30),
+                                                  )
+                                                : Icon(
+                                                    Icons.person, color: CustomTheme.lightTheme.primaryColor, size: 30),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(10.0),
+                                              BorderRadius.circular(25.0),
+                                          side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.2)),
                                         ),
-                                        // margin: EdgeInsets.all(10),
                                       );
                                     }),
                               ),
                             ),
                           );
                         } else {
-                          return Text("Profile not set");
+                          return ListTile(
+                            title: Text("Profile not set"),
+                            leading: Icon(Icons.person_outline, color: CustomTheme.lightTheme.primaryColor),
+                          );
                         }
                       }),
                 ),
@@ -175,14 +184,12 @@ class _SettingsPageState extends State<SettingsPage> {
             // UPDATE LANGUAGE
             _buildUpdateLanguageWidget(context),
 
-            // DARK/LIGHT THEME
-            // _buildThemeWidget(context),
-
             // CONTACT US
             _buildContactWidget(context),
 
             // LOGOUT
             _buildLogoutWidget(context),
+            
             // APP VERSION
             _buildAppVersionWidget(context),
           ],
@@ -193,14 +200,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildGeneralWidget(context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 4, 20, 4),
+      margin: EdgeInsets.fromLTRB(16, 4, 16, 4),
       child: Card(
+          elevation: 0,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.white70, width: 1),
+            side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1), width: 1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
-            padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+            padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -210,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                              color: Colors.grey.withOpacity(0.2),
+                              color: Colors.grey.withValues(alpha: 0.1),
                               width: 1.0))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,41 +229,19 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: 16.0,
                             fontFamily: "Open-sans",
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                            color: CustomTheme.lightTheme.primaryColor),
                       )
                     ],
                   ),
                 ),
 
-                // NOTIFICATIONS
-                Container(
-                    //padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Colors.grey.withOpacity(0.2),
-                                width: 1.0))),
-                    child: InkWell(
-                        onTap: () {
-                          print("Notifications clicked...");
-                          Navigator.pushNamed(context, '/notifications');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            AppTranslations.of(context).text("notifications"),
-                          ),
-                          //subtitle: Text('write a feedback'),
-                          leading: Icon(Icons.notifications),
-                          trailing: Icon(Icons.arrow_forward_ios),
-                        ))),
-
                 // SERVICE PROVIDER LIST
                 Container(
-                    // padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                     decoration: BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
-                                color: Colors.grey.withOpacity(0.2),
+                                color: Colors.grey.withValues(alpha: 0.1),
                                 width: 1.0))),
                     child: GestureDetector(
                         onTap: () {
@@ -267,20 +253,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: Text(
                             AppTranslations.of(context)
                                 .text("service_provider_list"),
+                            style: TextStyle(fontSize: 15),
                           ),
-                          //subtitle: Text('write a feedback'),
-                          leading: Icon(Icons.list),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          leading: Icon(Icons.list, color: CustomTheme.lightTheme.primaryColor),
+                          trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
                         ))),
 
                 // NOTICE
                 Container(
-                    // padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Colors.grey.withOpacity(0.2),
-                                width: 1.0))),
                     child: GestureDetector(
                         onTap: () {
                           print("Notice Board clicked");
@@ -289,28 +269,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: ListTile(
                           title: Text(
                             AppTranslations.of(context).text("notice"),
+                            style: TextStyle(fontSize: 15),
                           ),
-                          //subtitle: Text('write a feedback'),
-                          leading: Icon(Icons.note),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                          leading: Icon(Icons.note, color: CustomTheme.lightTheme.primaryColor),
+                          trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
                         ))),
-
-                // FEEDBACK
-                /*Container(
-                                // padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                                child: GestureDetector(
-                                    onTap: (){
-                                        print("Feedback page clicked...");
-                                        Navigator.pushNamed(context, '/feedback');
-                                    },
-                                    child: ListTile(
-                                        title: Text(AppTranslations.of(context).text("feedback"),),
-                                        //subtitle: Text('write a feedback'),
-                                        leading: Icon(Icons.feedback,),
-                                        trailing: Icon(Icons.arrow_forward_ios),
-                                    )
-                                )
-                            ),*/
               ],
             ),
           )),
@@ -321,8 +284,9 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(16, 4, 16, 4),
       child: Card(
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.white70, width: 1),
+          side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1), width: 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Container(
@@ -330,17 +294,21 @@ class _SettingsPageState extends State<SettingsPage> {
           child: ListTile(
             title: Text(
               AppTranslations.of(context).text("update_language"),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             ),
             subtitle: Text(
               AppTranslations.of(context).text("change_language_text"),
+              style: TextStyle(fontSize: 12),
             ),
             leading: Icon(
               Icons.language,
-              size: 30,
+              size: 28,
+              color: CustomTheme.lightTheme.primaryColor,
             ),
             trailing: DropdownButton<String>(
+              underline: SizedBox(),
               focusColor: CustomTheme.lightTheme.primaryColor,
-              style: TextStyle(color: CustomTheme.lightTheme.primaryColor),
+              style: TextStyle(color: CustomTheme.lightTheme.primaryColor, fontWeight: FontWeight.bold),
               iconEnabledColor: CustomTheme.lightTheme.primaryColor,
               items:
                   languagesList.map<DropdownMenuItem<String>>((String choice) {
@@ -349,14 +317,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Text(
                     choice,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
+                        color: Colors.black87,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600),
                   ),
                 );
               }).toList(),
-              onChanged: _select,
-              hint: Text('Select'),
+              onChanged: (String? language) { if (language != null) _select(language); },
+              hint: Text('Select', style: TextStyle(fontSize: 14)),
             ),
           ),
         ),
@@ -368,8 +336,9 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(16, 4, 16, 4),
       child: Card(
+          elevation: 0,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.white70, width: 1),
+            side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1), width: 1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: GestureDetector(
@@ -380,14 +349,81 @@ class _SettingsPageState extends State<SettingsPage> {
               child: ListTile(
                 title: Text(
                   AppTranslations.of(context).text("contact_us"),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                 ),
-                subtitle: Text('Have any queries? Contact us'),
+                subtitle: Text('Have any queries? Contact us', style: TextStyle(fontSize: 12)),
                 leading: Icon(
                   Icons.phone_in_talk,
-                  size: 30,
+                  size: 28,
+                  color: CustomTheme.lightTheme.primaryColor,
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
+                  size: 18,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget _buildLogoutWidget(context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(16, 4, 16, 4),
+      child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.red.withValues(alpha: 0.1), width: 1),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: GestureDetector(
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(AppTranslations.of(context).text("logout_confirmation_title")),
+                    content: Text(AppTranslations.of(context).text("logout_confirmation_message")),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(AppTranslations.of(context).text("no")),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text(AppTranslations.of(context).text("yes"), style: TextStyle(color: Colors.red)),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          
+                          // Reset the navigation index to homepage (0) before logging out
+                          Provider.of<BottomNavigationBarProvider>(context, listen: false).currentIndex = 0;
+
+                          AuthBlock auth = Provider.of<AuthBlock>(context, listen: false);
+                          await auth.logout();
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => OpenimisOnboardingPage()),
+                            (Route<dynamic> route) => false
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
+              child: ListTile(
+                title: Text(
+                  AppTranslations.of(context).text("logout"),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+                ),
+                subtitle: Text('Sign out of your account', style: TextStyle(fontSize: 12)),
+                leading: Icon(
+                  Icons.logout,
+                  size: 28,
+                  color: Colors.red,
                 ),
               ),
             ),
@@ -397,60 +433,25 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildAppVersionWidget(context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 4, 16, 16),
+      margin: EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: Card(
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.white70, width: 1),
+          side: BorderSide(color: Colors.grey.withValues(alpha: 0.1), width: 1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Container(
           child: ListTile(
-            title: Text('App Version'),
-            subtitle: Text('${env.APP_VERSION}'),
+            title: Text('App Version', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            subtitle: Text('${env.APP_VERSION}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
             leading: Icon(
               Icons.info_outline,
-              size: 30,
+              size: 24,
+              color: Colors.grey,
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildLogoutWidget(context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(16, 4, 16, 4),
-      child: Card(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.white70, width: 1),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: GestureDetector(
-            onTap: () async {
-              AuthBlock auth = Provider.of<AuthBlock>(context, listen: false);
-              await auth.logout();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => OpenimisOnboardingPage()),
-                (Route<dynamic> route) => false
-              );
-            },
-            child: Container(
-              child: ListTile(
-                title: Text(
-                  AppTranslations.of(context).text("logout") ?? "Logout",
-                ),
-                subtitle: Text('Sign out of your account'),
-                leading: Icon(
-                  Icons.logout,
-                  size: 30,
-                  color: Colors.red,
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                ),
-              ),
-            ),
-          )),
     );
   }
 }

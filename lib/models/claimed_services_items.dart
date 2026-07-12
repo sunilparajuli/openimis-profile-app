@@ -10,7 +10,7 @@ String claimedServicesItemsToJson(ClaimedServicesItems data) => json.encode(data
 
 class ClaimedServicesItems {
   ClaimedServicesItems({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class ClaimedServicesItems {
 
 class Data {
   Data({
-    this.insureeClaim,
+    required this.insureeClaim,
   });
 
   List<InsureeClaim> insureeClaim;
@@ -42,8 +42,8 @@ class Data {
 
 class InsureeClaim {
   InsureeClaim({
-    this.services,
-    this.items,
+    required this.services,
+    required this.items,
   });
 
   List<Service> services;
@@ -62,8 +62,8 @@ class InsureeClaim {
 
 class ItemElement {
   ItemElement({
-    this.id,
-    this.item,
+    required this.id,
+    required this.item,
   });
 
   String id;
@@ -82,8 +82,8 @@ class ItemElement {
 
 class ServiceClass {
   ServiceClass({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
   });
 
   String id;
@@ -102,8 +102,8 @@ class ServiceClass {
 
 class Service {
   Service({
-    this.id,
-    this.service,
+    required this.id,
+    required this.service,
   });
 
   String id;

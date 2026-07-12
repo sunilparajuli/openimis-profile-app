@@ -5,7 +5,7 @@ import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
 
 class CardItem extends StatelessWidget {
   const CardItem({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

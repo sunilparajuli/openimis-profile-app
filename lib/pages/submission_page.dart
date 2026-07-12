@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -15,13 +16,12 @@ class SubmissionPage extends StatefulWidget {
     _SubmissionPageState createState() => _SubmissionPageState();
     
 }
-
 class _SubmissionPageState extends State<SubmissionPage> {
-    File _image;
+    File? _image;
 
     final picker = ImagePicker();
 
-    AuthBlock auth;
+    late AuthBlock auth;
     @override
     void initState() {
         super.initState();
@@ -63,14 +63,14 @@ class _SubmissionPageState extends State<SubmissionPage> {
         });
     }
     
-    Future uploadPic() async{
+    Future<void> uploadPic() async{
         setState(() {
             isLoading = !isLoading;
         });
         String url = env.API_BASE_URL;
         var request = new http.MultipartRequest("POST", Uri.parse(url));
 //		request.headers.addAll(headers);
-        request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri(Uri.parse(_image.path)).readAsBytes(), filename: "jpt.jpg"));
+        request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri(Uri.parse(_image!.path)).readAsBytes(), filename: "voucher.jpg"));
 //		request.fields['address'] = 'address';
 //		request.fields['query'] ='mutation {createVoucherPayment(file: ${Uri.parse(_image.path)}){   ok  }  }","variables":null"}';
         request.fields['query'] ='mutation {createVoucherPayment(file: "file", insuree:"${auth.user['data']['insureeAuthOtp']['insuree']['chfId']}"){   ok  }  }';
@@ -79,10 +79,10 @@ class _SubmissionPageState extends State<SubmissionPage> {
             print(response.stream.bytesToString().toString());
             if (response.statusCode == 200) {
                 if (response.reasonPhrase == "OK") {
-                     RedirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission'),);
+                     _redirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission'),);
                 }
                 else{
-                    RedirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission_error'));
+                    _redirectToCardPage(AppTranslations.of(context).text('payment_voucher_submission_error'));
                     
                 }
                 setState(() {
@@ -125,7 +125,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
         );
     }
     
-    void RedirectToCardPage(String value) {
+    void _redirectToCardPage(String value) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (c) => CardDetailPage(message: value)),
                 (route) => false);
@@ -151,7 +151,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     Expanded(
                         child: Container(
                             decoration: BoxDecoration(
-                                color: CustomTheme.lightTheme.backgroundColor,
+                                color: CustomTheme.lightTheme.colorScheme.surface,
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(30),
                                     topRight: Radius.circular(30)
@@ -175,9 +175,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                                             padding: EdgeInsets.all(16.0),
                                             child: Column(
                                                 children: [
-                                                    _image != null ?
-                                                        _imageCardWidget()
-                                                        : _addImageCardWidget()
+                                                    _image != null ? _imageCardWidget() : _addImageCardWidget()
                                                 ],
                                             )
                                         ),
@@ -206,7 +204,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
             },
             child: Card(
                 child: Image.file(
-                    _image,
+                    _image!,
                     fit: BoxFit.fill,
                 ),
             ),
@@ -224,7 +222,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     height: 120,
                     width: 120,
                     child: Center(
-                        child: Icon(Icons.note_add, size: 30, color: Colors.grey.withOpacity(0.5),),
+                        child: Icon(Icons.note_add, size: 30, color: Colors.grey.withValues(alpha: 0.5),),
                     )
                 ),
             ),
@@ -237,7 +235,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
             width: double.infinity,
             child: ElevatedButton(
                 onPressed: () async {
-                    _image!=null ? uploadPic(): showMessage('Please upload image of your Paid Voucher ');
+                    uploadPic();
                 },
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(16.0), backgroundColor: CustomTheme.lightTheme.primaryColor,

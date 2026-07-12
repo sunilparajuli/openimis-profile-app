@@ -1,19 +1,19 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:openimis_web_app/pages/policy_information.dart';
+import 'package:openimis_web_app/pages/policy_information_page.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:openimis_web_app/pages/settings.dart';
+import 'package:openimis_web_app/pages/settings_page.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/langlang/application.dart';
 
-import 'homepage.dart';
+import 'home_page.dart';
 
 class Display extends StatefulWidget {
   final int initIndex;
-  Display({Key key, @required this.initIndex}) : super(key: key);
+  Display({Key? key, required this.initIndex}) : super(key: key);
 
   @override
   _DisplayState createState() => _DisplayState();
@@ -32,8 +32,8 @@ class _DisplayState extends State<Display> {
             AppTranslations.load(locale);
         });
     }
-    _getDrawerItemWidget(int pos) {
-        switch (pos) {
+    _getDrawerItemWidget(int index) {
+        switch (index) {
             case 0:
                 return new Homepage();
             case 1:
@@ -50,7 +50,7 @@ class _DisplayState extends State<Display> {
     List<String> titleList = ["page_title_openimis", "page_title_policy_information", "page_title_settings"];
 
     Widget build(BuildContext context) {
-        final bottom_nav = Provider.of<BottomNavigationBarProvider>(context);
+        final bottomNavProvider = Provider.of<BottomNavigationBarProvider>(context);
         var connectionStatus = Provider.of<ConnectivityResult>(context);
         if(connectionStatus==ConnectivityResult.none){setState(() {});}
 
@@ -70,7 +70,7 @@ class _DisplayState extends State<Display> {
                     )
                 ],
                 title: Text(
-                    AppTranslations.of(context).text(titleList[bottom_nav.currentIndex]),
+                    AppTranslations.of(context).text(titleList[bottomNavProvider.currentIndex]),
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w500
@@ -83,14 +83,14 @@ class _DisplayState extends State<Display> {
             // connectionStatus==ConnectivityResult.none ?
             //         Container(child: Center(child: Text(AppTranslations.of(context).text('no_internet_connection')),),)
             //     :
-            _getDrawerItemWidget(bottom_nav.currentIndex),
+            _getDrawerItemWidget(bottomNavProvider.currentIndex),
             bottomNavigationBar: CurvedNavigationBar(
                 color: CustomTheme.lightTheme.primaryColor,
                 height: 60,
                 onTap: (index) {
-                    bottom_nav.currentIndex = index;
+                    bottomNavProvider.currentIndex = index;
                 },
-                backgroundColor: CustomTheme.lightTheme.backgroundColor,
+                backgroundColor: CustomTheme.lightTheme.colorScheme.surface,
                 items: <Widget>[
                     Icon(
                         Icons.home,

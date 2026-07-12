@@ -10,7 +10,7 @@ String claimedServicesToJson(ClaimedServices data) => json.encode(data.toJson())
 
 class ClaimedServices {
   ClaimedServices({
-    this.data,
+    required this.data,
   });
 
   Data data;
@@ -26,7 +26,7 @@ class ClaimedServices {
 
 class Data {
   Data({
-    this.insureeClaim,
+    required this.insureeClaim,
   });
 
   List<InsureeClaim> insureeClaim;
@@ -42,7 +42,7 @@ class Data {
 
 class InsureeClaim {
   InsureeClaim({
-    this.services,
+    required this.services,
   });
 
   List<ServiceElement> services;
@@ -58,10 +58,10 @@ class InsureeClaim {
 
 class ServiceElement {
   ServiceElement({
-    this.id,
-    this.qtyProvided,
-    this.qtyApproved,
-    this.service,
+    required this.id,
+    required this.qtyProvided,
+    required this.qtyApproved,
+    required this.service,
   });
 
   String id;
@@ -70,10 +70,10 @@ class ServiceElement {
   ServiceService service;
 
   factory ServiceElement.fromJson(Map<String, dynamic> json) => ServiceElement(
-    id: json["id"],
-    qtyProvided: json["qtyProvided"] != null ? json["qtyProvided"].toDouble() : null,
-    qtyApproved: json["qtyApproved"] != null ? json["qtyApproved"].toDouble() : null,
-    service: ServiceService.fromJson(json["service"]),
+    id: json["id"]?.toString() ?? "",
+    qtyProvided: (json["qtyProvided"] ?? 0).toDouble(),
+    qtyApproved: (json["qtyApproved"] ?? 0).toDouble(),
+    service: ServiceService.fromJson(json["service"] ?? {}),
   );
 
   Map<String, dynamic> toJson() => {
@@ -86,9 +86,9 @@ class ServiceElement {
 
 class ServiceService {
   ServiceService({
-    this.id,
-    this.name,
-    this.price,
+    required this.id,
+    required this.name,
+    required this.price,
   });
 
   String id;
@@ -96,9 +96,9 @@ class ServiceService {
   double price;
 
   factory ServiceService.fromJson(Map<String, dynamic> json) => ServiceService(
-    id: json["id"],
-    name: json["name"],
-    price: json["price"],
+    id: json["id"]?.toString() ?? "",
+    name: json["name"] ?? "N/A",
+    price: (json["price"] ?? 0).toDouble(),
   );
 
   Map<String, dynamic> toJson() => {

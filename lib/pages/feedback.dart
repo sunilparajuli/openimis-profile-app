@@ -1,4 +1,4 @@
-import 'package:openimis_web_app/pages/settings.dart';
+import 'package:openimis_web_app/pages/settings_page.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/langlang/application.dart';
@@ -67,7 +67,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   radius: circleRadius,
                                   backgroundColor: CustomTheme
                                       .lightTheme.primaryColor
-                                      .withOpacity(0.25),
+                                      .withValues(alpha: 0.25),
                                   child: Icon(
                                     Icons.message_rounded,
                                     color: Colors.white,
@@ -145,13 +145,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                            isLoading =true;                                   
                                       });
                                       // isLoading.setLoading(globals.isLoading);
-                                      var create = ApiGraphQlServices()
-                                          .createFeedback(
-                                              fullname.text,
-                                              email.text,
-                                              mobile_no.text,
-                                              queries.text);
-                                      if(create!= null){
+                                       await ApiGraphQlServices()
+                                           .createFeedback(
+                                               fullname.text,
+                                               email.text,
+                                               mobile_no.text,
+                                               queries.text);
+                                      if(true){
                                           // Navigator.pop(context, SettingsPage('Feedback Has been Sent thank you'));
                                           Navigator.of(context).pop(MaterialPageRoute(builder:(context)=>SettingsPage('feedback has been sent')));
                                       }
@@ -205,7 +205,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             controller: fullname,
             keyboardType: TextInputType.text,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter full name';
               }
               return null;
@@ -253,7 +253,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             controller: mobile_no,
             keyboardType: TextInputType.number,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter mobile number';
               }
               return null;
@@ -301,7 +301,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             controller: email,
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter email address';
               }
               return null;
@@ -349,7 +349,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             controller: queries,
             keyboardType: TextInputType.text,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter FeedbackPage';
               }
               return null;

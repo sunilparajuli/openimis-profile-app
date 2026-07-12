@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,11 +15,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  AuthBlock auth;
+  late AuthBlock auth;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds:2000), () async {
+    Timer(Duration(milliseconds:2000), () async {
       if(auth.isLoggedIn){
         Navigator.of(context).pushNamedAndRemoveUntil('/card',(Route<dynamic> route) => false);
       }
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  Future checkFirstSeen() async {
+  Future<void> checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
     if(_seen==false){
@@ -49,15 +50,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(auth==null) {
-      auth = Provider.of<AuthBlock>(context);
-      env.setAuth(auth);
-
-    }
-    return WillPopScope(
-      onWillPop: () {
-        SystemNavigator.pop();
-        return;
+    auth = Provider.of<AuthBlock>(context);
+    env.setAuth(auth);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (!didPop) SystemNavigator.pop();
       },
       child: Stack(
         children: <Widget>

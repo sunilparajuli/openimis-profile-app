@@ -6,7 +6,7 @@ import 'package:openimis_web_app/profile/utils/custom_clipper.dart';
 
 class StackContainer extends StatelessWidget {
   const StackContainer({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

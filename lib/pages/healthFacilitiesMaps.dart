@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+
 
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
@@ -22,8 +23,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  CustomLatLng _currentLocation;
-  CustomLatLng _selectedRestaurant;
+  late CustomLatLng _currentLocation;
+  late CustomLatLng _selectedRestaurant;
   List<Map<String, dynamic>> _places = [
     {'name': 'Patan Hospital', 'coords': CustomLatLng(27.7236, 85.4181)},
     {'name': 'Birat Hospital', 'coords': CustomLatLng(27.6684, 85.4621)},
@@ -87,13 +88,13 @@ class _MapPageState extends State<MapPage> {
     List<Marker> markers = [];
 
     // Add marker for current location
-    if (_currentLocation != null) {
+    if (true) {
       markers.add(
         Marker(
           width: 80.0,
           height: 80.0,
           point: LatLng(_currentLocation.latitude, _currentLocation.longitude),
-          builder: (ctx) => Icon(
+          child: Icon(
             Icons.my_location,
             size: 40,
             color: Colors.blue,
@@ -108,7 +109,7 @@ class _MapPageState extends State<MapPage> {
         width: 80.0,
         height: 80.0,
         point: LatLng(place['coords'].latitude, place['coords'].longitude),
-        builder: (ctx) => GestureDetector(
+        child: GestureDetector(
           onTap: () => _onPlaceSelected(place['coords']),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -117,8 +118,8 @@ class _MapPageState extends State<MapPage> {
                 Icons.location_pin,
                 size: 30.0,
                 color: _selectedRestaurant == place['coords']
-                    ? Colors.red // Selected restaurant
-                    : Colors.blue, // Default color
+                    ? Colors.red
+                    : Colors.blue,
               ),
               Text(
                 place['name'],
@@ -135,6 +136,7 @@ class _MapPageState extends State<MapPage> {
 
     return markers;
   }
+
   List<Polyline> _buildPolylines() {
     List<Polyline> polylines = [];
 
@@ -166,25 +168,19 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Map View'),
       ),
-      body: _currentLocation == null
-          ? Center(child: CircularProgressIndicator())
-          : FlutterMap(
+      body: FlutterMap(
         options: MapOptions(
-          center: LatLng(_currentLocation.latitude, _currentLocation.longitude),
-          zoom: 12.0,
+          initialCenter: LatLng(_currentLocation.latitude, _currentLocation.longitude),
+          initialZoom: 12.0,
         ),
-        layers: [
-          TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           ),
-          MarkerClusterLayerOptions(
-            maxClusterRadius: 120, // Adjust as needed
-            size: Size(40, 40), // Size of the cluster icon
-            anchor: AnchorPos.align(AnchorAlign.center),
+          MarkerLayer(
             markers: _buildMarkers(),
           ),
-          PolylineLayerOptions(
+          PolylineLayer(
             polylines: _buildPolylines(),
           ),
         ],

@@ -10,7 +10,7 @@ String noticeToJson(Notice data) => json.encode(data.toJson());
 
 class Notice {
     Notice({
-        this.data,
+        required this.data,
     });
     
     Data data;
@@ -26,7 +26,7 @@ class Notice {
 
 class Data {
     Data({
-        this.notices,
+        required this.notices,
     });
     
     Notices notices;
@@ -42,7 +42,7 @@ class Data {
 
 class Notices {
     Notices({
-        this.edges,
+        required this.edges,
     });
     
     List<Edge> edges;
@@ -58,7 +58,7 @@ class Notices {
 
 class Edge {
     Edge({
-        this.node,
+        required this.node,
     });
     
     Node node;
@@ -74,9 +74,9 @@ class Edge {
 
 class Node {
     Node({
-        this.id,
-        this.title,
-        this.description,
+        required this.id,
+        required this.title,
+        required this.description,
     });
     
     String id;

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class AppTranslations {
-  Locale locale;
-  static Map<dynamic, dynamic> _localisedValues;
+  late Locale locale;
+  static late Map<dynamic, dynamic> _localisedValues;
 
   AppTranslations(Locale locale) {
     this.locale = locale;
   }
 
   static AppTranslations of(BuildContext context) {
-    return Localizations.of<AppTranslations>(context, AppTranslations);
+    return Localizations.of<AppTranslations>(context, AppTranslations)!;
   }
 
   static Future<AppTranslations> load(Locale locale) async {

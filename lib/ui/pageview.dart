@@ -13,7 +13,7 @@ class PageViewScreen extends StatefulWidget {
 }
 
 class _PageViewScreenState extends State<PageViewScreen> {
-  AuthBlock auth;
+  late AuthBlock auth;
   final int _numPages = 2;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
@@ -41,11 +41,8 @@ class _PageViewScreenState extends State<PageViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(auth==null) {
-      auth = Provider.of<AuthBlock>(context);
-      env.setAuth(auth);
-
-    }
+    auth = Provider.of<AuthBlock>(context);
+    env.setAuth(auth);
     if(auth.isLoggedIn){
       Navigator.pushNamed(context, '/home');
     }

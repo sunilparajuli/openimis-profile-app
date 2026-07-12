@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:openimis_web_app/models/faq.dart';
@@ -25,49 +26,47 @@ import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helpe
 
 import "package:openimis_web_app/mock_api/mock_api_data_services.dart" as mock_data_services;
 
+import '../models/ServiceProviders.dart';
+import '../models/app_contacts.dart';
+
 class ApiGraphQlServices {
     bool isLoading = false;
-    MedicalServices medicalServices = MedicalServices();
-    Claims insuree_claims = Claims();
-    Claimed claimed = Claimed();
-    ClaimedServices claimedservices = ClaimedServices();
-    ClaimedItems claimeditems = ClaimedItems();
-    HealthFacilityCoordinates healthFacilityCoordinates = HealthFacilityCoordinates();
-    PolicyInformation policyinformation = PolicyInformation();
-    InsureePolicyInformation insureepolicyinformation = InsureePolicyInformation();
-    Notice notices = Notice();
-    Feedback feedback = Feedback();
-    InsureeData insureedata = InsureeData();
-    Notifications notifications = Notifications();
-    Offices offices = Offices();
-    Faq faq = Faq();
+    MedicalServices? medicalServices;
+    Claims? insuree_claims;
+    Claimed? claimed;
+    ClaimedServices? claimedservices;
+    ClaimedItems? claimeditems;
+    HealthFacilityCoordinates? healthFacilityCoordinates;
+    PolicyInformation? policyinformation;
+    InsureePolicyInformation? insureepolicyinformation;
+    Notice? notices;
+    Feedback? feedback;
+    InsureeData? insureedata;
+    Notifications? notifications;
+    Offices? offices;
+    Faq? faq;
 
 
     Future<MedicalServices> MedicalServicesGQL(String args) async {
         try {
-            final response = await ApiClient.postGraphQL(null, OpenimisGqlQueries.medicalServices(100));
+            final response = await ApiClient.postGraphQL('', OpenimisGqlQueries.medicalServices(100));
             print(jsonEncode(OpenimisGqlQueries.medicalServices(100)));
             var jsonMap = json.decode(response.body);
             medicalServices = MedicalServices.fromJson(jsonMap);
-        } catch (Exception) {
-            return medicalServices;
-        }
-        return medicalServices;
+            return medicalServices!;
+        } catch (e) { throw Exception("API Error"); }
     }
     
-    Future<Claims> ClaimsServicesGQL(String token, String chfID, canRefresh) async {
+    Future<Claims> ClaimsServicesGQL(String token, String chfID, bool canRefresh) async {
           if(env.production==false){
             insuree_claims = Claims.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_claims()));
-            return insuree_claims;
+            return insuree_claims!;
           }
 
-          var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
-            return value;
-          });
-          if(!isRefresh){
-            var ret = await helper.SessionManager().getClaimsServicesGQL().then((value) => value);
-            if(ret!=null) {
-              return ret;
+          if(!canRefresh){
+            var cachedClaims = await helper.SessionManager().getClaimsServicesGQL();
+            if(cachedClaims != null) {
+              return cachedClaims;
             }
           }
             try {
@@ -76,51 +75,62 @@ class ApiGraphQlServices {
               var jsonMap = response.body;
               helper.SessionManager().setClaimsServicesGQL(response.body);
               insuree_claims = Claims.fromJson(jsonDecode(jsonMap));
-            } catch (Exception) {
-              return insuree_claims;
-            }
-            return insuree_claims;
-
-
-
+              return insuree_claims!;
+            } catch (e) { throw Exception("API Error"); }
       }
 
 
 
-    // Services api
-    Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimid) async { //todo pass claim id from widget
+    Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimId) async { //todo pass claim id from widget
         try {
-            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedServices(claimid));
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedServices(claimId));
             var jsonMap = json.decode(response.body);
             claimedservices = ClaimedServices.fromJson(jsonMap);
-        } catch (Exception) {
-            return claimedservices;
+            return claimedservices!;
+        } catch (e) { 
+            print("ClaimedServicesServicesGQL error: $e");
+            throw Exception("API Error: $e"); 
         }
-        return claimedservices;
     }
     
-    Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimid) async { //todo pass claim id from widget
+    Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimId) async { //todo pass claim id from widget
         try {
-            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedItems(claimid));
+            final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedItems(claimId));
             var jsonMap = json.decode(response.body);
             claimeditems = ClaimedItems.fromJson(jsonMap);
-            
-            
-        } catch (Exception) {
-            return  claimeditems;//claimeditems;
+            return claimeditems!;
+        } catch (e) {
+            print("ClaimedItemServicesGQL error: $e");
+            throw Exception("API Error: $e");
         }
-        return claimeditems;
     }
     
     Future<HealthFacilityCoordinates> HealthFacilityCoordinatesServicesGQL(args) async {
         try {
-            final response = await ApiClient.postGraphQL(null, OpenimisGqlQueries.healthFacilityCoordinate(args));
+            final response = await ApiClient.postGraphQL('', OpenimisGqlQueries.healthFacilityCoordinate(args));
             var jsonMap = json.decode(response.body);
             healthFacilityCoordinates = HealthFacilityCoordinates.fromJson(jsonMap);
-        } catch (Exception) {
-            return  healthFacilityCoordinates;
+            return healthFacilityCoordinates!;
+        } catch (e) { 
+            if (healthFacilityCoordinates != null) return healthFacilityCoordinates!;
+            throw Exception("API Error"); 
         }
-        return healthFacilityCoordinates;
+    }
+
+/// Removed the (args) parameter completely
+    Future<dynamic> service_providers() async {
+      try {
+        final response = await ApiClient.postGraphQL('', OpenimisGqlQueries.service_providers());
+        var jsonMap = json.decode(response.body);
+
+        // Make sure this matches your actual JSON model for facilities
+        var facilities =  ServiceProvidersModel.fromJson(jsonMap);
+
+        return facilities;
+      } catch (e) {
+        print("Error fetching service providers: $e");
+        throw Exception("API Error");
+      }
     }
 
 
@@ -132,10 +142,7 @@ class ApiGraphQlServices {
       });
     if(!isRefresh){
       var _policyinformation = await helper.SessionManager()
-            .getPolicyInformationCardPage()
-            .then((value) {
-          return value;
-        });
+            .getPolicyInformationCardPage();
         if (_policyinformation != null) {
           return _policyinformation;
         }
@@ -146,35 +153,40 @@ class ApiGraphQlServices {
 
             helper.SessionManager().setPolicyInformationCardPage(response.body);
             policyinformation = PolicyInformation.fromJson(jsonMap);
-        } catch (Exception) {
-            return  policyinformation;//claimeditems;
+            return policyinformation!;
+        } catch (e) {
+            if (policyinformation != null) return policyinformation!;
+            throw Exception("API Error");
         }
-        return policyinformation;
     }
     
 
     Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid, bool canRefresh) async { //todo pass claim id from widget // this is for the list of policies of insuree
-      var jsonMap;
-      var resbody;
+      dynamic jsonMap;
+      dynamic responseBody;
 
       if(canRefresh==true){
 
       try {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureePolicyInformationLists(chfid));
-            resbody = response.body;
+            responseBody = response.body;
              jsonMap = json.decode(response.body);
             insureepolicyinformation = InsureePolicyInformation.fromJson(jsonMap);
-            
-        } catch (Exception) {
-            return  insureepolicyinformation;//claimeditems;
+            helper.SessionManager().setPolicyInformation(responseBody);
+            return insureepolicyinformation!;
+        } catch (e) {
+            if (insureepolicyinformation != null) return insureepolicyinformation!;
+            throw Exception("API Error");
         }
-       // helper.SessionManager().deletePoicyInfrmatin();
-        helper.SessionManager().setPolicyInformation(resbody);
-        return insureepolicyinformation;
     }
       else {
        // helper.SessionManager().deletePoicyInfrmatin();
-        return helper.SessionManager().getPolicyInformation();
+        var cached = await helper.SessionManager().getPolicyInformation();
+        if (cached != null) {
+          return cached;
+        }
+        // Fallback to fetch if cache is empty even if canRefresh is false
+        return await InsureePolicyInformationServicesGQL(token, chfid, true);
       }
     }
     
@@ -183,26 +195,23 @@ class ApiGraphQlServices {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.notices());
             var jsonMap = json.decode(response.body);
             notices = Notice.fromJson(jsonMap);
-        } catch (Exception) {
-            return  notices;
+            return notices!;
+        } catch (e) { 
+            if (notices != null) return notices!;
+            throw Exception("API Error"); 
         }
-        return notices;
     }
 
-    Future<InsureeData> InsureeInfoServicesGQL(String token, String chfid, canRefresh) async {
+    Future<InsureeData> InsureeInfoServicesGQL(String token, String chfid, bool canRefresh) async {
       if(env.production==false){
         insureedata = InsureeData.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info())); //(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info()));
-        return insureedata;
+        return insureedata!;
       }
 
-      var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
-        return value;
-      });
-
-      if(!isRefresh){
-        var ret = await helper.SessionManager().getInsureeInfoServicesGQL().then((value) => value);
-        if(ret!=null) {
-          return ret;
+      if(!canRefresh){
+        var cachedInsureeData = await helper.SessionManager().getInsureeInfoServicesGQL();
+        if(cachedInsureeData != null) {
+          return cachedInsureeData;
         }
       }
 
@@ -213,12 +222,8 @@ class ApiGraphQlServices {
           insureedata = InsureeData.fromJson(jsonMap);
           // helper.SessionManager().deletePoicyInfrmatin();
           helper.SessionManager().setInsureeInfoServicesGQL(response.body);
-        } catch (Exception) {
-          return insureedata;
-        }
-        return insureedata;
-
-
+          return insureedata!;
+        } catch (e) { throw Exception("API Error"); }
     }
 
 
@@ -227,53 +232,60 @@ class ApiGraphQlServices {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.notifications(chfid));
             var jsonMap = json.decode(response.body);
             notifications = Notifications.fromJson(jsonMap);
-        } catch (Exception) {
-            return  notifications;
-        }
-        return notifications;
+            return notifications!;
+        } catch (e) { throw Exception("API Error"); }
     }
 
 
 
   //mutation
     Future<Map>  createFeedback(fullname, email, mobile_number, queries) async {
-        var jsonmap;
+        dynamic jsonmap;
         globals.isLoading = true;
         try {
-               final response = await ApiClient.postGraphQL(null, 
+               final response = await ApiClient.postGraphQL('', 
                        openimisGQLMutation().createFeedbackMutation(
                            fullname, email, mobile_number, queries));
                jsonmap = jsonDecode(response.body);
-           } catch (Exception)
+           } catch (e)
             {
                 globals.isLoading = false;
-               return null;
+               throw Exception("Not implemented");
            }
        globals.isLoading = false;
         return jsonmap ;
     }
 
 
+    Future<AppContactsModel> AppContactsServicesGQL() async {
+      late AppContactsModel appContacts;
+      try {
+        final response = await ApiClient.postGraphQL('',OpenimisGqlQueries.appContactsQuery());
+        var jsonMap = json.decode(utf8.decode(response.bodyBytes)); // utf8.decode handles specific localized characters safely
+        appContacts = AppContactsModel.fromJson(jsonMap);
+      } catch (e) {
+        throw Exception("API Error");
+      }
+      return appContacts;
+    }
 
  Future<Offices>  getOfficesList() async {
-   var jsonmap;
+   dynamic jsonmap;
    try {
      final response = await  rootBundle.loadString("assets/json/offices.json"); //http.get(Uri.parse(env.OFFICE_LIST_URL),
      jsonmap = response;
      offices =  Offices.fromJson(jsonDecode(jsonmap));
-   } catch (Exception)
-
+     return offices!;
+   } catch (e)
      {
-
-       return offices;
-
+       if (offices != null) return offices!;
+       throw Exception("Asset Error");
    }
-   return offices;
  }
 
 
   Future<Faq>  getFaqs() async {
-    var jsonmap;
+    dynamic jsonmap;
     try {
       //final response = await http.get(Uri.parse(env.FAQ_LIST_URL),
       final response = await  rootBundle.loadString("assets/json/faqs.json");
@@ -285,14 +297,12 @@ class ApiGraphQlServices {
       // );
       jsonmap = response;
       faq =  Faq.fromJson(jsonDecode(jsonmap));
-    } catch (Exception)
-
+      return faq!;
+    } catch (e)
     {
-
-      return faq;
-
+      if (faq != null) return faq!;
+      throw Exception("Asset Error");
     }
-    return faq;
   }
     
 }

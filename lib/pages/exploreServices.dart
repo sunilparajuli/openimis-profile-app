@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 // import 'package:openimis_web_app/models/claimed.dart';
@@ -19,9 +20,9 @@ class ExploreServicesPage extends StatefulWidget {
 }
 
 class _ExploreServicesPageState extends State<ExploreServicesPage> {
-	Future<MedicalServices> _medicalservices;
+	late Future<MedicalServices> _medicalservices;
 	
-	AuthBlock auth;
+	late AuthBlock auth;
 
 	double min = 0.03, initial = 0.65, max = 0.7;
 	
@@ -49,7 +50,7 @@ class _ExploreServicesPageState extends State<ExploreServicesPage> {
 						boxShadow: [
 							BoxShadow(color: CustomTheme.lightTheme.colorScheme.secondary, spreadRadius: 1),
 						],
-						color:CustomTheme.lightTheme.backgroundColor,
+						color:CustomTheme.lightTheme.colorScheme.surface,
 					),
 					
 					child:  ListView(
@@ -112,14 +113,14 @@ class _ExploreServicesPageState extends State<ExploreServicesPage> {
 			child: FutureBuilder<MedicalServices>(
 				future: _medicalservices,
 				builder: (context, snapshot) {
-					if(snapshot.hasData && snapshot.data.data!=null) {
+					if(snapshot.hasData) {
 						return GridView.builder(
 							gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
 							physics: ScrollPhysics(),
 							shrinkWrap: true,
-							itemCount: snapshot.data.data.medicalServicesStr.edges.length,
+							itemCount: snapshot.data!.data.medicalServicesStr.edges.length,
 							itemBuilder: (BuildContext context, int index) {
-								var medical_services = snapshot.data.data
+								var medical_services = snapshot.data!.data
 									.medicalServicesStr.edges[index];
 								return Container(
 									padding: EdgeInsets.all(4.0),

@@ -10,7 +10,7 @@ String claimsToJson(Claims data) => json.encode(data.toJson());
 
 class Claims {
 	Claims({
-		this.data,
+		required this.data,
 	});
 
 	Data data;
@@ -26,7 +26,7 @@ class Claims {
 
 class Data {
 	Data({
-		this.insureeProfile,
+		required this.insureeProfile,
 	});
 
 	InsureeProfile insureeProfile;
@@ -42,13 +42,15 @@ class Data {
 
 class InsureeProfile {
 	InsureeProfile({
-		this.insureeClaim,
+		required this.insureeClaim,
 	});
 
 	List<InsureeClaim> insureeClaim;
 
 	factory InsureeProfile.fromJson(Map<String, dynamic> json) => InsureeProfile(
-		insureeClaim: List<InsureeClaim>.from(json["insureeClaim"].map((x) => InsureeClaim.fromJson(x))),
+		insureeClaim: json["insureeClaim"] == null 
+			? [] 
+			: List<InsureeClaim>.from(json["insureeClaim"].map((x) => InsureeClaim.fromJson(x))),
 	);
 
 	Map<String, dynamic> toJson() => {
@@ -58,11 +60,11 @@ class InsureeProfile {
 
 class InsureeClaim {
 	InsureeClaim({
-		this.id,
-		this.dateClaimed,
-		this.claimed,
-		this.status,
-		this.healthFacility,
+		required this.id,
+		required this.dateClaimed,
+		required this.claimed,
+		required this.status,
+		required this.healthFacility,
 	});
 
 	String id;
@@ -72,11 +74,11 @@ class InsureeClaim {
 	HealthFacility healthFacility;
 
 	factory InsureeClaim.fromJson(Map<String, dynamic> json) => InsureeClaim(
-		id: json["id"],
-		dateClaimed: DateTime.parse(json["dateClaimed"]),
-		claimed: json["claimed"].toDouble(),
-		status: json["status"],
-		healthFacility: HealthFacility.fromJson(json["healthFacility"]),
+		id: json["id"]?.toString() ?? "",
+		dateClaimed: json["dateClaimed"] == null ? DateTime.now() : DateTime.parse(json["dateClaimed"]),
+		claimed: (json["claimed"] ?? 0).toDouble(),
+		status: json["status"] ?? 0,
+		healthFacility: HealthFacility.fromJson(json["healthFacility"] ?? {}),
 	);
 
 	Map<String, dynamic> toJson() => {
@@ -93,7 +95,7 @@ class HealthFacility {
 		this.name,
 	});
 
-	String name;
+	String? name;
 
 	factory HealthFacility.fromJson(Map<String, dynamic> json) => HealthFacility(
 		name: json["name"],

@@ -28,13 +28,13 @@ class _SignInState extends State<SignIn> {
                 padding: EdgeInsets.symmetric(vertical: 25.0),
                 width: double.infinity,
                 child: Consumer<AuthBlock>(
-                    builder: (BuildContext context, AuthBlock auth, Widget child){
+                    builder: (BuildContext context, AuthBlock auth, Widget? child){
                         return ElevatedButton(
                             onPressed: () async {
                                 // Validate form
-                                if (_formKey.currentState.validate() && !auth.loading) {
+                                if (_formKey.currentState!.validate() && !auth.loading) {
                                     // Update values
-                                    _formKey.currentState.save();
+                                    _formKey.currentState!.save();
 
                                     // Hit Api
                                     await auth.login(userCredential);
