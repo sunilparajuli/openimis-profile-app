@@ -14,7 +14,7 @@ class InsureeInfoWidget extends StatelessWidget {
     final insuree = profile.insuree;
     return Container(
       height: screenHeight(context, dividedBy: 3.5),
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,7 +22,7 @@ class InsureeInfoWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
                   radius: 50,
@@ -31,13 +31,13 @@ class InsureeInfoWidget extends StatelessWidget {
                     child: (profile.photo != null && profile.photo.toString().trim().isNotEmpty)
                         ? FadeInImage.assetNetwork(
                             image: profile.photo.replaceAll('192.168.15.22', 'imistest.hib.gov.np'),
-                            placeholder: "assets/images/openimis-logo.png",
+                            placeholder: "assets/images/hib-logo.png",
                             fit: BoxFit.cover,
                             width: 100,
                             height: 100,
                             imageErrorBuilder: (context, error, stackTrace) {
                               return Image.asset(
-                                "assets/images/openimis-logo.png",
+                                "assets/images/hib-logo.png",
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
@@ -45,28 +45,27 @@ class InsureeInfoWidget extends StatelessWidget {
                             },
                           )
                         : Image.asset(
-                            "assets/images/openimis-logo.png",
+                            "assets/images/hib-logo.png",
                             fit: BoxFit.cover,
                             width: 100,
                             height: 100,
                           ),
                   ),
                 ),
-                SizedBox(height: 8),
-                Expanded(
-                  child: Text(
-                    '${insuree.otherNames} ${insuree.lastName}',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black),
-                    maxLines: 3,
-                  ),
+                const SizedBox(height: 8),
+                Text(
+                  '${insuree.otherNames} ${insuree.lastName}',
+                  style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black),
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
                 )
               ],
             ),
           ),
-          VerticalDivider(
+          const VerticalDivider(
             thickness: 1.5,
             color: Colors.black,
           ),
@@ -77,38 +76,38 @@ class InsureeInfoWidget extends StatelessWidget {
               children: <Widget>[
                 Text(
                   AppTranslations.of(context).text('current_balance'),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   "${env.Currency} $balance",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-                SizedBox(height: 4.0),
-                Divider(
+                const SizedBox(height: 4.0),
+                const Divider(
                   indent: 20.0,
                   thickness: 1.5,
                   color: Colors.black,
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   AppTranslations.of(context).text('first_service_point'),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Expanded(
                   child: Text(
                     '${insuree.healthFacility.name ?? "N/A"}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
                         color: Colors.black),

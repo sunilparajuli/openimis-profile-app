@@ -4,6 +4,8 @@ import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:openimis_web_app/models/user.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
+
 class LoginScreen extends StatefulWidget {
 	@override
 	final String chfid;
@@ -192,6 +194,9 @@ class _LoginScreenState extends State<LoginScreen> {
 																					// Update values
 																					_formKey.currentState!.save();
 																					_user.chfid = widget.chfid;
+
+                                          // Clear any old data before logging in with a new user
+                                          await helper.SessionManager().clearAll();
 
 																					// Hit Api
 																					await auth.login(_user);

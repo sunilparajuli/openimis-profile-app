@@ -57,10 +57,10 @@ class _DisplayState extends State<Display> {
         return Scaffold(
             appBar: AppBar(
                 automaticallyImplyLeading: false,
-                backgroundColor: CustomTheme.lightTheme.primaryColor, //Color.fromRGBO(234, 239, 255, 50),
+                backgroundColor: CustomTheme.lightTheme.primaryColor,
                 elevation: 0.0,
+                centerTitle: bottomNavProvider.currentIndex == 0 ? false : true,
                 actions: <Widget>[
-                    // _createLanguageDropDown()
                     IconButton(
                         icon: Icon(Icons.credit_card_rounded, color: Colors.white, size: 30,),
                         onPressed: (){
@@ -69,14 +69,37 @@ class _DisplayState extends State<Display> {
                         }
                     )
                 ],
-                title: Text(
-                    AppTranslations.of(context).text(titleList[bottomNavProvider.currentIndex]),
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500
+                title: bottomNavProvider.currentIndex == 0 
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                            Image.asset(
+                                'assets/images/hib-logo.png',
+                                height: 35,
+                                fit: BoxFit.contain,
+                            ),
+                            SizedBox(width: 10),
+                            Flexible(
+                              child: Text(
+                                AppTranslations.of(context).text(titleList[bottomNavProvider.currentIndex]),
+                                style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                        ],
+                    )
+                    : Text(
+                        AppTranslations.of(context).text(titleList[bottomNavProvider.currentIndex]),
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                        ),
                     ),
-                    textAlign: TextAlign.center,
-                ),
             ),
            
             body :

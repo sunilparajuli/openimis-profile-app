@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/models/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import  'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/graphql/gql_queries.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
 
 import 'package:openimis_web_app/services/api_client.dart';
 
@@ -18,6 +18,9 @@ class AuthService {
   // Create storage
   final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   Future<Map> login(UserCredential userCredential) async {
+    // Clear any previous session data before starting a new login process
+    await helper.SessionManager().clearAll();
+
     var q = OpenimisGqlQueries.otpVerify({"chfid":"${userCredential.chfid}", "otp": "${userCredential.otp}" });
     final response = await ApiClient.postGraphQL('', q);
     print(jsonDecode(response.body));

@@ -59,10 +59,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
 			isLoading = !isLoading;
 		});
 
-		// 2. SAFE AUTH CHECK for chfId
-		String chfId = "123";
+		// 2. SAFE AUTH CHECK for token and chfId
+		String token = "";
+		String chfId = "";
 		try {
-			if (auth.user != null) {
+			if (auth.user != null && auth.user.containsKey('data')) {
+				token = auth.user['data']['insureeAuthOtp']['token'] ?? "";
 				chfId = auth.user['data']['insureeAuthOtp']['insuree']['chfId'].toString();
 			}
 		} catch (e) {
@@ -71,6 +73,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
 		String url = env.API_BASE_URL;
 		var request = new http.MultipartRequest("POST", Uri.parse(url));
+
+		// Ensure Token and App-Version are sent
+		request.headers.addAll({
+			"Insuree-Token": token,
+			"App-Version": env.APP_VERSION,
+		});
 
 		// 3. Safely check if image is picked before uploading
 		if (_image != null) {

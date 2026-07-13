@@ -55,9 +55,17 @@ class AuthBlock extends ChangeNotifier {
   Map _user = {};
   Map get user => _user;
   setUser() async {
-    var u = await _authService.getUser();
-    _user = u ?? {};
-    isLoggedIn = u == null ? false : true;
+    try {
+      var u = await _authService.getUser();
+      _user = u ?? {};
+      isLoggedIn = u != null;
+    } catch (e) {
+      print("Error retrieving user session: $e");
+      _user = {};
+      isLoggedIn = false;
+      // If session is corrupted, clean up to allow a fresh login
+      await logout();
+    }
     notifyListeners();
   }
 
@@ -76,13 +84,11 @@ class AuthBlock extends ChangeNotifier {
     loading = true;
     loadingType = 'register';
     var a = await _authService.register(userRegister);
-    if(a==null)
-    {
+    if (a == null) {
       loading = false;
-    }
-      else{
+    } else {
       _isRegisterSuccess = true;
-      }
+    }
     notifyListeners();
 
   }
@@ -92,13 +98,11 @@ class AuthBlock extends ChangeNotifier {
     loading = true;
     loadingType = 'register';
     var a = await _authService.register(userRegister);
-    if(a==null)
-    {
+    if (a == null) {
       loading = false;
-    }
-      else{
+    } else {
       _isRegisterSuccess = true;
-      }
+    }
     notifyListeners();
 
   }

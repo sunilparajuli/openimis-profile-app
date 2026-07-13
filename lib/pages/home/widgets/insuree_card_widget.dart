@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/langlang/app_translation.dart';
-import 'package:openimis_web_app/theme/custom_theme.dart';
+import 'package:openimis_web_app/theme/colors.dart';
 
 class InsureeCardWidget extends StatelessWidget {
   final dynamic profile;
@@ -28,7 +28,7 @@ class InsureeCardWidget extends StatelessWidget {
     if (insureePolicies != null && insureePolicies.isNotEmpty) {
       var lastPolicy = insureePolicies.last;
       DateTime expiryDate = lastPolicy.policy.expiryDate;
-      return '  ${expiryDate.year}-${expiryDate.month}-${expiryDate.day} ';
+      return '  ${expiryDate.year}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')} ';
     }
     return "";
   }
@@ -39,83 +39,96 @@ class InsureeCardWidget extends StatelessWidget {
 
     return Container(
       height: 120,
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.22),
       child: Card(
+        elevation: 2.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: [
+              // REMAINING DAYS CARD
               Container(
                 child: Card(
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: CustomTheme.lightTheme.primaryColor)),
+                      side: BorderSide(color: CustomColors.SuccessGreen.withValues(alpha: 0.2))),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(8),
                               topLeft: Radius.circular(8),
                             ),
-                            color: CustomTheme.lightTheme.primaryColor),
-                        padding: EdgeInsets.all(4),
+                            color: CustomColors.SuccessGreen),
+                        padding: const EdgeInsets.all(4),
                         child: Text(
                           AppTranslations.of(context).text('remaining'),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         _calculateRemainingDays(policies),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                     ],
                   ),
                 ),
               ),
+              // EXPIRY ON CARD
               Container(
                 child: Card(
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: CustomTheme.lightTheme.primaryColor)),
+                      side: BorderSide(color: CustomColors.ExpiryOrange.withValues(alpha: 0.2))),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(8),
                               topLeft: Radius.circular(8),
                             ),
-                            color: CustomTheme.lightTheme.primaryColor),
-                        padding: EdgeInsets.all(4),
+                            color: CustomColors.ExpiryOrange),
+                        padding: const EdgeInsets.all(4),
                         child: Text(
                           AppTranslations.of(context).text('expire_on'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         _getExpiresOn(policies),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
-                      SizedBox(height: 4.0),
+                      const SizedBox(height: 4.0),
                     ],
                   ),
                 ),

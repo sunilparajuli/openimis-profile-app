@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
@@ -20,7 +19,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
 	@override
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
-		String token = env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123";
 
 		return Scaffold(
 			backgroundColor: CustomTheme.lightTheme.primaryColor,

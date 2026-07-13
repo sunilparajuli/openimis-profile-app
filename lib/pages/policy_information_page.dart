@@ -165,20 +165,18 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "HEALTH INSURANCE POLICY",
-                      style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.2),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      _data.policy.product?.name ?? "N/A",
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "HEALTH INSURANCE POLICY",
+                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(width: 8),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
@@ -212,7 +210,9 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildInfoColumn("ENROLL DATE", "${_data.policy.enrollDate.year}-${_data.policy.enrollDate.month.toString().padLeft(2, '0')}-${_data.policy.enrollDate.day.toString().padLeft(2, '0')}"),
+                    _buildInfoColumn("ENROLL DATE", _data.policy.enrollDate != null ? "${_data.policy.enrollDate.year}-${_data.policy.enrollDate.month.toString().padLeft(2, '0')}-${_data.policy.enrollDate.day.toString().padLeft(2, '0')}" : "N/A"),
+                    if (_data.policy.startDate != null)
+                      _buildInfoColumn("ACTIVE DATE", "${_data.policy.startDate.year}-${_data.policy.startDate.month.toString().padLeft(2, '0')}-${_data.policy.startDate.day.toString().padLeft(2, '0')}"),
                     _buildInfoColumn("EXPIRY DATE", expiryString, isExpiry: true),
                   ],
                 ),
@@ -281,35 +281,38 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Container(
-                      // Applying the exact same badge styling to the product name
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(4),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      _data.policy.product != null ? '${_data.policy.product.name}' : "Unknown",
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
                       ),
-                      child: Text(
-                        _data.policy.product != null ? '${_data.policy.product.name}' : "Unknown",
-                        style: TextStyle(
-                          fontSize: 12.0, // Slightly smaller to match badge aesthetic
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade700, // Matched blue text
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
-                Text(
-                  '${env.Currency} ${_data.policy.value.toInt()} ',
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    '${env.Currency} ${_data.policy.value.toInt()}',
+                    style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
+                SizedBox(width: 4),
                 _buildCompactBadge(isActive ? 'Active' : 'Expired', isActive ? Colors.green : Colors.red),
+                SizedBox(width: 4),
                 _buildCompactBadge(_data.policy.stage.isNotEmpty ? _data.policy.stage : "N/A", Colors.blue),
               ],
             ),
@@ -328,11 +331,11 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                if (_data.policy.startDate != null)
-                  _buildFullDateColumn('Start', _data.policy.startDate),
                 if (_data.policy.enrollDate != null)
-                  _buildFullDateColumn('Enroll', _data.policy.enrollDate),
-                _buildFullDateColumn('Expiry', _data.policy.expiryDate, isExpiry: true),
+                  _buildFullDateColumn('Enroll date', _data.policy.enrollDate),
+                if (_data.policy.startDate != null)
+                  _buildFullDateColumn('Active date', _data.policy.startDate),
+                _buildFullDateColumn('Expiry date', _data.policy.expiryDate, isExpiry: true),
               ],
             ),
           ),

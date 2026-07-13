@@ -5,6 +5,8 @@ class CustomColors {
 	static const Color BrandPurple = Color.fromRGBO(72, 23, 108, 1); // Main text, figure, and top border
 	static const Color BrandGreen = Color.fromRGBO(97, 166, 41, 1);  // Green leaves
 	static const Color NavRed = Color.fromRGBO(229, 28, 35, 1); // Pure vibrant red
+	static const Color SuccessGreen = Color(0xFF439927); // Requested success/remaining color
+	static const Color ExpiryOrange = Color(0xFFD44F16); // Requested expiry background color
 	// --- EXISTING COLORS ---
 	static const Color GreyBackground = Color.fromRGBO(249, 252, 255, 1);
 	static const Color GreyBorder = Color.fromRGBO(207, 207, 207, 1);

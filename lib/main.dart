@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:openimis_web_app/auth/register_card.dart';
 import 'package:openimis_web_app/auth/reset-password.dart';

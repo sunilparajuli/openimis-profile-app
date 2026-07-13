@@ -116,17 +116,17 @@ class _HistoryPageState extends State<HistoryPage> {
 																					child: (profile.photo != null && profile.photo!.trim().isNotEmpty)
 																							? FadeInImage.assetNetwork(
 																									image: profile.photo!.replaceAll('192.168.15.22', 'imistest.hib.gov.np'),
-																									placeholder: "assets/images/openimis-logo.png",
+																									placeholder: "assets/images/hib-logo.png",
 																									fit: BoxFit.cover,
 																									imageErrorBuilder: (context, error, stackTrace) {
 																										return Image.asset(
-																											"assets/images/openimis-logo.png",
+																											"assets/images/hib-logo.png",
 																											fit: BoxFit.cover,
 																										);
 																									},
 																								)
 																							: Image.asset(
-																									"assets/images/openimis-logo.png",
+																									"assets/images/hib-logo.png",
 																									fit: BoxFit.cover,
 																								),
 																				),

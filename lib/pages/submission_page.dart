@@ -69,7 +69,13 @@ class _SubmissionPageState extends State<SubmissionPage> {
         });
         String url = env.API_BASE_URL;
         var request = new http.MultipartRequest("POST", Uri.parse(url));
-//		request.headers.addAll(headers);
+        
+        // Ensure Token and App-Version are sent
+        request.headers.addAll({
+            "Insuree-Token": auth.user['data']['insureeAuthOtp']['token'],
+            "App-Version": env.APP_VERSION,
+        });
+
         request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri(Uri.parse(_image!.path)).readAsBytes(), filename: "voucher.jpg"));
 //		request.fields['address'] = 'address';
 //		request.fields['query'] ='mutation {createVoucherPayment(file: ${Uri.parse(_image.path)}){   ok  }  }","variables":null"}';

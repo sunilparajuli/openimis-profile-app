@@ -16,22 +16,32 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late AuthBlock auth;
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      auth = Provider.of<AuthBlock>(context);
+      _initialized = true;
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    Timer(Duration(milliseconds: 2000), () async {
+      // Ensure we have the latest user state before deciding where to go
+      if (auth.user.isNotEmpty || auth.isLoggedIn) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+      } else {
+        checkFirstSeen();
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds:2000), () async {
-      if(auth.isLoggedIn){
-        Navigator.of(context).pushNamedAndRemoveUntil('/card',(Route<dynamic> route) => false);
-      }
-      else {
-        checkFirstSeen();
-
-
-
-      }
-
-
-    });
   }
 
   Future<void> checkFirstSeen() async {

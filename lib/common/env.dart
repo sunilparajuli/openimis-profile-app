@@ -1,7 +1,6 @@
 library env;
 
 import 'package:openimis_web_app/blocks/auth_block.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 bool registerSuccess = false;
@@ -21,9 +20,6 @@ getRegisterSuccess(){
 }
 
 getAuthToken(AuthBlock authBlock){
-	if(authBlock==null){
-		authBlock=auth;
-	}
 	if(authBlock.isLoggedIn){
 		return authBlock.user['token'];
 	}
