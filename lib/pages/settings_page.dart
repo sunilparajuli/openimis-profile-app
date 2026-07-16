@@ -15,6 +15,7 @@ import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
+import 'package:openimis_web_app/services/biometric_service.dart';
 
 class SettingsPage extends StatefulWidget {
   final dynamic feedbackMessage;
@@ -274,9 +275,56 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: Icon(Icons.note, color: CustomTheme.lightTheme.primaryColor),
                           trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
                         ))),
+                
+                // BIOMETRIC LOGIN
+                _buildBiometricToggle(context),
               ],
             ),
           )),
+    );
+  }
+
+  Widget _buildBiometricToggle(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: prefs.isBiometricEnabled(),
+      builder: (context, snapshot) {
+        bool isEnabled = snapshot.data ?? false;
+        return Container(
+          child: ListTile(
+            title: Text(
+              "Biometric Login",
+              style: TextStyle(fontSize: 15),
+            ),
+            subtitle: Text('Secure access with fingerprint/face', style: TextStyle(fontSize: 12)),
+            leading: Icon(Icons.fingerprint, color: CustomTheme.lightTheme.primaryColor),
+            trailing: Switch(
+              value: isEnabled,
+              activeColor: CustomTheme.lightTheme.primaryColor,
+              onChanged: (bool value) async {
+                if (value) {
+                  bool canCheck = await BiometricService().canCheckBiometrics();
+                  if (canCheck) {
+                    bool authenticated = await BiometricService().authenticate();
+                    if (authenticated) {
+                      await prefs.setBiometricEnabled(true);
+                      setState(() {});
+                      showMessage("Biometric login enabled", context);
+                    } else {
+                      showMessage("Authentication failed", context);
+                    }
+                  } else {
+                    showMessage("Biometrics not available on this device", context);
+                  }
+                } else {
+                  await prefs.setBiometricEnabled(false);
+                  setState(() {});
+                  showMessage("Biometric login disabled", context);
+                }
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -197,6 +197,15 @@ class SessionManager {
     return isRefresh;
   }
 
+  static const String KEY_BIOMETRIC_ENABLED = "biometric_enabled";
+  Future<void> setBiometricEnabled(bool enabled) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(KEY_BIOMETRIC_ENABLED, enabled);
+  }
 
+  Future<bool> isBiometricEnabled() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(KEY_BIOMETRIC_ENABLED) ?? false;
+  }
 }
 

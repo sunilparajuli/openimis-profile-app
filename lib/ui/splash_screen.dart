@@ -6,6 +6,8 @@ import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:provider/provider.dart';
+import 'package:openimis_web_app/services/biometric_service.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = "splash-screen";
@@ -32,11 +34,55 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(milliseconds: 2000), () async {
       // Ensure we have the latest user state before deciding where to go
       if (auth.user.isNotEmpty || auth.isLoggedIn) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+        bool bioEnabled = await SessionManager().isBiometricEnabled();
+        if (bioEnabled) {
+          bool authenticated = await BiometricService().authenticate();
+          if (authenticated) {
+            Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+          } else {
+            // Authentication failed or canceled. Show a retry option.
+            _showBiometricRetryDialog();
+          }
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+        }
       } else {
         checkFirstSeen();
       }
     });
+  }
+
+  void _showBiometricRetryDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text('Biometric Authentication'),
+        content: Text('Please authenticate to continue to your profile.'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              // Standard logout if they can't/won't authenticate
+              await auth.logout();
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+            },
+            child: Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              bool authenticated = await BiometricService().authenticate();
+              if (authenticated) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/card', (Route<dynamic> route) => false);
+              } else {
+                _showBiometricRetryDialog();
+              }
+            },
+            child: Text('Retry'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
