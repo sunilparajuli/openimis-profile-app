@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:openimis_web_app/models/claimeditems.dart';
 import 'package:openimis_web_app/models/claimedservices.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
@@ -29,6 +30,218 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
         _claimedItems = ApiGraphQlServices().ClaimedItemServicesGQL(widget.token, widget.claimId);
     }
     
+    void _showFeedbackBottomSheet() async {
+        final _formKey = GlobalKey<FormState>();
+        String feedbackDetails = "";
+        int rating = 5;
+        String source = "Mobile App";
+        DateTime feedbackDate = DateTime.now();
+
+        bool cardRendered = false;
+        bool paymentAsked = false;
+        bool drugPrescribed = false;
+        bool drugReceived = false;
+
+        // Attempt to pre-set drugPrescribed based on items list
+        try {
+            final itemsData = await _claimedItems;
+            if (itemsData.data.insureeClaim.isNotEmpty && itemsData.data.insureeClaim[0].items.isNotEmpty) {
+                drugPrescribed = true;
+            }
+        } catch (e) {
+            print("Could not pre-fetch items for feedback: $e");
+        }
+
+        showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (BuildContext context) {
+                return StatefulBuilder(
+                    builder: (context, setModalState) {
+                        return Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                ),
+                            ),
+                            padding: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).viewInsets.bottom,
+                                left: 24,
+                                right: 24,
+                                top: 12,
+                            ),
+                            child: SingleChildScrollView(
+                                child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                            // Handle
+                                            Container(
+                                                width: 40,
+                                                height: 4,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[300],
+                                                    borderRadius: BorderRadius.circular(2),
+                                                ),
+                                            ),
+                                            SizedBox(height: 24),
+                                            Text(
+                                                'Give Your Feedback',
+                                                style: TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: CustomTheme.lightTheme.primaryColor,
+                                                ),
+                                            ),
+                                            SizedBox(height: 24),
+                                            
+                                            // Checklist section
+                                            _buildChecklistTile('Card rendered', cardRendered, (val) {
+                                                setModalState(() => cardRendered = val!);
+                                            }),
+                                            _buildChecklistTile('Payment asked', paymentAsked, (val) {
+                                                setModalState(() => paymentAsked = val!);
+                                            }),
+                                            _buildChecklistTile('Drug prescribed', drugPrescribed, (val) {
+                                                setModalState(() => drugPrescribed = val!);
+                                            }),
+                                            _buildChecklistTile('Drug received', drugReceived, (val) {
+                                                setModalState(() => drugReceived = val!);
+                                            }),
+                                            
+                                            SizedBox(height: 16),
+
+                                            // Rating Stars
+                                            Text(
+                                                'How would you rate this service?',
+                                                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                            ),
+                                            SizedBox(height: 12),
+                                            Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: List.generate(5, (index) {
+                                                    return IconButton(
+                                                        icon: Icon(
+                                                            index < rating ? Icons.star : Icons.star_border,
+                                                            color: Colors.amber,
+                                                            size: 36,
+                                                        ),
+                                                        onPressed: () {
+                                                            setModalState(() {
+                                                                rating = index + 1;
+                                                            });
+                                                        },
+                                                    );
+                                                }),
+                                            ),
+                                            SizedBox(height: 24),
+
+                                            TextFormField(
+                                                decoration: InputDecoration(
+                                                    labelText: 'Feedback Details',
+                                                    alignLabelWithHint: true,
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                    hintText: 'Share your thoughts about this claim...',
+                                                ),
+                                                maxLines: 4,
+                                                onChanged: (value) => feedbackDetails = value,
+                                                validator: (value) => value!.isEmpty ? 'Please enter some details' : null,
+                                            ),
+                                            SizedBox(height: 16),
+                                            
+                                            TextFormField(
+                                                initialValue: source,
+                                                decoration: InputDecoration(
+                                                    labelText: 'Source',
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(12),
+                                                    ),
+                                                ),
+                                                onChanged: (value) => source = value,
+                                            ),
+                                            SizedBox(height: 24),
+                                            
+                                            Row(
+                                                children: [
+                                                    Expanded(
+                                                        child: TextButton(
+                                                            child: Text('Cancel', style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+                                                            onPressed: () => Navigator.of(context).pop(),
+                                                        ),
+                                                    ),
+                                                    Expanded(
+                                                        child: ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                                backgroundColor: CustomTheme.lightTheme.primaryColor,
+                                                                padding: EdgeInsets.symmetric(vertical: 16),
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(12),
+                                                                ),
+                                                            ),
+                                                            child: Text('Submit', style: TextStyle(fontSize: 16, color: Colors.white)),
+                                                            onPressed: () async {
+                                                                if (_formKey.currentState!.validate()) {
+                                                                    Navigator.of(context).pop();
+                                                                    try {
+                                                                        await ApiGraphQlServices().createClaimFeedback(
+                                                                            widget.token,
+                                                                            feedbackDetails,
+                                                                            rating,
+                                                                            source,
+                                                                            feedbackDate.toIso8601String(),
+                                                                            widget.claimId,
+                                                                            cardRendered,
+                                                                            paymentAsked,
+                                                                            drugPrescribed,
+                                                                            drugReceived
+                                                                        );
+                                                                        Fluttertoast.showToast(
+                                                                            msg: "Feedback submitted successfully",
+                                                                            backgroundColor: Colors.green,
+                                                                            textColor: Colors.white,
+                                                                        );
+                                                                    } catch (e) {
+                                                                        Fluttertoast.showToast(
+                                                                            msg: "Error: $e",
+                                                                            backgroundColor: Colors.red,
+                                                                            textColor: Colors.white,
+                                                                        );
+                                                                    }
+                                                                }
+                                                            },
+                                                        ),
+                                                    ),
+                                                ],
+                                            ),
+                                            SizedBox(height: 32),
+                                        ],
+                                    ),
+                                ),
+                            ),
+                        );
+                    }
+                );
+            }
+        );
+    }
+
+    Widget _buildChecklistTile(String label, bool value, Function(bool?) onChanged) {
+        return CheckboxListTile(
+            title: Text(label, style: TextStyle(fontSize: 16)),
+            value: value,
+            onChanged: onChanged,
+            activeColor: CustomTheme.lightTheme.primaryColor,
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+        );
+    }
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -100,7 +313,13 @@ class _ClaimedItemServicesPageState extends State<ClaimedItemServicesPage> {
                         ),
                     ),
                 ],
-            )
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+                onPressed: _showFeedbackBottomSheet,
+                label: Text('Give Feedback'),
+                icon: Icon(Icons.feedback),
+                backgroundColor: CustomTheme.lightTheme.primaryColor,
+            ),
         );
     }
     

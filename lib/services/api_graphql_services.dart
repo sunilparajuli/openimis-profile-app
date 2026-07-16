@@ -239,13 +239,13 @@ class ApiGraphQlServices {
 
 
   //mutation
-    Future<Map>  createFeedback(fullname, email, mobile_number, queries) async {
+    Future<Map>  createFeedback(fullname, email, mobileNo, queries) async {
         dynamic jsonmap;
         globals.isLoading = true;
         try {
                final response = await ApiClient.postGraphQL('', 
                        openimisGQLMutation().createFeedbackMutation(
-                           fullname, email, mobile_number, queries));
+                           fullname, email, mobileNo, queries));
                jsonmap = jsonDecode(response.body);
            } catch (e)
             {
@@ -256,6 +256,19 @@ class ApiGraphQlServices {
         return jsonmap ;
     }
 
+
+    Future<Map> createClaimFeedback(String token, String details, int rating, String source, String date, int claimId, bool cardRendered, bool paymentAsked, bool drugPrescribed, bool drugReceived) async {
+        globals.isLoading = true;
+        try {
+            final response = await ApiClient.postGraphQL(token,
+                openimisGQLMutation().createClaimFeedbackMutation(details, rating, source, date, claimId, cardRendered, paymentAsked, drugPrescribed, drugReceived));
+            globals.isLoading = false;
+            return jsonDecode(response.body);
+        } catch (e) {
+            globals.isLoading = false;
+            throw Exception("API Error: $e");
+        }
+    }
 
     Future<AppContactsModel> AppContactsServicesGQL() async {
       late AppContactsModel appContacts;
