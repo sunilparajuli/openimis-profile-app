@@ -159,6 +159,7 @@ class Policy {
     required this.enrollDate,
     required this.expiryDate,
     required this.status,
+    required this.stage,
   });
   
   double value;
@@ -166,14 +167,26 @@ class Policy {
   DateTime? enrollDate;
   DateTime expiryDate;
   int status;
+  String stage;
   
-  factory Policy.fromJson(Map<String, dynamic> json) => Policy(
-    value: json["value"] == null ? 0.0 : json["value"].toDouble(),
-    startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : null,
-    enrollDate: json["enrollDate"] != null ? DateTime.parse(json["enrollDate"]) : null,
-    expiryDate: DateTime.parse(json["expiryDate"]),
-    status: json["status"],
-  );
+  factory Policy.fromJson(Map<String, dynamic> json) {
+    String parseStage(dynamic stageValue) {
+        if (stageValue == null) return '';
+        String stageCode = stageValue.toString().trim().toUpperCase();
+        if (stageCode == 'N') return 'New';
+        if (stageCode == 'R') return 'Renewed';
+        return stageValue.toString();
+    }
+
+    return Policy(
+      value: json["value"] == null ? 0.0 : json["value"].toDouble(),
+      startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : null,
+      enrollDate: json["enrollDate"] != null ? DateTime.parse(json["enrollDate"]) : null,
+      expiryDate: DateTime.parse(json["expiryDate"]),
+      status: json["status"],
+      stage: parseStage(json["stage"]),
+    );
+  }
   
   Map<String, dynamic> toJson() => {
     "value": value,
@@ -181,5 +194,6 @@ class Policy {
     "enrollDate": enrollDate != null ? "${enrollDate!.year.toString().padLeft(4, '0')}-${enrollDate!.month.toString().padLeft(2, '0')}-${enrollDate!.day.toString().padLeft(2, '0')}" : null,
     "expiryDate": "${expiryDate.year.toString().padLeft(4, '0')}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')}",
     "status": status,
+    "stage": stage,
   };
 }

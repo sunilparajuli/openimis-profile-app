@@ -3,6 +3,7 @@ import 'package:openimis_web_app/models/user.dart';
 import 'package:openimis_web_app/services/auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 
 class AuthBlock extends ChangeNotifier {
   final storage = FlutterSecureStorage();
@@ -57,13 +58,13 @@ class AuthBlock extends ChangeNotifier {
   setUser() async {
     try {
       var u = await _authService.getUser();
+      bool sessionActive = await SessionManager().isSessionActive();
       _user = u ?? {};
-      isLoggedIn = u != null;
+      isLoggedIn = u != null && sessionActive;
     } catch (e) {
       print("Error retrieving user session: $e");
       _user = {};
       isLoggedIn = false;
-      // If session is corrupted, clean up to allow a fresh login
       await logout();
     }
     notifyListeners();
@@ -73,6 +74,7 @@ class AuthBlock extends ChangeNotifier {
     loading = true;
     loadingType = 'login';
     await _authService.login(userCredential);
+    await SessionManager().setSessionActive(true); // Set session active after OTP success
     setUser();
     loading = false;
     notifyListeners();
@@ -108,12 +110,39 @@ class AuthBlock extends ChangeNotifier {
   }
 
   logout() async {
-    await _authService.logout();
     isLoggedIn = false;
     _currentIndex = 0; // Reset index to homepage
-    await storage.deleteAll();
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.clear();
+    
+    bool bioEnabled = await SessionManager().isBiometricEnabled();
+    await SessionManager().setSessionActive(false); // Mark session as inactive
+
+    if (!bioEnabled) {
+      // FULL WIPE only if biometrics are NOT enabled
+      await _authService.logout();
+      await storage.deleteAll();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+    } else {
+      // Partial clear: keep the 'user' data in storage for biometric "unlocking"
+      // but clear the SharedPreferences cache
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      final keysToKeep = [SessionManager.KEY_BIOMETRIC_ENABLED, SessionManager.KEY_SESSION_ACTIVE];
+      final Map<String, dynamic> savedValues = {};
+      
+      for (String key in keysToKeep) {
+        if (preferences.containsKey(key)) {
+          savedValues[key] = preferences.get(key);
+        }
+      }
+      
+      await preferences.clear();
+      
+      // Restore the kept settings
+      for (String key in savedValues.keys) {
+        if (savedValues[key] is bool) await preferences.setBool(key, savedValues[key]);
+      }
+    }
+
     notifyListeners();
   }
 }

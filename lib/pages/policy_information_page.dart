@@ -210,7 +210,7 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildInfoColumn("ENROLL DATE", _data.policy.enrollDate != null ? "${_data.policy.enrollDate.year}-${_data.policy.enrollDate.month.toString().padLeft(2, '0')}-${_data.policy.enrollDate.day.toString().padLeft(2, '0')}" : "N/A"),
+                    _buildInfoColumn(_data.policy.stage == 'Renewed' ? "RENEWED DATE" : "ENROLL DATE", _data.policy.enrollDate != null ? "${_data.policy.enrollDate.year}-${_data.policy.enrollDate.month.toString().padLeft(2, '0')}-${_data.policy.enrollDate.day.toString().padLeft(2, '0')}" : "N/A"),
                     if (_data.policy.startDate != null)
                       _buildInfoColumn("ACTIVE DATE", "${_data.policy.startDate.year}-${_data.policy.startDate.month.toString().padLeft(2, '0')}-${_data.policy.startDate.day.toString().padLeft(2, '0')}"),
                     _buildInfoColumn("EXPIRY DATE", expiryString, isExpiry: true),
@@ -332,7 +332,7 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 if (_data.policy.enrollDate != null)
-                  _buildFullDateColumn('Enroll date', _data.policy.enrollDate),
+                  _buildFullDateColumn(_data.policy.stage == 'Renewed' ? 'Renewed date' : 'Enroll date', _data.policy.enrollDate),
                 if (_data.policy.startDate != null)
                   _buildFullDateColumn('Active date', _data.policy.startDate),
                 _buildFullDateColumn('Expiry date', _data.policy.expiryDate, isExpiry: true),

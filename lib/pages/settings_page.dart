@@ -15,7 +15,6 @@ import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:provider/provider.dart';
 import 'package:openimis_web_app/ui/onboarding/onboarding_card.dart';
 import 'package:openimis_web_app/services/bottom_nav_bar_service.dart';
-import 'package:openimis_web_app/services/biometric_service.dart';
 
 class SettingsPage extends StatefulWidget {
   final dynamic feedbackMessage;
@@ -275,56 +274,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: Icon(Icons.note, color: CustomTheme.lightTheme.primaryColor),
                           trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
                         ))),
-                
-                // BIOMETRIC LOGIN
-                _buildBiometricToggle(context),
               ],
             ),
           )),
-    );
-  }
-
-  Widget _buildBiometricToggle(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: prefs.isBiometricEnabled(),
-      builder: (context, snapshot) {
-        bool isEnabled = snapshot.data ?? false;
-        return Container(
-          child: ListTile(
-            title: Text(
-              "Biometric Login",
-              style: TextStyle(fontSize: 15),
-            ),
-            subtitle: Text('Secure access with fingerprint/face', style: TextStyle(fontSize: 12)),
-            leading: Icon(Icons.fingerprint, color: CustomTheme.lightTheme.primaryColor),
-            trailing: Switch(
-              value: isEnabled,
-              activeColor: CustomTheme.lightTheme.primaryColor,
-              onChanged: (bool value) async {
-                if (value) {
-                  bool canCheck = await BiometricService().canCheckBiometrics();
-                  if (canCheck) {
-                    bool authenticated = await BiometricService().authenticate();
-                    if (authenticated) {
-                      await prefs.setBiometricEnabled(true);
-                      setState(() {});
-                      showMessage("Biometric login enabled", context);
-                    } else {
-                      showMessage("Authentication failed", context);
-                    }
-                  } else {
-                    showMessage("Biometrics not available on this device", context);
-                  }
-                } else {
-                  await prefs.setBiometricEnabled(false);
-                  setState(() {});
-                  showMessage("Biometric login disabled", context);
-                }
-              },
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -443,14 +395,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       TextButton(
                         child: Text(AppTranslations.of(context).text("yes"), style: TextStyle(color: Colors.red)),
                         onPressed: () async {
-                          Navigator.of(context).pop();
+                          final navigator = Navigator.of(context);
+                          final bottomNav = Provider.of<BottomNavigationBarProvider>(context, listen: false);
+                          final auth = Provider.of<AuthBlock>(context, listen: false);
+
+                          navigator.pop();
                           
                           // Reset the navigation index to homepage (0) before logging out
-                          Provider.of<BottomNavigationBarProvider>(context, listen: false).currentIndex = 0;
+                          bottomNav.currentIndex = 0;
 
-                          AuthBlock auth = Provider.of<AuthBlock>(context, listen: false);
                           await auth.logout();
-                          Navigator.of(context).pushAndRemoveUntil(
+                          
+                          navigator.pushAndRemoveUntil(
                             MaterialPageRoute(builder: (context) => OpenimisOnboardingPage()),
                             (Route<dynamic> route) => false
                           );

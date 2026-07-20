@@ -205,9 +205,9 @@ class _CardDetailPageState extends State<CardDetailPage> {
                             SizedBox(height: 8.0),
                             Row(
                                 children: [
-                                    Expanded(child: _buildDateItem('Start:', insureeProfile.policy.startDate, alignment: CrossAxisAlignment.start)),
-                                    Expanded(child: _buildDateItem('Enroll:', insureeProfile.policy.enrollDate, alignment: CrossAxisAlignment.center)),
-                                    Expanded(child: _buildDateItem(AppTranslations.of(context).text('expiry_date') + ':', insureeProfile.policy.expiryDate, isExpiry: true, alignment: CrossAxisAlignment.end)),
+                                    Expanded(child: _buildDateItem(insureeProfile.policy.stage == 'Renewed' ? 'Renewed date:' : 'Enroll date:', insureeProfile.policy.enrollDate, alignment: CrossAxisAlignment.start)),
+                                    Expanded(child: _buildDateItem('Active date:', insureeProfile.policy.startDate, alignment: CrossAxisAlignment.center)),
+                                    Expanded(child: _buildDateItem('Expiry date:', insureeProfile.policy.expiryDate, isExpiry: true, alignment: CrossAxisAlignment.end)),
                                 ],
                             ),
                         ],

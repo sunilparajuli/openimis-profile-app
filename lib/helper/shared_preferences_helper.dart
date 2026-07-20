@@ -207,5 +207,16 @@ class SessionManager {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getBool(KEY_BIOMETRIC_ENABLED) ?? false;
   }
+
+  static const String KEY_SESSION_ACTIVE = "session_active";
+  Future<void> setSessionActive(bool active) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(KEY_SESSION_ACTIVE, active);
+  }
+
+  Future<bool> isSessionActive() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(KEY_SESSION_ACTIVE) ?? false;
+  }
 }
 
