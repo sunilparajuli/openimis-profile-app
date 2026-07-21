@@ -1,5 +1,4 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:openimis_web_app/pages/policy_information_page.dart';
+    import 'package:openimis_web_app/pages/policy_information_page.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,8 +50,6 @@ class _DisplayState extends State<Display> {
 
     Widget build(BuildContext context) {
         final bottomNavProvider = Provider.of<BottomNavigationBarProvider>(context);
-        var connectionStatus = Provider.of<ConnectivityResult>(context);
-        if(connectionStatus==ConnectivityResult.none){setState(() {});}
 
         return Scaffold(
             appBar: AppBar(

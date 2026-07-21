@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 import 'package:openimis_web_app/auth/register_card.dart';
 import 'package:openimis_web_app/auth/reset-password.dart';
 import 'package:openimis_web_app/models/insuree.dart';
@@ -31,7 +31,7 @@ import 'package:openimis_web_app/pages/settings_page.dart';
 import 'package:openimis_web_app/auth/validate_otp_card.dart';
 import 'langlang/app_localization_deligate.dart';
 import 'package:openimis_web_app/auth/verify_insuree.dart';
-import 'package:openimis_web_app/services/connectivity.dart';
+
 import 'package:openimis_web_app/pages/claimed_item_services.dart';
 import 'package:openimis_web_app/pages/submission_page.dart';
 import 'package:openimis_web_app/langlang/application.dart';
@@ -60,7 +60,6 @@ class _MyAppState extends State<MyApp> {
     late AppTranslationsDelegate _newLocaleDelegate;
     late Insuree insuree;
     DarkThemeProvider themeChangeProvider = new DarkThemeProvider();
-    ConnectivityService connectivityStatus = new ConnectivityService();
 
     @override
     void initState() {
@@ -92,10 +91,6 @@ class _MyAppState extends State<MyApp> {
                 ChangeNotifierProvider(create: (_) {
                     return themeChangeProvider;
                 }),
-
-                StreamProvider<ConnectivityResult>.value(
-                    value: Connectivity().onConnectivityChanged.map((list) => list.isNotEmpty ? list.first : ConnectivityResult.none),
-                    initialData: ConnectivityResult.none),
             ],
             child: Consumer<DarkThemeProvider>(
                 builder: (BuildContext context, value, Widget? child) {

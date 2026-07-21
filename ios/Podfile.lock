@@ -1,6 +1,4 @@
 PODS:
-  - connectivity_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_secure_storage_darwin (10.0.0):
     - Flutter
@@ -29,7 +27,6 @@ PODS:
   - TOCropViewController (3.1.2)
 
 DEPENDENCIES:
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_secure_storage_darwin (from `.symlinks/plugins/flutter_secure_storage_darwin/darwin`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -46,8 +43,6 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
-  connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
     :path: Flutter
   flutter_secure_storage_darwin:
@@ -70,7 +65,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
 
 SPEC CHECKSUMS:
-  connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage_darwin: 557817588b80e60213cbecb573c45c76b788018d
   fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
@@ -83,6 +77,6 @@ SPEC CHECKSUMS:
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   TOCropViewController: a916930c465b5d9445a74d95e0c0da931771b4df
 
-PODFILE CHECKSUM: 319ca9862e7a269cf3ea27892e924cdc4fd643e1
+PODFILE CHECKSUM: 283fe346397bb4cc646f34107d02cfffe10a89fe
 
 COCOAPODS: 1.16.2

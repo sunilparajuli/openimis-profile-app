@@ -26,7 +26,7 @@ dependencies:
   awesome_dialog: ^3.3.0
   cupertino_icons: ^1.0.8
   image_picker: ^1.2.1
-  connectivity_plus: ^7.2.0
+
   getwidget: ^7.0.2
   qr_flutter: ^4.0.0
   flutter_launcher_icons: ^0.14.4
