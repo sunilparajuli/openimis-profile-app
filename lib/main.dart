@@ -40,13 +40,33 @@ import 'package:openimis_web_app/blocks/bool_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await dotenv.load(fileName: ".env");
-    ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
-    SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    runApp(MyApp());
+    try {
+        WidgetsFlutterBinding.ensureInitialized();
+        
+        // Use try-catch for critical initializations to prevent white screen hangs
+        try {
+            await dotenv.load(fileName: ".env");
+        } catch (e) {
+            print("Error loading .env: $e");
+        }
+
+        try {
+            ByteData data = await rootBundle.load('assets/ca/lets-encrypt-r3.pem');
+            SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+        } catch (e) {
+            print("Error loading SSL certificate: $e");
+        }
+
+        SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+            
+        runApp(MyApp());
+    } catch (e, stackTrace) {
+        print("CRITICAL STARTUP ERROR: $e");
+        print(stackTrace);
+        // Still try to run the app so it's not a permanent white screen
+        runApp(MyApp());
+    }
 }
 
 //  WidgetsFlutterBinding.ensureInitialized();
