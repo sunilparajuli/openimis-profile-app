@@ -9,6 +9,10 @@ import 'package:openimis_web_app/langlang/application.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
+import 'package:openimis_web_app/common/env.dart' as env;
+import 'package:apple_passkit/apple_passkit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class CardDetailPage extends StatefulWidget {
     final String message;
@@ -86,6 +90,62 @@ class _CardDetailPageState extends State<CardDetailPage> {
         );
     }
 
+    Widget _buildAddToWalletButton(String chfId) {
+        return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ElevatedButton.icon(
+                onPressed: () => _addToAppleWallet(chfId),
+                icon: const Icon(Icons.wallet, color: Colors.white),
+                label: const Text("Add to Apple Wallet"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+            ),
+        );
+    }
+
+    Future<void> _addToAppleWallet(String chfId) async {
+        try {
+            // 1. Check if device supports adding passes
+            final ApplePassKit passkit = ApplePassKit();
+            bool canAdd = await passkit.canAddPasses();
+            if (!canAdd) {
+                showInSnackBar("Apple Wallet is not available on this device.");
+                return;
+            }
+
+            // 2. Show loading
+            showInSnackBar("Preparing your Apple Wallet pass...");
+
+            // 3. Fetch the .pkpass file from the server
+            // Note: This URL must return the binary data of a SIGNED .pkpass file
+            final String passUrl = "${env.API_HIB_REST_URL}insuree/pass/$chfId";
+            final auth = Provider.of<AuthBlock>(context, listen: false);
+            final String token = auth.user['data']['insureeAuthOtp']['token'];
+
+            final response = await http.get(
+                Uri.parse(passUrl),
+                headers: {
+                    "Insuree-Token": token,
+                    "App-Version": env.APP_VERSION,
+                },
+            );
+
+            if (response.statusCode == 200) {
+                // 4. Present the Wallet prompt
+                await passkit.addPass(response.bodyBytes);
+            } else {
+                showInSnackBar("Failed to download pass. Server returned ${response.statusCode}");
+            }
+        } catch (e) {
+            print("Apple Wallet Error: $e");
+            showInSnackBar("Could not add to Wallet: $e");
+        }
+    }
+
     @override
     Widget build(BuildContext context) {
         final auth = Provider.of<AuthBlock>(context);
@@ -114,7 +174,13 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                             var policyprofile = snapshot.data!.data.insureeProfile;
                                             var totalPolicies = snapshot.data!.data.insureeProfile.insureePolicies.length - 1;
                                             var insureeProfile = snapshot.data!.data.insureeProfile.insureePolicies[totalPolicies];
-                                            return ListView(children: [_virtualCardWidget(policyprofile, insureeProfile, auth)]);
+                                            return ListView(
+                                              children: [
+                                                _virtualCardWidget(policyprofile, insureeProfile, auth),
+                                                if (Platform.isIOS) 
+                                                  _buildAddToWalletButton(policyprofile.chfId),
+                                              ],
+                                            );
                                         } else if (snapshot.hasError) {
                                             return Center(child: Text("Error loading policy information"));
                                         } else {
