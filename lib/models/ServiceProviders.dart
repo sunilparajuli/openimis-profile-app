@@ -80,19 +80,31 @@ class ServiceProviderNode {
   String id;
   String name;
   String code;
+  double? latitude;
+  double? longitude;
 
-  ServiceProviderNode({this.id = "", this.name = "", this.code = ""});
+  ServiceProviderNode({
+    this.id = "",
+    this.name = "",
+    this.code = "",
+    this.latitude,
+    this.longitude,
+  });
 
   ServiceProviderNode.fromJson(Map<String, dynamic> json)
       : id = json['id']?.toString() ?? '',
         name = json['name']?.toString() ?? '',
-        code = json['code']?.toString() ?? '';
+        code = json['code']?.toString() ?? '',
+        latitude = json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
+        longitude = json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['code'] = this.code;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
     return data;
   }
 }

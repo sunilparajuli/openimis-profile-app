@@ -13,6 +13,8 @@ import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:apple_passkit/apple_passkit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class CardDetailPage extends StatefulWidget {
     final String message;
@@ -90,7 +92,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
         );
     }
 
-    Widget _buildAddToWalletButton(String chfId) {
+    Widget _buildAddToAppleWalletButton(String chfId) {
         return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton.icon(
@@ -99,6 +101,23 @@ class _CardDetailPageState extends State<CardDetailPage> {
                 label: const Text("Add to Apple Wallet"),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+            ),
+        );
+    }
+
+    Widget _buildAddToGoogleWalletButton(String chfId) {
+        return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: ElevatedButton.icon(
+                onPressed: () => _addToGoogleWallet(chfId),
+                icon: const Icon(Icons.wallet, color: Colors.white),
+                label: const Text("Add to Google Wallet"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4285F4),
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -121,7 +140,6 @@ class _CardDetailPageState extends State<CardDetailPage> {
             showInSnackBar("Preparing your Apple Wallet pass...");
 
             // 3. Fetch the .pkpass file from the server
-            // Note: This URL must return the binary data of a SIGNED .pkpass file
             final String passUrl = "${env.API_HIB_REST_URL}insuree/pass/$chfId";
             final auth = Provider.of<AuthBlock>(context, listen: false);
             final String token = auth.user['data']['insureeAuthOtp']['token'];
@@ -143,6 +161,38 @@ class _CardDetailPageState extends State<CardDetailPage> {
         } catch (e) {
             print("Apple Wallet Error: $e");
             showInSnackBar("Could not add to Wallet: $e");
+        }
+    }
+
+    Future<void> _addToGoogleWallet(String chfId) async {
+        try {
+            showInSnackBar("Preparing your Google Wallet pass...");
+
+            final String passUrl = "${env.API_HIB_REST_URL}insuree/google-pass/$chfId";
+            final auth = Provider.of<AuthBlock>(context, listen: false);
+            final String token = auth.user['data']['insureeAuthOtp']['token'];
+
+            final response = await http.get(
+                Uri.parse(passUrl),
+                headers: {
+                    "Insuree-Token": token,
+                    "App-Version": env.APP_VERSION,
+                },
+            );
+
+            if (response.statusCode == 200) {
+                final responseData = jsonDecode(response.body);
+                final String jwt = responseData['jwt'];
+                
+                // Using MethodChannel to communicate with native Android for Google Wallet
+                const platform = MethodChannel('hib.np.gov/google_wallet');
+                await platform.invokeMethod('savePassesJwt', {'jwt': jwt});
+            } else {
+                showInSnackBar("Failed to prepare pass. Server returned ${response.statusCode}");
+            }
+        } catch (e) {
+            print("Google Wallet Error: $e");
+            showInSnackBar("Could not add to Google Wallet: $e");
         }
     }
 
@@ -177,8 +227,11 @@ class _CardDetailPageState extends State<CardDetailPage> {
                                             return ListView(
                                               children: [
                                                 _virtualCardWidget(policyprofile, insureeProfile, auth),
+                                                SizedBox(height: 20),
                                                 if (Platform.isIOS) 
-                                                  _buildAddToWalletButton(policyprofile.chfId),
+                                                  _buildAddToAppleWalletButton(policyprofile.chfId),
+                                                if (Platform.isAndroid)
+                                                  _buildAddToGoogleWalletButton(policyprofile.chfId),
                                               ],
                                             );
                                         } else if (snapshot.hasError) {
