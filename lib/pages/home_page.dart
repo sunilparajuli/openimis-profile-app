@@ -102,6 +102,7 @@ class _HomepageState extends State<Homepage> {
 				child: Column(
 					children: [
 						_buildProfileSection(),
+						_buildMapShortcut(),
 						ClaimHistoryWidget(claimsFuture: _claimsFuture, auth: _auth),
 					],
 				),
@@ -145,6 +146,55 @@ class _HomepageState extends State<Homepage> {
 					)
 				);
 			}
+		);
+	}
+
+	Widget _buildMapShortcut() {
+		return Container(
+			margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+			child: Card(
+				elevation: 0,
+				shape: RoundedRectangleBorder(
+					borderRadius: BorderRadius.circular(15),
+					side: BorderSide(color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1)),
+				),
+				child: InkWell(
+					onTap: () => Navigator.pushNamed(context, '/map-services'),
+					borderRadius: BorderRadius.circular(15),
+					child: Padding(
+						padding: const EdgeInsets.all(16.0),
+						child: Row(
+							children: [
+								Container(
+									padding: const EdgeInsets.all(10),
+									decoration: BoxDecoration(
+										color: CustomTheme.lightTheme.primaryColor.withValues(alpha: 0.1),
+										shape: BoxShape.circle,
+									),
+									child: Icon(Icons.map_outlined, color: CustomTheme.lightTheme.primaryColor, size: 28),
+								),
+								const SizedBox(width: 16),
+								Expanded(
+									child: Column(
+										crossAxisAlignment: CrossAxisAlignment.start,
+										children: [
+											const Text(
+												"Nearest Health Facilities",
+												style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+											),
+											Text(
+												"Find hospitals and clinics near you",
+												style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+											),
+										],
+									),
+								),
+								Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+							],
+						),
+					),
+				),
+			),
 		);
 	}
 }

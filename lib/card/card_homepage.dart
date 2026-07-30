@@ -29,7 +29,7 @@ class _CardHomeState extends State<CardHome> {
 	
 	Widget build(BuildContext context) {
 		return Scaffold(
-            backgroundColor: CustomTheme.lightTheme.colorScheme.surface.withOpacity(0.5),
+            backgroundColor: CustomTheme.lightTheme.colorScheme.surface.withValues(alpha: 0.5),
             body: Stack(
                 children: [
                     SingleChildScrollView(
@@ -316,7 +316,7 @@ class _CardHomeState extends State<CardHome> {
                                             FutureBuilder<Claims>(
                                                 future: _insureeclaims,
                                                 builder: (context, snapshot) {
-                                                    if(snapshot.hasData && snapshot.data!.data!=null) {
+                                                    if(snapshot.hasData) {
                                                         return ListView.builder(
                                                             shrinkWrap: true,
                                                             scrollDirection: Axis.vertical,

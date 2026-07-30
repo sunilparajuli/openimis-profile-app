@@ -40,9 +40,7 @@ class ClaimHistoryWidget extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal),
             ),
             leading: GestureDetector(
-              onTap: () {
-                print("123");
-              },
+              onTap: () {},
               child: Icon(Icons.history, color: CustomTheme.lightTheme.primaryColor, size: 30),
             ),
             trailing: GestureDetector(

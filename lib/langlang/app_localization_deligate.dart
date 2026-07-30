@@ -30,7 +30,7 @@ class AppTranslationsDelegate extends LocalizationsDelegate<AppTranslations> {
       default:
     }
 
-    return AppTranslations.load(newLocale ?? locale);
+    return AppTranslations.load(newLocale);
   }
 
   @override

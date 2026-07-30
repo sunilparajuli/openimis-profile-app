@@ -6,7 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 
 class AuthBlock extends ChangeNotifier {
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage(
+    mOptions: MacOsOptions(accessibility: KeychainAccessibility.first_unlock),
+  );
   AuthBlock() {
     setUser();
   }
@@ -82,32 +84,7 @@ class AuthBlock extends ChangeNotifier {
 
 
 
-  register(UserRegister userRegister) async {
-    loading = true;
-    loadingType = 'register';
-    var a = await _authService.register(userRegister);
-    if (a == null) {
-      loading = false;
-    } else {
-      _isRegisterSuccess = true;
-    }
-    notifyListeners();
 
-  }
-
-
-    validateOtp(UserRegister userRegister) async {
-    loading = true;
-    loadingType = 'register';
-    var a = await _authService.register(userRegister);
-    if (a == null) {
-      loading = false;
-    } else {
-      _isRegisterSuccess = true;
-    }
-    notifyListeners();
-
-  }
 
   logout() async {
     isLoggedIn = false;

@@ -13,10 +13,12 @@ class ApiClient {
     };
 
     // DEBUG LOG
-    print("--- GRAPHQL REQUEST ---");
-    print("URL: $uri");
-    print("Headers: $headers");
-    print("Body: ${jsonEncode(body)}");
+    if (!env.production) {
+      print("--- GRAPHQL REQUEST ---");
+      print("URL: $uri");
+      print("Headers: $headers");
+      print("Body: ${jsonEncode(body)}");
+    }
 
     final response = await http.post(
       uri,
@@ -25,8 +27,10 @@ class ApiClient {
     );
 
     // DEBUG LOG RESPONSE
-    print("--- RESPONSE (${response.statusCode}) ---");
-    print("Body: ${response.body}");
+    if (!env.production) {
+      print("--- RESPONSE (${response.statusCode}) ---");
+      print("Body: ${response.body}");
+    }
 
     return response;
   }

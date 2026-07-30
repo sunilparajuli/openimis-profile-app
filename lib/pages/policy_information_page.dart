@@ -373,32 +373,6 @@ class _PolicyInformationPageState extends State<PolicyInformationPage> {
     );
   }
 
-  // Helper widget to build the vertical label/date pairs cleanly
-  Widget _buildDateColumn(String label, dynamic dateObj, {bool isExpiry = false}) {
-    String formattedDate = '${dateObj.year}-${dateObj.month.toString().padLeft(2, '0')}-${dateObj.day.toString().padLeft(2, '0')}';
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500
-          ),
-        ),
-        SizedBox(height: 4.0),
-        Text(
-          formattedDate,
-          style: TextStyle(
-            fontSize: 13.0,
-            fontWeight: FontWeight.w600,
-            color: isExpiry ? Colors.red.shade700 : Colors.black87,
-          ),
-        ),
-      ],
-    );
-  }
 }
 

@@ -7,11 +7,10 @@ import 'dart:async';
 import 'package:openimis_web_app/helper/shared_preferences_helper.dart' as helper;
 
 class LoginScreen extends StatefulWidget {
-	@override
 	final String chfid;
 	LoginScreen({Key? key, required this.chfid}): super(key: key);
+	@override
 	_LoginScreenState createState() => _LoginScreenState();
-
 }
 
 class _LoginScreenState extends State<LoginScreen> {

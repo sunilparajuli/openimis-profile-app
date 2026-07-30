@@ -333,7 +333,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																			_formKey.currentState!.save();
 
 																			// Hit Api
-																			await auth.register(userRegister);
+
 
 																			Timer.periodic(Duration(milliseconds: 500), (timer) {
 																				print(DateTime.now());

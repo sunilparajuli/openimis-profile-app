@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/langlang/application.dart';
-import 'package:openimis_web_app/models/ServiceProviders.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';

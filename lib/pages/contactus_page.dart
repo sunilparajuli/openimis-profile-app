@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:openimis_web_app/services/api_graphql_services.dart';
 import 'package:openimis_web_app/blocks/auth_block.dart';
 import 'package:provider/provider.dart';
-import 'package:openimis_web_app/common/env.dart' as env;
 
 import '../models/app_contacts.dart';
 import '../screen_size_reducers.dart';

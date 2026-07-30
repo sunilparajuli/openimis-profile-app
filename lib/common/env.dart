@@ -64,3 +64,6 @@ String ONBOARDING_SCREEN_3 = 'assets/images/smcard/splash3.jpg';
 bool production = dotenv.env['PRODUCTION']?.toLowerCase() == 'true';
 
 String Currency = dotenv.env['CURRENCY'] ?? "Npr.";
+
+String debugToken = dotenv.env['DEBUG_TOKEN'] ?? "123";
+String debugChfId = dotenv.env['DEBUG_CHFID'] ?? "123";

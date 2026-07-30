@@ -9,8 +9,7 @@ import 'package:openimis_web_app/models/insuree_policy_information.dart';
 import 'package:openimis_web_app/models/notices.dart';
 import 'package:openimis_web_app/models/notifications.dart';
 import 'package:openimis_web_app/models/office.dart';
-// import 'package:openimis_web_app/models/faq.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 import 'package:openimis_web_app/services/api_client.dart';
 import 'package:openimis_web_app/models/medical_services.dart';
 import 'package:openimis_web_app/models/insuree_claims.dart';
@@ -46,11 +45,9 @@ class ApiGraphQlServices {
     Offices? offices;
     Faq? faq;
 
-
     Future<MedicalServices> MedicalServicesGQL(String args) async {
         try {
             final response = await ApiClient.postGraphQL('', OpenimisGqlQueries.medicalServices(100));
-            print(jsonEncode(OpenimisGqlQueries.medicalServices(100)));
             var jsonMap = json.decode(response.body);
             medicalServices = MedicalServices.fromJson(jsonMap);
             return medicalServices!;
@@ -70,8 +67,7 @@ class ApiGraphQlServices {
             }
           }
             try {
-              final response = await ApiClient.postGraphQL(token, 
-                      OpenimisGqlQueries.insureeClaims(chfID));
+              final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaims(chfID));
               var jsonMap = response.body;
               helper.SessionManager().setClaimsServicesGQL(response.body);
               insuree_claims = Claims.fromJson(jsonDecode(jsonMap));
@@ -79,28 +75,24 @@ class ApiGraphQlServices {
             } catch (e) { throw Exception("API Error"); }
       }
 
-
-
-    Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimId) async { //todo pass claim id from widget
+    Future<ClaimedServices> ClaimedServicesServicesGQL(token, int claimId) async {
         try {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedServices(claimId));
             var jsonMap = json.decode(response.body);
             claimedservices = ClaimedServices.fromJson(jsonMap);
             return claimedservices!;
         } catch (e) { 
-            print("ClaimedServicesServicesGQL error: $e");
             throw Exception("API Error: $e"); 
         }
     }
     
-    Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimId) async { //todo pass claim id from widget
+    Future<ClaimedItems> ClaimedItemServicesGQL(token, int claimId) async {
         try {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeClaimedItems(claimId));
             var jsonMap = json.decode(response.body);
             claimeditems = ClaimedItems.fromJson(jsonMap);
             return claimeditems!;
         } catch (e) {
-            print("ClaimedItemServicesGQL error: $e");
             throw Exception("API Error: $e");
         }
     }
@@ -117,40 +109,28 @@ class ApiGraphQlServices {
         }
     }
 
-/// Removed the (args) parameter completely
     Future<dynamic> service_providers() async {
       try {
         final response = await ApiClient.postGraphQL('', OpenimisGqlQueries.service_providers());
         var jsonMap = json.decode(response.body);
-
-        // Make sure this matches your actual JSON model for facilities
         var facilities =  ServiceProvidersModel.fromJson(jsonMap);
-
         return facilities;
       } catch (e) {
-        print("Error fetching service providers: $e");
         throw Exception("API Error");
       }
     }
 
-
-    Future<PolicyInformation> PolicyInformationServicesGQL(String token, chfid) async { //todo pass claim id from widget // this is for the homepage
-
-
-      var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi().then((value) {
-          return value;
-      });
-    if(!isRefresh){
-      var _policyinformation = await helper.SessionManager()
-            .getPolicyInformationCardPage();
+    Future<PolicyInformation> PolicyInformationServicesGQL(String token, chfid) async {
+      var isRefresh = await helper.SessionManager().getTrueSetFalseRefreshAPi();
+      if(!isRefresh){
+        var _policyinformation = await helper.SessionManager().getPolicyInformationCardPage();
         if (_policyinformation != null) {
           return _policyinformation;
         }
-    }
+      }
       try {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureePolicyInformation(chfid));
             var jsonMap = json.decode(response.body);
-
             helper.SessionManager().setPolicyInformationCardPage(response.body);
             policyinformation = PolicyInformation.fromJson(jsonMap);
             return policyinformation!;
@@ -161,31 +141,24 @@ class ApiGraphQlServices {
     }
     
 
-    Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid, bool canRefresh) async { //todo pass claim id from widget // this is for the list of policies of insuree
-      dynamic jsonMap;
-      dynamic responseBody;
-
+    Future<InsureePolicyInformation> InsureePolicyInformationServicesGQL(String token, chfid, bool canRefresh) async {
       if(canRefresh==true){
-
-      try {
+        try {
             final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureePolicyInformationLists(chfid));
-            responseBody = response.body;
-             jsonMap = json.decode(response.body);
+            var jsonMap = json.decode(response.body);
             insureepolicyinformation = InsureePolicyInformation.fromJson(jsonMap);
-            helper.SessionManager().setPolicyInformation(responseBody);
+            helper.SessionManager().setPolicyInformation(response.body);
             return insureepolicyinformation!;
         } catch (e) {
             if (insureepolicyinformation != null) return insureepolicyinformation!;
             throw Exception("API Error");
         }
-    }
+      }
       else {
-       // helper.SessionManager().deletePoicyInfrmatin();
         var cached = await helper.SessionManager().getPolicyInformation();
         if (cached != null) {
           return cached;
         }
-        // Fallback to fetch if cache is empty even if canRefresh is false
         return await InsureePolicyInformationServicesGQL(token, chfid, true);
       }
     }
@@ -204,7 +177,7 @@ class ApiGraphQlServices {
 
     Future<InsureeData> InsureeInfoServicesGQL(String token, String chfid, bool canRefresh) async {
       if(env.production==false){
-        insureedata = InsureeData.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info())); //(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info()));
+        insureedata = InsureeData.fromJson(json.decode(mock_data_services.MockApi().openimis_gql_insuree_info()));
         return insureedata!;
       }
 
@@ -216,16 +189,31 @@ class ApiGraphQlServices {
       }
 
         try {
-          final response = await ApiClient.postGraphQL(token, 
-                  OpenimisGqlQueries.insureeInfo(chfid));
+          final response = await ApiClient.postGraphQL(token, OpenimisGqlQueries.insureeInfo(chfid));
           var jsonMap = json.decode(response.body);
           insureedata = InsureeData.fromJson(jsonMap);
-          // helper.SessionManager().deletePoicyInfrmatin();
+          
+          final photoUrl = insureedata?.data.profile.photo;
+          if (photoUrl != null && photoUrl.isNotEmpty) {
+            _cachePhotoAsBase64(photoUrl.replaceAll('192.168.15.22', 'imistest.hib.gov.np'));
+          }
+
           helper.SessionManager().setInsureeInfoServicesGQL(response.body);
           return insureedata!;
         } catch (e) { throw Exception("API Error"); }
     }
 
+    Future<void> _cachePhotoAsBase64(String url) async {
+      try {
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          final String base64Image = base64Encode(response.bodyBytes);
+          await helper.SessionManager().settBase64Image(base64Image);
+        }
+      } catch (e) {
+        print("Error caching profile photo: $e");
+      }
+    }
 
     Future<Notifications> NotificationsServicesGQL(String token, String chfid) async {
         try {
@@ -236,21 +224,15 @@ class ApiGraphQlServices {
         } catch (e) { throw Exception("API Error"); }
     }
 
-
-
-  //mutation
     Future<Map>  createFeedback(fullname, email, mobileNo, queries) async {
         dynamic jsonmap;
         globals.isLoading = true;
         try {
-               final response = await ApiClient.postGraphQL('', 
-                       openimisGQLMutation().createFeedbackMutation(
-                           fullname, email, mobileNo, queries));
+               final response = await ApiClient.postGraphQL('', openimisGQLMutation().createFeedbackMutation(fullname, email, mobileNo, queries));
                jsonmap = jsonDecode(response.body);
-           } catch (e)
-            {
+           } catch (e) {
                 globals.isLoading = false;
-               throw Exception("Not implemented");
+               throw Exception("API Error");
            }
        globals.isLoading = false;
         return jsonmap ;
@@ -260,8 +242,7 @@ class ApiGraphQlServices {
     Future<Map> createClaimFeedback(String token, String details, int rating, String source, String date, int claimId, bool cardRendered, bool paymentAsked, bool drugPrescribed, bool drugReceived) async {
         globals.isLoading = true;
         try {
-            final response = await ApiClient.postGraphQL(token,
-                openimisGQLMutation().createClaimFeedbackMutation(details, rating, source, date, claimId, cardRendered, paymentAsked, drugPrescribed, drugReceived));
+            final response = await ApiClient.postGraphQL(token, openimisGQLMutation().createClaimFeedbackMutation(details, rating, source, date, claimId, cardRendered, paymentAsked, drugPrescribed, drugReceived));
             globals.isLoading = false;
             return jsonDecode(response.body);
         } catch (e) {
@@ -274,7 +255,7 @@ class ApiGraphQlServices {
       late AppContactsModel appContacts;
       try {
         final response = await ApiClient.postGraphQL('',OpenimisGqlQueries.appContactsQuery());
-        var jsonMap = json.decode(utf8.decode(response.bodyBytes)); // utf8.decode handles specific localized characters safely
+        var jsonMap = json.decode(utf8.decode(response.bodyBytes));
         appContacts = AppContactsModel.fromJson(jsonMap);
       } catch (e) {
         throw Exception("API Error");
@@ -283,39 +264,24 @@ class ApiGraphQlServices {
     }
 
  Future<Offices>  getOfficesList() async {
-   dynamic jsonmap;
    try {
-     final response = await  rootBundle.loadString("assets/json/offices.json"); //http.get(Uri.parse(env.OFFICE_LIST_URL),
-     jsonmap = response;
-     offices =  Offices.fromJson(jsonDecode(jsonmap));
+     final response = await  rootBundle.loadString("assets/json/offices.json");
+     offices =  Offices.fromJson(jsonDecode(response));
      return offices!;
-   } catch (e)
-     {
+   } catch (e) {
        if (offices != null) return offices!;
        throw Exception("Asset Error");
    }
  }
 
-
   Future<Faq>  getFaqs() async {
-    dynamic jsonmap;
     try {
-      //final response = await http.get(Uri.parse(env.FAQ_LIST_URL),
       final response = await  rootBundle.loadString("assets/json/faqs.json");
-
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-
-      // );
-      jsonmap = response;
-      faq =  Faq.fromJson(jsonDecode(jsonmap));
+      faq =  Faq.fromJson(jsonDecode(response));
       return faq!;
-    } catch (e)
-    {
+    } catch (e) {
       if (faq != null) return faq!;
       throw Exception("Asset Error");
     }
   }
-    
 }

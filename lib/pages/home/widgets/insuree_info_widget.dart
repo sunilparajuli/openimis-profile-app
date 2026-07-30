@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:openimis_web_app/common/env.dart' as env;
 import 'package:openimis_web_app/langlang/app_translation.dart';
 import 'package:openimis_web_app/screen_size_reducers.dart';
+import 'package:openimis_web_app/helper/shared_preferences_helper.dart';
 
 class InsureeInfoWidget extends StatelessWidget {
   final dynamic profile;
@@ -28,8 +30,22 @@ class InsureeInfoWidget extends StatelessWidget {
                   radius: 50,
                   backgroundColor: Colors.white,
                   child: ClipOval(
-                    child: (profile.photo != null && profile.photo.toString().trim().isNotEmpty)
-                        ? FadeInImage.assetNetwork(
+                    child: FutureBuilder<String?>(
+                      future: SessionManager().getBase64Image(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                          // --- SHOW LOCAL BASE64 PHOTO ---
+                          return Image.memory(
+                            base64Decode(snapshot.data!),
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                          );
+                        }
+                        
+                        // --- FALLBACK TO NETWORK PHOTO ---
+                        if (profile.photo != null && profile.photo.toString().trim().isNotEmpty) {
+                          return FadeInImage.assetNetwork(
                             image: profile.photo.replaceAll('192.168.15.22', 'imistest.hib.gov.np'),
                             placeholder: "assets/images/hib-logo.png",
                             fit: BoxFit.cover,
@@ -43,13 +59,17 @@ class InsureeInfoWidget extends StatelessWidget {
                                 fit: BoxFit.cover,
                               );
                             },
-                          )
-                        : Image.asset(
-                            "assets/images/hib-logo.png",
-                            fit: BoxFit.cover,
-                            width: 100,
-                            height: 100,
-                          ),
+                          );
+                        }
+                        
+                        return Image.asset(
+                          "assets/images/hib-logo.png",
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),

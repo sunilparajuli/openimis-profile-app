@@ -8,19 +8,13 @@ import 'package:openimis_web_app/models/policy_information.dart';
 import 'package:openimis_web_app/models/usp_policy_insuree_hib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class SessionManager {
-  final String fullname = "";
-  final String? image_url = null;
-
-
-  InsureePolicyInformation? _informationpolicy;
-  Claims? _claims;
-  InsureeData? _insureedata;
-  UspPolicyInsureeHib? _uspPolicyInsureeHib;
-  PolicyInformation? _policyInformation;
-//set data into shared preferences like this
   static const String KEY_FULLNAME = "saved_fullname";
+  static const String KEY_IMAGE = "saved_image";
+  static const String KEY_BASE64_IMAGE = "saved_base64_image";
+  static const String KEY_BIOMETRIC_ENABLED = "biometric_enabled";
+  static const String KEY_SESSION_ACTIVE = "session_active";
+
   Future<void> setFullname(String fullname) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(KEY_FULLNAME, fullname);
@@ -28,176 +22,134 @@ class SessionManager {
 
   Future<String> getFullname() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String? val = pref.getString(KEY_FULLNAME);
-    return val ?? "";
+    return pref.getString(KEY_FULLNAME) ?? "";
   }
 
-  static const String KEY_IMAGE = "saved_image";
-  Future<void>setImage(String image_url) async {
+  Future<void> setImage(String image_url) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(KEY_IMAGE, image_url);
   }
 
-    Future<String> getImage() async {
+  Future<String> getImage() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String? val = pref.getString(KEY_IMAGE);
-    return val ?? "";
+    return pref.getString(KEY_IMAGE) ?? "";
   }
 
-
-  Future<void> setUserInfo(String fullname) async {
+  Future<void> settBase64Image(String base64String) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(this.fullname, fullname);
+    await prefs.setString(KEY_BASE64_IMAGE, base64String);
   }
 
-  Future<void> setPolicyInformation(args) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("policyinformation", args);
+  Future<String?> getBase64Image() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString(KEY_BASE64_IMAGE);
   }
-
 
   Future<void> clearAll() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
 
-  Future<bool> getInfoStatus() async{
+  Future<bool> getInfoStatus() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var cachedData = pref.getString("policyinformation");
-    if(cachedData==null){
-      return false;
-    }
-    return true;
+    return pref.getString("policyinformation") != null;
   }
+
+  Future<void> setPolicyInformation(args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("policyinformation", args);
+  }
+
   Future<InsureePolicyInformation?> getPolicyInformation() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var cachedData = pref.getString("policyinformation");
     if (cachedData == null) return null;
-    _informationpolicy = InsureePolicyInformation.fromJson(json.decode(cachedData));
-    return _informationpolicy;
+    return InsureePolicyInformation.fromJson(json.decode(cachedData));
   }
 
-
-
-  Future<bool> getClaimsServicesStatus() async{
+  Future<bool> getClaimsServicesStatus() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var cachedData = pref.getString("ClaimsServicesGQL");
-    if(cachedData==null){
-      return false;
-    }
-    return true;
+    return pref.getString("ClaimsServicesGQL") != null;
   }
 
   Future<void> setClaimsServicesGQL(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
-    prefs.setString("ClaimsServicesGQL", args);
+    await prefs.setString("ClaimsServicesGQL", args);
   }
 
   Future<Claims?> getClaimsServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var cachedData = pref.getString("ClaimsServicesGQL");
     if (cachedData == null) return null;
-    _claims = Claims.fromJson(json.decode(cachedData));
-    return _claims;
+    return Claims.fromJson(json.decode(cachedData));
   }
 
-  Future<bool> getInsureeInfoServicesStatus() async{
+  Future<bool> getInsureeInfoServicesStatus() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var cachedData = pref.getString("InsureeInfoServicesGQL");
-    if(cachedData==null){
-      return false;
-    }
-    return true;
+    return pref.getString("InsureeInfoServicesGQL") != null;
   }
 
   Future<void> setInsureeInfoServicesGQL(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("InsureeInfoServicesGQL", args);
+    await prefs.setString("InsureeInfoServicesGQL", args);
   }
 
   Future<InsureeData?> getInsureeInfoServicesGQL() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var cachedData = pref.getString("InsureeInfoServicesGQL");
     if (cachedData == null) return null;
-    _insureedata = InsureeData.fromJson(json.decode(cachedData));
-    return _insureedata;
+    return InsureeData.fromJson(json.decode(cachedData));
   }
 
-
-  Future<bool> getprocedureHIBstatus() async{
+  Future<bool> getprocedureHIBstatus() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var cachedData = pref.getString("procedureHIB");
-    if(cachedData==null){
-      return false;
-    }
-    return true;
+    return pref.getString("procedureHIB") != null;
   }
 
   Future<void> setprocedureHIB(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("procedureHIB", args);
+    await prefs.setString("procedureHIB", args);
   }
 
   Future<UspPolicyInsureeHib?> getprocedureHIB() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var cachedData = pref.getString("procedureHIB");
     if (cachedData == null) return null;
-    _uspPolicyInsureeHib = UspPolicyInsureeHib.fromJson(json.decode(cachedData));
-    return _uspPolicyInsureeHib;
+    return UspPolicyInsureeHib.fromJson(json.decode(cachedData));
   }
-
-
-  // Future<bool> getprocedureHIBstatus() async{
-  //   final SharedPreferences pref = await SharedPreferences.getInstance();
-  //   var cachedData = pref.getString("procedureHIB") ??null;
-  //   if(cachedData==null){
-  //     return false;
-  //   }
-  //   return true;
-  // }
 
   Future<void> setPolicyInformationCardPage(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("PolicyInformationCardPage", args);
+    await prefs.setString("PolicyInformationCardPage", args);
   }
 
   Future<PolicyInformation?> getPolicyInformationCardPage() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     var cachedData = pref.getString("PolicyInformationCardPage");
     if (cachedData == null) return null;
-    _policyInformation = PolicyInformation.fromJson(json.decode(cachedData));
-    return _policyInformation;
+    return PolicyInformation.fromJson(json.decode(cachedData));
   }
-
 
   Future<void> setRefreshApi(args) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("refreshApi", args.toString());
+    await prefs.setString("refreshApi", args.toString());
   }
 
   Future<bool> getRefreshApi() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var exp = prefs.get("refreshApi");
-    return exp=="true";
-
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("refreshApi") == "true";
   }
 
-  Future<bool> getTrueSetFalseRefreshAPi() async{
-    var isRefresh = await getRefreshApi() .then((value){
-      return value;
-    });
-
-    if(isRefresh==true){
-      Timer.periodic(Duration(milliseconds: 500), (timer)  async{
+  Future<bool> getTrueSetFalseRefreshAPi() async {
+    var isRefresh = await getRefreshApi();
+    if (isRefresh == true) {
+      Timer(Duration(milliseconds: 500), () async {
         await setRefreshApi(false);
-        timer.cancel();
       });
     }
     return isRefresh;
   }
 
-  static const String KEY_BIOMETRIC_ENABLED = "biometric_enabled";
   Future<void> setBiometricEnabled(bool enabled) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(KEY_BIOMETRIC_ENABLED, enabled);
@@ -208,7 +160,6 @@ class SessionManager {
     return pref.getBool(KEY_BIOMETRIC_ENABLED) ?? false;
   }
 
-  static const String KEY_SESSION_ACTIVE = "session_active";
   Future<void> setSessionActive(bool active) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(KEY_SESSION_ACTIVE, active);
@@ -219,4 +170,3 @@ class SessionManager {
     return pref.getBool(KEY_SESSION_ACTIVE) ?? false;
   }
 }
-

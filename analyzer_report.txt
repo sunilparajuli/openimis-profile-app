@@ -1,0 +1,17 @@
+Analyzing openimis_mobile_app...                                
+
+warning • The include file 'package:flutter_lints/flutter.yaml' in '/Users/hisoka/flutter_apps/openimis_mobile_app/analysis_options.yaml' can't be found when analyzing '/Users/hisoka/flutter_apps/openimis_mobile_app' • analysis_options.yaml:10:10 • include_file_not_found
+warning • The field doesn't override an inherited getter or setter • lib/auth/login_card.dart:11:15 • override_on_non_overriding_member
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/card/card_homepage.dart:32:73 • deprecated_member_use
+warning • The operand can't be 'null', so the condition is always 'true' • lib/card/card_homepage.dart:319:95 • unnecessary_null_comparison
+warning • The left operand can't be null, so the right operand is never executed • lib/langlang/app_localization_deligate.dart:33:46 • dead_null_aware_expression
+warning • The operand can't be 'null', so the condition is always 'true' • lib/pages/card_details.dart:45:23 • unnecessary_null_comparison
+warning • Unused import: 'package:openimis_web_app/common/env.dart' • lib/pages/contactus_page.dart:6:8 • unused_import
+warning • The '!' will have no effect because the receiver can't be null • lib/pages/healthFacilitiesMaps.dart:135:47 • unnecessary_non_null_assertion
+warning • The declaration '_buildDateColumn' isn't referenced • lib/pages/policy_information_page.dart:377:10 • unused_element
+warning • The operand can't be 'null', so the condition is always 'true' • lib/pages/profile_page.dart:66:18 • unnecessary_null_comparison
+warning • The declaration '_addImageCardWidget' isn't referenced • lib/pages/profile_page.dart:145:9 • unused_element
+warning • The operand can't be 'null', so the condition is always 'true' • lib/pages/profile_page.dart:161:18 • unnecessary_null_comparison
+warning • The declaration '_buildSubmitButton' isn't referenced • lib/pages/profile_page.dart:491:9 • unused_element
+warning • Unused import: 'package:openimis_web_app/models/ServiceProviders.dart' • lib/pages/service_provider_page.dart:4:8 • unused_import
+

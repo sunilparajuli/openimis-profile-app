@@ -12,6 +12,7 @@ import '../langlang/app_translation.dart';
 import '../screen_size_reducers.dart';
 import 'claimed_item_services.dart';
 import 'exploreServices.dart';
+import '../utils/token_fetch.dart';
 
 class HistoryPage extends StatefulWidget {
 	@override
@@ -358,7 +359,7 @@ class _HistoryPageState extends State<HistoryPage> {
 																				context,
 																				MaterialPageRoute(
 																					builder: (context) => ClaimedItemServicesPage(
-																						token: env.production ? auth.user['data']['insureeAuthOtp']['token'] : "123",
+																						token: TokenUtils.getToken(auth),
 																						claimId: int.parse(claims.id),
 																					),
 																				),

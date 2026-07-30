@@ -63,7 +63,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 		String token = "";
 		String chfId = "";
 		try {
-			if (auth.user != null && auth.user.containsKey('data')) {
+			if (auth.user.containsKey('data')) {
 				token = auth.user['data']['insureeAuthOtp']['token'] ?? "";
 				chfId = auth.user['data']['insureeAuthOtp']['insuree']['chfId'].toString();
 			}
@@ -142,24 +142,16 @@ class _ProfileInfoState extends State<ProfileInfo> {
 		);
 	}
 
-	Widget _addImageCardWidget() {
-		return GestureDetector(
-			onTap: () {
-				return;
-			},
-		);
-	}
-
 	@override
 	Widget build(BuildContext context) {
 		auth = Provider.of<AuthBlock>(context);
 
 		// 5. SAFE AUTH CHECKS for the GraphQL query during hot reload
-		String token = "123";
-		String chfId = "123";
+		String token = env.debugToken;
+		String chfId = env.debugChfId;
 		try {
-			if (auth.user != null) {
-				token = auth.user['data']['insureeAuthOtp']['token'] ?? "123";
+			if (auth.user.containsKey('data')) {
+				token = auth.user['data']['insureeAuthOtp']['token'] ?? env.debugToken;
 				chfId = auth.user['data']['insureeAuthOtp']['insuree']['chfId'].toString();
 			}
 		} catch (e) {
@@ -488,30 +480,5 @@ class _ProfileInfoState extends State<ProfileInfo> {
 		);
 	}
 
-	Widget _buildSubmitButton() {
-		return Container(
-			padding: EdgeInsets.fromLTRB(12, 8, 12, 10),
-			width: double.infinity,
-			child: ElevatedButton(
-				onPressed: () async {
-					uploadProfile();
-				},
-				style: ElevatedButton.styleFrom(
-					padding: EdgeInsets.all(16.0),
-					backgroundColor: CustomTheme.lightTheme.primaryColor,
-					shape: RoundedRectangleBorder(
-						borderRadius: BorderRadius.all(Radius.circular(10.0)),
-					),
-				),
-				child: Text(
-					AppTranslations.of(context).text('submit'),
-					style: TextStyle(
-							fontSize: 18.0,
-							fontWeight: FontWeight.bold,
-							fontFamily: "Open-sans",
-							color: Colors.white),
-				),
-			),
-		);
-	}
+
 }

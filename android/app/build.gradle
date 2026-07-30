@@ -69,8 +69,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        namespace "np.gov.hib.hibprofile"
-        applicationId "np.gov.hib.hibprofile"
+        namespace "hib.np.com.tinker"
+        applicationId "hib.np.com.tinker"
         minSdkVersion 23
         targetSdk 35
         versionCode flutterVersionCode.toInteger()

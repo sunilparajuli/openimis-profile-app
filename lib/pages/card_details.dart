@@ -42,7 +42,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
     void didChangeDependencies() {
         super.didChangeDependencies();
         final auth = Provider.of<AuthBlock>(context, listen: false);
-        if (auth.user != null && auth.user['data'] != null) {
+        if (auth.user.containsKey('data') && auth.user['data'] != null) {
             final token = auth.user['data']['insureeAuthOtp']['token'];
             final chfId = auth.user['data']['insureeAuthOtp']['insuree']['chfId'];
             _policyInfoFuture ??= ApiGraphQlServices().PolicyInformationServicesGQL(token, chfId);
