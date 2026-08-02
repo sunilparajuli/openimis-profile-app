@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:openimis_web_app/models/ServiceProviders.dart';
 import 'package:openimis_web_app/theme/custom_theme.dart';
+import 'package:openimis_web_app/common/env.dart' as env;
 
 class MapPage extends StatefulWidget {
   @override
@@ -35,7 +36,20 @@ class _MapPageState extends State<MapPage> {
   Future<void> _determinePosition() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) return;
+      if (!serviceEnabled) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Location services are disabled."),
+              action: SnackBarAction(
+                label: "SETTINGS",
+                onPressed: () => Geolocator.openLocationSettings(),
+              ),
+            ),
+          );
+        }
+        return;
+      }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
@@ -108,7 +122,6 @@ class _MapPageState extends State<MapPage> {
     if (nearest != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Drawing route to ${nearest.name}...")));
       
-      // Fetch route from OSRM (Open Source Routing Machine) - Free service
       final url = 'https://router.project-osrm.org/route/v1/driving/'
           '${_userPosition!.longitude},${_userPosition!.latitude};'
           '${nearest.longitude},${nearest.latitude}?overview=full&geometries=geojson';
@@ -128,11 +141,10 @@ class _MapPageState extends State<MapPage> {
         }
       } catch (e) {
         print("Routing error: $e");
-        // Fallback: just show the line directly if API fails
         setState(() {
           _routePoints = [
             LatLng(_userPosition!.latitude, _userPosition!.longitude),
-            LatLng(nearest?.latitude ?? 0.0, nearest?.longitude ?? 0.0),
+            LatLng(nearest!.latitude!, nearest!.longitude!),
           ];
         });
       }
@@ -166,6 +178,11 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Mapbox URL template - Using the Static Tiles API which works best with flutter_map
+    final String mapUrlTemplate = env.mapboxAccessToken.isEmpty 
+        ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' 
+        : 'https://api.mapbox.com/styles/v1/${env.mapboxStyleId}/tiles/256/{z}/{x}/{y}@2x?access_token=${env.mapboxAccessToken}';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Health Facility Map'),
@@ -181,8 +198,11 @@ class _MapPageState extends State<MapPage> {
               ),
               children: [
                 TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate: mapUrlTemplate,
                   userAgentPackageName: 'np.gov.hib.hibprofile',
+                  additionalOptions: {
+                    if (env.mapboxAccessToken.isNotEmpty) 'accessToken': env.mapboxAccessToken,
+                  },
                 ),
                 if (_routePoints.isNotEmpty)
                   PolylineLayer(

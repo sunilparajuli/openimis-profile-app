@@ -51,8 +51,9 @@ getFirebaseToken(){
 	return FirebaseToken;
 }
 
-String API_HIB_URL = dotenv.env['API_BASE_URL'] ?? 'https://imistest.hib.gov.np/api/graphql';
-String API_HIB_REST_URL = dotenv.env['API_HIB_REST_URL'] ?? 'http://imistest.hib.gov.np/api/';
+// Strictly fetch from .env for security. Fallbacks are only for local development safety.
+String API_HIB_URL = dotenv.env['API_BASE_URL'] ?? 'http://localhost:8000/api/graphql';
+String API_HIB_REST_URL = dotenv.env['API_HIB_REST_URL'] ?? 'http://localhost:8000/api/';
 String API_BASE_URL = API_HIB_URL;
 
 String LOGO_URL = 'assets/images/shs.png';
@@ -65,5 +66,8 @@ bool production = dotenv.env['PRODUCTION']?.toLowerCase() == 'true';
 
 String Currency = dotenv.env['CURRENCY'] ?? "Npr.";
 
-String debugToken = dotenv.env['DEBUG_TOKEN'] ?? "123";
-String debugChfId = dotenv.env['DEBUG_CHFID'] ?? "123";
+String debugToken = dotenv.env['DEBUG_TOKEN'] ?? "";
+String debugChfId = dotenv.env['DEBUG_CHFID'] ?? "";
+
+String mapboxAccessToken = dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? "";
+String mapboxStyleId = dotenv.env['MAPBOX_STYLE_ID'] ?? "mapbox/streets-v12";
